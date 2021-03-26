@@ -1,13 +1,24 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { LoginComponent } from './login/login.component';
 import { AuthGuardService as AuthGuard } from './auth-guard.service';
-import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 
 const routes: Routes = [
-  { path: 'login', component: LoginComponent },
-  { path: '', redirectTo: 'pdf-view', pathMatch: 'full' },
-  { path: '**', component: PageNotFoundComponent },
+  {
+    path: 'login',
+    pathMatch: 'full',
+    loadChildren: () =>
+      import('./feature/authentication/authentication.module').then(
+        (m) => m.AuthenticationModule
+      ),
+    canActivate: [AuthGuard],
+  },
+
+  {
+    path: 'home',
+    loadChildren: () =>
+      import('./feature/home/home.module').then((m) => m.HomeModule),
+    canActivate: [AuthGuard],
+  },
 ];
 
 @NgModule({
