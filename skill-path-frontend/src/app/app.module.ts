@@ -1,27 +1,32 @@
 import { HttpClientModule } from '@angular/common/http';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
+import {
+  MDBBootstrapModulesPro,
+  MDBSpinningPreloader,
+} from 'ng-uikit-pro-standard';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { LoginComponent } from './login/login.component';
-import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
-
-import { MDBBootstrapModulesPro } from 'ng-uikit-pro-standard';
-import { MDBSpinningPreloader } from 'ng-uikit-pro-standard';
+import { CoreModule } from './core/core/core.module';
 
 @NgModule({
-  declarations: [AppComponent, LoginComponent, PageNotFoundComponent],
+  declarations: [AppComponent],
   imports: [
     BrowserModule,
-    MDBBootstrapModulesPro.forRoot(),
+    CoreModule,
     FormsModule,
     HttpClientModule,
     AppRoutingModule,
     ReactiveFormsModule,
+    MDBBootstrapModulesPro.forRoot(),
   ],
   providers: [MDBSpinningPreloader],
   bootstrap: [AppComponent],
+
+  schemas: [NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA],
 })
 export class AppModule {}

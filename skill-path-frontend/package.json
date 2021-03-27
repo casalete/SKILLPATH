@@ -7,7 +7,8 @@
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "autoprefixer": "postcss src/assets/styles/*.scss --use autoprefixer -d build/"
   },
   "private": true,
   "dependencies": {
@@ -26,7 +27,7 @@
     "chart.js": "^2.5.0",
     "easy-pie-chart": "^2.1.7",
     "hammerjs": "^2.0.8",
-    "ng-uikit-pro-standard": "git+https://oauth2:UGS-CUq7HKqbPsQE-F_P@git.mdbootstrap.com/mdb/angular/ng-uikit-pro-standard.git",
+    "ng-uikit-pro-standard": "file:ng-uikit-pro-standard-11.0.0.tgz",
     "rxjs": "~6.6.0",
     "screenfull": "^3.3.0",
     "tslib": "^2.0.0",
@@ -40,6 +41,7 @@
     "codelyzer": "^6.0.0",
     "ts-node": "~8.3.0",
     "tslint": "~6.1.0",
-    "typescript": "~4.0.2"
+    "typescript": "~4.0.2",
+    "autoprefixer": "^10.2.3"
   }
 }

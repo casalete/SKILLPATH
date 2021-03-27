@@ -1,17 +1,35 @@
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
-import { LoginComponent } from './login/login.component';
+import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import { AuthGuardService as AuthGuard } from './auth-guard.service';
-import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+import { HomeComponent } from './feature/home/components/home/home.component';
 
 const routes: Routes = [
-  { path: 'login', component: LoginComponent },
-  { path: '', redirectTo: 'pdf-view', pathMatch: 'full' },
-  { path: '**', component: PageNotFoundComponent },
+
+  {
+    path: 'login',
+    pathMatch: 'full',
+    loadChildren: () =>
+      import('./feature/authentication/authentication.module').then(
+        (m) => m.AuthenticationModule
+      ),
+    canActivate: [AuthGuard],
+  },
+
+  {
+    path: 'home',
+    loadChildren: () =>
+      import('./feature/home/home.module').then((m) => m.HomeModule),
+    canActivate: [AuthGuard],
+  },
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [
+    RouterModule.forRoot(routes, {
+      useHash: true,
+      preloadingStrategy: PreloadAllModules,
+    }),
+  ],
   exports: [RouterModule],
 })
 export class AppRoutingModule {}
