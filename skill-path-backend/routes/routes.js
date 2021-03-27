@@ -2,13 +2,13 @@ const express = require('express');
 
 const router = express.Router();
 
-const elastic = require('elasticsearch');
+const elastic = require('@elastic/elasticsearch');
 
 const bodyParser = require('body-parser').json();
 
-const elasticClient = elastic.Client({
+const elasticClient = new elastic.Client({
 
-    host: 'localhost:9200',
+    node: 'http://localhost:9200'
 });
 
 
