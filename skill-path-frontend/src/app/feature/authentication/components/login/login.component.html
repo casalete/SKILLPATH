@@ -10,13 +10,14 @@
     <!--Card content-->
     <mdb-card-body cascade="true" class="px-lg-5 pt-0">
       <!-- Form -->
-      <form class="text-center" style="color: #757575">
+      <form [formGroup]="loginForm" class="text-center" style="color: #757575">
         <!-- Email -->
         <div class="md-form">
           <input
             type="email"
             id="materialLoginFormEmail"
             class="form-control"
+            formControlName="email"
             mdbInput
           />
           <label for="materialLoginFormEmail">E-mail</label>
@@ -29,6 +30,7 @@
             id="materialLoginFormPassword"
             class="form-control"
             mdbInput
+            formControlName="password"
           />
           <label for="materialLoginFormPassword">Password</label>
         </div>
@@ -53,7 +55,7 @@
           block="true"
           class="my-4 waves-effect z-depth-2"
           mdbWavesEffect
-          type="submit"
+          (click)="onSubmit()"
         >
           Sign in
         </button>

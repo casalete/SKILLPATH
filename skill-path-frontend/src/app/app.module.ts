@@ -4,6 +4,10 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
+import { EffectsModule } from '@ngrx/effects';
+import { RouterState, StoreRouterConnectingModule } from '@ngrx/router-store';
+import { StoreModule } from '@ngrx/store';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import {
   MDBBootstrapModulesPro,
   MDBSpinningPreloader,
@@ -11,18 +15,22 @@ import {
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { CoreModule } from './core/core/core.module';
+import { CoreModule } from './core/core.module';
+import { reducers } from './store';
 
 @NgModule({
   declarations: [AppComponent],
   imports: [
     BrowserModule,
     CoreModule,
-    FormsModule,
+    AppRoutingModule,
     HttpClientModule,
     AppRoutingModule,
-    ReactiveFormsModule,
+    StoreModule.forRoot(reducers),
     MDBBootstrapModulesPro.forRoot(),
+    EffectsModule.forRoot(),
+    StoreDevtoolsModule.instrument({ maxAge: 50 }),
+    StoreRouterConnectingModule.forRoot({ routerState: RouterState.Minimal }),
   ],
   providers: [MDBSpinningPreloader],
   bootstrap: [AppComponent],
