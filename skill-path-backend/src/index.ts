@@ -7,12 +7,11 @@ const cors = require('cors');
 
 const app = express();
 
-const authService = require('./auth/authService');
-const passport = require('./auth/passport');
-
+/* const passport = require('./auth/passport');
+ */
 app.use(session({ secret: 'Baloasi' }));
-app.use(passport.initialize());
-app.use(passport.session());
+/* app.use(passport.initialize());
+app.use(passport.session()); */
 app.use(bodyParser.json());
 
 app.use(function (req, res, next) {
@@ -41,14 +40,14 @@ app.use(
     })
 );
 
-app.post('/authenticate', authService.auth(), (req, res) => {
+/* app.post('/authenticate', authService.auth(), (req, res) => {
     res.status(200).json({ statusCode: 200, user: req.user });
-});
+}); */
 
 const routes = require('./routes/routes');
 
-app.use('/api/v1', authService.isLoggedIn, routes);
-
+/* app.use('/api/v1', authService.isLoggedIn, routes);
+ */
 app.listen(process.env.PORT, () => {
     console.log(`cors enabled-server listening on: ${process.env.PORT}`);
 });

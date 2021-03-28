@@ -1,6 +1,7 @@
-const express = require('express');
+import express from 'express'
 
-const router = express.Router();
+export const router = express.Router();
+
 
 const elastic = require('@elastic/elasticsearch');
 
@@ -10,6 +11,8 @@ const elasticClient = new elastic.Client({
     node: 'http://localhost:9200',
 });
 
+/* app.use('/users', UsersRouter)
+ */
 let products = [
     {
         id: '1',
@@ -159,4 +162,16 @@ router.delete('/products/:id', (req, res) => {
 
 // });
 
-module.exports = router;
+// module.exports = router;?
+
+
+/* export interface UserModel {
+    name: string,
+    id: number,
+}
+
+export interface PostModel {
+    name: string,
+    id: number,
+}
+export const user : UserModel ={name:'test', id:1}; */
