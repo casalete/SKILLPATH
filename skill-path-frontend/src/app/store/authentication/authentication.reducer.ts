@@ -34,6 +34,22 @@ const reducer = createReducer(
     loading: false,
     loadingStatus: null,
   })),
+
+  on(AuthActions.registerStart, (state) => ({
+    ...state,
+    loading: true,
+    loadingStatus: 'Registering...',
+  })),
+
+  on(AuthActions.registerError, (state, { error }) => ({
+    ...state,
+    authError: error,
+    authenticatedSessionData: null,
+    loading: false,
+    loadingStatus: null,
+    // TODO: check if this is still used
+  })),
+
   on(AuthActions.clearError, (state) => ({
     ...state,
     authError: null,

@@ -10,7 +10,12 @@
     <!--Card content-->
     <mdb-card-body cascade="true" class="px-lg-5 pt-0">
       <!-- Form -->
-      <form [formGroup]="loginForm" class="text-center" style="color: #757575">
+      <form
+        [formGroup]="loginForm"
+        autocomplete="off"
+        class="text-center"
+        style="color: #757575"
+      >
         <!-- Email -->
         <div class="md-form">
           <input
@@ -63,7 +68,7 @@
         <!-- Register -->
         <p>
           Not a member?
-          <a href="">Register</a>
+          <a routerLink="/register">Register</a>
         </p>
 
         <!-- Social login -->

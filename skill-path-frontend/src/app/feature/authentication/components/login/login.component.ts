@@ -12,11 +12,7 @@ import { loginStart } from '../../../../store/authentication/authentication.acti
 export class LoginComponent implements OnInit {
   loginForm: FormGroup;
 
-  constructor(
-    private fb: FormBuilder,
-    private router: Router,
-    private store: Store
-  ) {}
+  constructor(private fb: FormBuilder, private store: Store) {}
 
   ngOnInit(): void {
     this.loginForm = this.fb.group({
@@ -37,10 +33,4 @@ export class LoginComponent implements OnInit {
       );
     }
   }
-
-  // login() {
-  //   const val = this.loginForm.value;
-
-  //   if(val.email)
-  // }
 }

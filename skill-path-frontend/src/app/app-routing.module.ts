@@ -5,8 +5,7 @@ import { HomeComponent } from './feature/home/components/home/home.component';
 
 const routes: Routes = [
   {
-    path: 'login',
-    pathMatch: 'full',
+    path: 'auth',
     loadChildren: () =>
       import('./feature/authentication/authentication.module').then(
         (m) => m.AuthenticationModule
