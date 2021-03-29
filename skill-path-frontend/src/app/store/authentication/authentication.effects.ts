@@ -1,4 +1,4 @@
-import { HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Actions, Effect, ofType } from '@ngrx/effects';
@@ -12,22 +12,28 @@ import * as AuthActions from './authentication.actions';
 export class AuthEffects {
   constructor(
     private actions$: Actions,
-    private router: Router
-  ) // private localStorageService: LocalStorageService,
-  {}
+    private router: Router,
+    private http: HttpClient // private localStorageService: LocalStorageService,
+  ) {}
 
-  //     @Effect()
-  //     authLogin = this.actions$.pipe(
-  //         ofType(AuthActions.loginStart),
-  //         exhaustMap((action) => {
-  //             return this.authService.login(action.userCredentials).pipe(
-  //                 map((loginResponse: AuthenticatedSessionData) => {
-  //                     return AuthActions.authenticateSuccess({ authenticatedSessionData: loginResponse, rememberMe: action.rememberMe, origin: 'login' });
-  //                 }),
-  //                 catchError((err) => of(AuthActions.authenticateError({ error: err.error.error })))
-  //             );
-  //         })
-  //     );
+  @Effect()
+  authLogin = this.actions$.pipe(
+    ofType(AuthActions.loginStart),
+    exhaustMap((action) => {
+      return this.authService.login(action.userCredentials).pipe(
+        map((loginResponse: AuthenticatedSessionData) => {
+          return AuthActions.authenticateSuccess({
+            authenticatedSessionData: loginResponse,
+            rememberMe: action.rememberMe,
+            origin: 'login',
+          });
+        }),
+        catchError((err) =>
+          of(AuthActions.authenticateError({ error: err.error.error }))
+        )
+      );
+    })
+  );
 
   //     @Effect()
   //     authRedirect = this.actions$.pipe(
