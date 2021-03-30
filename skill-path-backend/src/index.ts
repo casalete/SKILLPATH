@@ -1,21 +1,23 @@
 require('dotenv').config();
-const express = require('express');
+import express from 'express';
+import {router} from './routes/routes';
+import passport from 'passport';
+import connectToDatabase from './db-connect';
 
-const session = require('express-session');
+require('./auth/auth');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 
-const app = express();
+export const app = express();
+app.use(bodyParser.urlencoded({ extended: false }));
+//app.use(bodyParser.json());
 
-/* const passport = require('./auth/passport');
- */
-app.use(session({ secret: 'Baloasi' }));
-/* app.use(passport.initialize());
-app.use(passport.session()); */
-app.use(bodyParser.json());
+app.use('/api/v1', router);
+
+connectToDatabase();
 
 app.use(function (req, res, next) {
-    res.header('Access-Control-Allow-Credentials', true);
+    res.header('Access-Control-Allow-Credentials', 'true');
     res.header('Access-Control-Allow-Origin', req.headers.origin);
     res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
     res.header('Access-Control-Allow-Headers', 'X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept');
@@ -40,16 +42,7 @@ app.use(
     })
 );
 
-/* app.post('/authenticate', authService.auth(), (req, res) => {
-    res.status(200).json({ statusCode: 200, user: req.user });
-}); */
-
-const routes = require('./routes/routes');
-
-/* app.use('/api/v1', authService.isLoggedIn, routes);
- */
 app.listen(process.env.PORT, () => {
     console.log(`cors enabled-server listening on: ${process.env.PORT}`);
 });
 
-module.exports = app;
