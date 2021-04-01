@@ -1,0 +1,28 @@
+version: '3'
+services:
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.12.0
+    env_file:
+      - elasticsearch.env
+    volumes:
+      - ./data/elasticsearch:/usr/share/elasticsearch/data
+    ports:
+      - 9200:9200
+  kibana:
+    image: docker.elastic.co/kibana/kibana:7.12.0
+    env_file:
+      - kibana.env
+    ports:
+      - 5601:5601
+  my-mongoDB:
+    image: mongo:latest
+    environment:
+      - MONGO_INITDB_DATABASE=${DB_NAME}
+    restart: always
+    volumes:
+      - db-data:/data/db:delegated 
+    ports:
+      - 27017:27017
+   
+volumes:
+  db-data:
