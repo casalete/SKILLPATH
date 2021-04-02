@@ -10,7 +10,11 @@ const cors = require('cors');
 
 export const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
+//app.use(bodyParser.json());
+
+app.use('/api/v1', router);
+
+connectToDatabase();
 
 app.use(function (req, res, next) {
 	res.header('Access-Control-Allow-Credentials', 'true');
@@ -37,9 +41,6 @@ app.use(
 		},
 	})
 );
-connectToDatabase();
-
-app.use('/api/v1', router);
 
 app.listen(process.env.PORT, () => {
 	console.log(`cors enabled-server listening on: ${process.env.PORT}`);
