@@ -18,7 +18,11 @@ export class AuthService {
         'Content-Type': 'application/json',
       }),
     };
-    return this.http.post(`/login`, userCredentials, httpOptions);
+    return this.http.post(
+      `${environment.apiUrl}/login`,
+      userCredentials,
+      httpOptions
+    );
     return null;
   }
 }
