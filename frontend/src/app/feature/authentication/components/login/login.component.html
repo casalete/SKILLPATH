@@ -1,0 +1,93 @@
+<!-- Material form login -->
+<div class="login-container d-flex align-items-center">
+  <mdb-card class="col-4 mx-auto" narrower="true" cascade="true">
+    <div class="view view-cascade morpheus-den-gradient">
+      <h3 class="card-header-title my-2 white-text text-center py-2">
+        Sign In
+      </h3>
+    </div>
+
+    <!--Card content-->
+    <mdb-card-body cascade="true" class="px-lg-5 pt-0">
+      <!-- Form -->
+      <form
+        [formGroup]="loginForm"
+        autocomplete="off"
+        class="text-center"
+        style="color: #757575"
+      >
+        <!-- Email -->
+        <div class="md-form">
+          <input
+            type="email"
+            id="materialLoginFormEmail"
+            class="form-control"
+            formControlName="email"
+            mdbInput
+          />
+          <label for="materialLoginFormEmail">E-mail</label>
+        </div>
+
+        <!-- Password -->
+        <div class="md-form">
+          <input
+            type="password"
+            id="materialLoginFormPassword"
+            class="form-control"
+            mdbInput
+            formControlName="password"
+          />
+          <label for="materialLoginFormPassword">Password</label>
+        </div>
+
+        <div class="d-flex justify-content-around">
+          <div>
+            <!-- Remember me -->
+            <mdb-checkbox>Remember me</mdb-checkbox>
+          </div>
+          <div>
+            <!-- Forgot password -->
+            <a href="">Forgot password?</a>
+          </div>
+        </div>
+
+        <!-- Sign in button -->
+        <button
+          mdbBtn
+          color="info"
+          outline="true"
+          rounded="true"
+          block="true"
+          class="my-4 waves-effect z-depth-2"
+          mdbWavesEffect
+          (click)="onSubmit()"
+        >
+          Sign in
+        </button>
+
+        <!-- Register -->
+        <p>
+          Not a member?
+          <a (click)="navigateToRegister()">Register</a>
+        </p>
+
+        <!-- Social login -->
+        <p>or sign in with:</p>
+        <a type="button" mdbBtn floating="true" color="fb" size="sm">
+          <mdb-icon fab icon="facebook"></mdb-icon>
+        </a>
+        <a type="button" mdbBtn floating="true" color="tw" size="sm">
+          <mdb-icon fab icon="twitter"></mdb-icon>
+        </a>
+        <a type="button" mdbBtn floating="true" color="li" size="sm">
+          <mdb-icon fab icon="linkedin"></mdb-icon>
+        </a>
+        <a type="button" mdbBtn floating="true" color="git" size="sm">
+          <mdb-icon fab icon="github"></mdb-icon>
+        </a>
+      </form>
+      <!-- Form -->
+    </mdb-card-body>
+  </mdb-card>
+  <!-- Material form login -->
+</div>

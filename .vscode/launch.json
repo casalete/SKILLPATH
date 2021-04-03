@@ -10,12 +10,14 @@
             "runtimeArgs": [
                 "start"
             ],
+            "outputCapture": "std",
+            "console": "integratedTerminal",
             "runtimeExecutable": "npm",
             "skipFiles": [
                 "<node_internals>/**"
             ],
             "type": "pwa-node",
-            "cwd":"${workspaceFolder}/skill-path-backend/src"
+            "cwd":"${workspaceFolder}/backend/src"
         }
         
     ]
