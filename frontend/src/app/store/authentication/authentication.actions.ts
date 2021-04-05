@@ -25,7 +25,7 @@ export const redirectOnLogin = createAction(
 
 export const registerStart = createAction(
   '[Auth] Register Start',
-  props<{ userRegisterPayload: UserCredentials }>()
+  props<{ userRegisterPayload: UserRegisterPayload }>()
 );
 
 export const registerSuccess = createAction(

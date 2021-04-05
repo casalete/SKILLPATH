@@ -1,35 +1,44 @@
 import express from 'express';
-import passport from 'passport';
-import jwt from 'jsonwebtoken';
+import UserModel from '../../models/user';
+
+const utils = require('../../utils/utils');
+
+const Unauthorized = require('../../utils/errors').Unauthorized;
 
 export const authRouter = express.Router();
 
-authRouter.post('/signup', passport.authenticate('signup', { session: false }), async (req, res, next) => {
-	res.json({
-		message: 'Signup successful',
-		user: req.user,
-	});
+authRouter.post('/register', async function (req, res, next) {
+	try {
+		const newUser = await UserModel.create({
+			username: req.body.username,
+			email: req.body.email,
+			password: req.body.password,
+			firstName: req.body.firstName,
+			lastName: req.body.lastName,
+		});
+
+		res.json({ success: true, user: newUser });
+	} catch (err) {
+		res.json({ success: false, msg: err });
+	}
 });
 
-authRouter.post('/login', async (req, res, next) => {
-	passport.authenticate('login', async (err, user, info) => {
-		try {
-			if (err || !user) {
-				const error = new Error('An error occurred.');
-
-				return next(error);
-			}
-
-			req.login(user, { session: false }, async (error) => {
-				if (error) return next(error);
-
-				const body = { _id: user._id, email: user.email };
-				const token = jwt.sign({ user: body }, 'SKILLPATH_JWT_SIGNATURE');
-
-				return res.json({ token });
-			});
-		} catch (error) {
-			return next(error);
+authRouter.post('/login', async function (req, res, next) {
+	try {
+		const user: any = await UserModel.findOne({ username: req.body.username });
+		if (!user) {
+			return res.status(401).json({ success: false, msg: 'could not find user' });
 		}
-	})(req, res, next);
+
+		const isValid = await user.isValidPassword(req.body.password);
+
+		if (isValid) {
+			const tokenObject = utils.issueJWT(user);
+			res.status(200).json({ success: true, token: tokenObject.token, expiresIn: tokenObject.expires });
+		} else {
+			throw new Unauthorized('Wrong password');
+		}
+	} catch (err) {
+		next(err);
+	}
 });

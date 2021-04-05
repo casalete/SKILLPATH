@@ -4,12 +4,18 @@ import { router } from './routes/routes';
 import connectToDatabase from './db-connect';
 import { handleErrors } from './middleware/handleErrors';
 
-const bodyParser = require('body-parser');
+const passport = require('passport');
+
 const cors = require('cors');
 
-export const app = express();
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
+const app = express();
+
+require('./config/passport')(passport);
+
+app.use(passport.initialize());
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 app.use(function (req, res, next) {
 	res.header('Access-Control-Allow-Credentials', 'true');
@@ -40,7 +46,7 @@ connectToDatabase();
 
 app.use('/api/v1', router);
 
-// app.use(handleErrors);
+app.use(handleErrors);
 
 app.listen(process.env.PORT, () => {
 	console.log(`cors enabled-server listening on: ${process.env.PORT}`);

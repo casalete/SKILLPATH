@@ -16,14 +16,13 @@ async function getUser(req: Request, res: Response, next: any) {
 		user = await User.findById(req.params.id);
 		if (user == null) {
 			throw new NotFound('Cannot find usser with given id');
-			// return res.status(404).json({ message: "Cannot find user with that id" });
 		}
 	} catch (err) {
 		next(err);
-		// return res.status(500).json({ message: err.message });
 	}
 	// add new key/value pair to the res obj
 	Object.assign(res, { user: user });
+	// res = {...res, user:user},
 	next(); // pass control to the next handler
 }
 

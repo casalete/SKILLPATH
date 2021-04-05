@@ -32,7 +32,7 @@ export class AuthService {
       }),
     };
     return this.http.post(
-      `${this.apiUrl}/auth/signup`,
+      `${this.apiUrl}/auth/register`,
       userCredentials,
       httpOptions
     );

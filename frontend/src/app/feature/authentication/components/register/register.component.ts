@@ -38,11 +38,11 @@ export class RegisterComponent implements OnInit {
     this.store.dispatch(
       registerStart({
         userRegisterPayload: {
-          // username: registerFormValue.username,
+          username: registerFormValue.username,
           email: registerFormValue.email,
           password: registerFormValue.password,
-          // firstName: registerFormValue.firstName,
-          // lastName: registerFormValue.lastName,
+          firstName: registerFormValue.firstName,
+          lastName: registerFormValue.lastName,
         },
       })
     );
