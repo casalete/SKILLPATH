@@ -4,8 +4,42 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
+
+
         {
-            "name": "Launch via NPM",
+            "name": "RUN DEV",
+            "request": "launch",
+            "runtimeArgs": [
+                "run-script","dev"
+            ],
+            "outputCapture": "std",
+            "console": "integratedTerminal",
+            "runtimeExecutable": "npm",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "type": "pwa-node",
+            "cwd":"${workspaceFolder}/backend/src"
+        },
+
+        {
+            "name": "RUN BUILD",
+            "request": "launch",
+            "runtimeArgs": [
+                "run-script","build"
+            ],
+            "outputCapture": "std",
+            "console": "integratedTerminal",
+            "runtimeExecutable": "npm",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "type": "pwa-node",
+            "cwd":"${workspaceFolder}/backend/src"
+        },
+
+        {
+            "name": "START PROD",
             "request": "launch",
             "runtimeArgs": [
                 "start"

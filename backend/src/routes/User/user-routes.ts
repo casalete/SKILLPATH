@@ -1,18 +1,17 @@
-import express, { Request, Response, Router } from 'express';
 import elastic from '@elastic/elasticsearch';
-import User from '../../models/user';
 import bcrypt from 'bcrypt';
+import express, { NextFunction, Request, Response } from 'express';
+import User from '../../models/user';
+import { NotFound } from '../../utils/errors';
 
 const elasticClient = new elastic.Client({
     node: 'http://localhost:9200',
 });
 
-export const usersRouter: Router = express.Router();
-
-console.log('test');
+export const usersRouter = express.Router();
 
 // find user with the given id
-async function getUser(req: Request, res: Response, next: any) {
+async function getUser(req: Request, res: Response, next: NextFunction) {
     console.log('test');
 
     let user;

@@ -1,5 +1,5 @@
 require('dotenv').config();
-import express from 'express';
+import express, { Application, NextFunction, Request, Response } from 'express';
 import { router } from './routes/routes';
 import connectToDatabase from './config/db-connect';
 import { handleErrors } from './middleware/handleErrors';
@@ -8,7 +8,7 @@ const passport = require('passport');
 
 const cors = require('cors');
 
-const app = express();
+const app: Application = express();
 
 require('./config/passport')(passport);
 
@@ -17,7 +17,7 @@ app.use(passport.initialize());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use(function (req, res, next) {
+app.use(function (req: Request, res: Response, next: NextFunction) {
     res.header('Access-Control-Allow-Credentials', 'true');
     res.header('Access-Control-Allow-Origin', req.headers.origin);
     res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
