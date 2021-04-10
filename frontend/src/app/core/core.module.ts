@@ -8,8 +8,8 @@ import { reducers } from '../store';
 import { AuthEffects } from '../store/authentication/authentication.effects';
 import { EffectsModule } from '@ngrx/effects';
 import { AuthService } from './services/authService';
-import { AuthInterceptor } from './interceptors/AuthInterceptor';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { AuthInterceptor } from './interceptors/authInterceptor';
 
 // const entityMetadata: EntityMetadataMap = {
 //   User: { selectId: selectUserId, noChangeTracking: true },
