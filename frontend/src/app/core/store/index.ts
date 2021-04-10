@@ -6,16 +6,13 @@ import { createFeatureSelector } from '@ngrx/store';
 import { createSelector } from '@ngrx/store';
 
 export interface CoreState extends State {
-  authState: AuthState;
+    authState: AuthState;
 }
 
 export const reducers: ActionReducerMap<CoreState> = {
-  authState: authReducer,
+    authState: authReducer,
 };
 
 export const selectCoreState = createFeatureSelector<CoreState>('core');
 
-export const selectAuthState = createSelector(
-  selectCoreState,
-  (state: CoreState) => state.authState
-);
+export const selectAuthState = createSelector(selectCoreState, (state: CoreState) => state.authState);

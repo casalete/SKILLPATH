@@ -1,6 +1,6 @@
 import jsonwebtoken from 'jsonwebtoken';
 
-function issueJWT(user) {
+export const issueJWT = (user) => {
     const _id = user._id;
 
     const expiresIn = '1d';
@@ -13,9 +13,7 @@ function issueJWT(user) {
     const signedToken = jsonwebtoken.sign(payload, 'SKILLPATH_SECRET_PASSWORD', { expiresIn: expiresIn });
 
     return {
-        token: 'Bearer ' + signedToken,
+        token: signedToken,
         expires: expiresIn,
     };
-}
-
-module.exports.issueJWT = issueJWT;
+};

@@ -6,10 +6,10 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
-  declarations: [],
-  imports: [CommonModule, FormsModule, ReactiveFormsModule],
-  exports: [MDBBootstrapModulesPro, FormsModule, ReactiveFormsModule],
+    declarations: [],
+    imports: [CommonModule, FormsModule, ReactiveFormsModule],
+    exports: [MDBBootstrapModulesPro, FormsModule, ReactiveFormsModule],
 
-  schemas: [NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA],
+    schemas: [],
 })
 export class SharedModule {}

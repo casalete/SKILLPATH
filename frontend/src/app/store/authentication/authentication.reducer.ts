@@ -10,24 +10,21 @@ const reducer = createReducer(
         loading: true,
         loadingStatus: 'Authenticating...',
     })),
-    on(AuthActions.authenticateSuccess, (state, { authenticatedSessionData }) => ({
+    on(AuthActions.authenticateSuccess, (state, { jwt }) => ({
         ...state,
-        authenticatedSessionData,
+        jwt,
         loading: false,
         loadingStatus: null,
     })),
     on(AuthActions.authenticateError, (state, { error }) => ({
         ...state,
         authError: error,
-        authenticatedSessionData: null,
         loading: false,
         loadingStatus: null,
         profile: null,
-        // TODO: check if this is still used
     })),
     on(AuthActions.logout, (state) => ({
         ...state,
-        authenticatedSessionData: null,
         loading: false,
         loadingStatus: null,
     })),
@@ -41,17 +38,15 @@ const reducer = createReducer(
     on(AuthActions.registerError, (state, { error }) => ({
         ...state,
         authError: error,
-        authenticatedSessionData: null,
         loading: false,
         loadingStatus: null,
-        // TODO: check if this is still used
     })),
 
     on(AuthActions.clearError, (state) => ({
         ...state,
         authError: null,
         profileError: null,
-    }))
+    })),
 );
 
 export function authReducer(state: AuthState, action: Action): any {

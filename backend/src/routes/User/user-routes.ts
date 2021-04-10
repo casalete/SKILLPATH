@@ -12,8 +12,6 @@ export const usersRouter = express.Router();
 
 // find user with the given id
 async function getUser(req: Request, res: Response, next: NextFunction) {
-    console.log('test');
-
     let user;
     try {
         user = await User.findById(req.params.id);
