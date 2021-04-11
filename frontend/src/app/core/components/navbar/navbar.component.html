@@ -1,21 +1,33 @@
-<mdb-navbar
-  SideClass="navbar fixed-top navbar-expand-lg navbar-dark morpheus-den-gradient scrolling-navbar intro-fixed-nav"
-  [containerInside]="false"
->
-  <mdb-navbar-brand>
-    <a class="logo navbar-brand" href="#"><strong>Navbar</strong></a>
-  </mdb-navbar-brand>
-  <links>
-    <ul class="navbar-nav mr-auto">
-      <li class="nav-item active waves-light" mdbWavesEffect>
-        <a class="nav-link">Home <span class="sr-only">(current)</span></a>
-      </li>
-      <li class="nav-item waves-light" mdbWavesEffect>
-        <a class="nav-link">Link</a>
-      </li>
-      <li class="nav-item waves-light" mdbWavesEffect>
-        <a class="nav-link">Profile</a>
-      </li>
-    </ul>
-  </links>
+<mdb-navbar SideClass="navbar fixed-top navbar-expand-lg navbar-dark scrolling-navbar intro-fixed-nav" [containerInside]="false">
+    <mdb-navbar-brand>
+        <a class="logo navbar-brand" href="#"><strong>SkillPath</strong></a>
+    </mdb-navbar-brand>
+    <links>
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active waves-light" mdbWavesEffect>
+                <a class="nav-link">Topics <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item waves-light" mdbWavesEffect>
+                <a class="nav-link">Link</a>
+            </li>
+            <li class="nav-item waves-light" mdbWavesEffect>
+                <a class="nav-link">Profile</a>
+            </li>
+        </ul>
+
+        <ul class="navbar-nav ml-auto nav-flex-icons">
+            <li class="nav-item">
+                <a class="nav-link">1 <mdb-icon fas icon="envelope"></mdb-icon></a>
+            </li>
+            <li class="nav-item avatar dropdown" dropdown>
+                <a dropdownToggle mdbWavesEffect type="button" class="nav-link dropdown-toggle waves-light" mdbWavesEffect>
+                    <img src="https://mdbootstrap.com/img/Photos/Avatars/avatar-2.jpg" alt="" class="img-fluid rounded-circle z-depth-0"
+                /></a>
+                <div *dropdownMenu class="dropdown-menu dropdown-menu-right dropdown dropdown-primary" role="menu">
+                    <a class="dropdown-item waves-light" mdbWavesEffect href="#">My account</a>
+                    <a class="dropdown-item waves-light" mdbWavesEffect href="#">Log out</a>
+                </div>
+            </li>
+        </ul>
+    </links>
 </mdb-navbar>
