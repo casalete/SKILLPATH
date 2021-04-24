@@ -6,7 +6,8 @@ import { NotFound } from '../../utils/errors';
 
 const elasticClient = new elastic.Client({
     node: 'http://localhost:9200',
-});
+})
+
 
 export const usersRouter = express.Router();
 

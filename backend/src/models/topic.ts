@@ -2,11 +2,22 @@ import mongoose from 'mongoose';
 import mongoosastic from 'mongoosastic';
 
 const topicSchema = new mongoose.Schema({
+    /* uuid: {
+		type: String,
+		required: true,
+		unique: true
+	}, */
     name: {
         type: String,
         required: true,
         unique: true,
     },
+    postsCount: {
+        type: Number
+    },
+    suggestedTopics: [{
+        type : String
+    }]
 });
 
 topicSchema.plugin(mongoosastic, {

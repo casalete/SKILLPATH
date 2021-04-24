@@ -3,6 +3,14 @@ import mongoosastic from 'mongoosastic';
 import bcrypt from 'bcrypt';
 
 const userSchema = new mongoose.Schema({
+	uuid: {
+		type: String,
+		required: true,
+		unique: true
+	},
+	authData: {
+		type : Object
+	},
 	firstName: {
 		type: String,
 		required: true,
@@ -19,19 +27,29 @@ const userSchema = new mongoose.Schema({
 		trim: true,
 		unique: 1,
 	},
-
 	password: {
 		type: String,
 		required: true,
 		minlength: 8,
 	},
-
 	email: {
 		type: String,
 		required: true,
 		trim: true,
 		unique: 1,
 	},
+	rank: {
+		type: {topicName: String, rank: Number}
+	},
+	followedTopics: [{
+		type: String
+	}],
+	followedUsers: [{
+		type: String
+	}],
+	lastActivity: {
+		type: Date
+	}
 });
 
 userSchema.pre('save', async function (next) {
