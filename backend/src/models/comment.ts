@@ -1,12 +1,25 @@
 import mongoose from 'mongoose';
 import mongoosastic from 'mongoosastic';
+import { VoteType } from './voteType';
+
+interface Comment {
+	author: String,
+	postName: String,
+    content: String,
+    topicName: String,
+    upVotes: Number,
+    downVotes: Number,
+    lastUpdated: Date,
+    score: Number,
+	votersList: [{
+        userName: String,
+        voteType: VoteType,
+    }]
+}
+
+interface CommentModel extends Comment, mongoose.Document {}
 
 const commentSchema = new mongoose.Schema({
-    uuid: {
-		type: String,
-		required: true,
-		unique: true
-	},
     author: {
         type: String,
         required: true,
@@ -21,7 +34,7 @@ const commentSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    topic: {
+    topicName: {
         type : String
     },
     upVotes: {
@@ -36,9 +49,10 @@ const commentSchema = new mongoose.Schema({
     score : {
         type : Number
     },
-    votersList: {
-        type : [{ userName : String, voteType : { upVote : String, downVote: String, comment : String} }]
-    }   
+    votersList: [{
+        userName: String,
+        voteType: VoteType,
+    }]  
 });
 
 commentSchema.plugin(mongoosastic, {
@@ -46,5 +60,5 @@ commentSchema.plugin(mongoosastic, {
     port: 9200,
 });
 
-const Comment = mongoose.model('Comment', commentSchema);
-export default Comment;
+export const Comment = mongoose.model<CommentModel>('Comment', commentSchema);
+

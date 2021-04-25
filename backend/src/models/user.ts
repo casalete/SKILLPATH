@@ -2,6 +2,22 @@ import mongoose from 'mongoose';
 import mongoosastic from 'mongoosastic';
 import bcrypt from 'bcrypt';
 
+interface User {
+	authData: Object,
+	firstName: String,
+	lastName: String,
+	username: String,	
+	password: String,
+	email: String,
+	rank: {topicName: String, rank: Number},
+	followedTopics: String[],
+	followedUsers: String[],
+	lastActivity: Date
+}
+
+interface UserModel extends User, mongoose.Document {}
+
+
 const userSchema = new mongoose.Schema({
 	uuid: {
 		type: String,
@@ -72,6 +88,5 @@ userSchema.plugin(mongoosastic, {
 	port: 9200,
 });
 
-const User = mongoose.model('User', userSchema);
+export const UserModel = mongoose.model<UserModel>('User', userSchema);
 
-export default User;

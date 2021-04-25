@@ -1,6 +1,6 @@
 import express from 'express';
 import { Error } from 'mongoose';
-import UserModel from '../../models/user';
+import { UserModel } from '../../models/user';
 import { BadRequest, GeneralError } from '../../utils/errors';
 
 import { issueJWT } from '../../utils/utils';

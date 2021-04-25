@@ -1,13 +1,12 @@
 import elastic from '@elastic/elasticsearch';
 import bcrypt from 'bcrypt';
 import express, { NextFunction, Request, Response } from 'express';
-import User from '../../models/user';
+import { UserModel } from '../../models/user';
 import { NotFound } from '../../utils/errors';
 
 const elasticClient = new elastic.Client({
     node: 'http://localhost:9200',
 })
-
 
 export const usersRouter = express.Router();
 
@@ -15,7 +14,7 @@ export const usersRouter = express.Router();
 async function getUser(req: Request, res: Response, next: NextFunction) {
     let user;
     try {
-        user = await User.findById(req.params.id);
+        user = await UserModel.findById(req.params.id);
         if (user == null) {
             throw new NotFound('Cannot find usser with given id');
         }
@@ -31,7 +30,7 @@ async function getUser(req: Request, res: Response, next: NextFunction) {
 // get all users
 usersRouter.get('/', async (_req: Request, res: Response) => {
     try {
-        const users = await User.find();
+        const users = await UserModel.find();
         res.json(users);
     } catch (err) {
         res.status(500).json({ message: err.message });
@@ -47,16 +46,17 @@ usersRouter.get('/:id', getUser, (_req: Request, res: Response) => {
 usersRouter.post('/', async (req: Request, res: Response) => {
     const hashedPass: string = await bcrypt.hash(req.body.password, 10);
 
-    const user = new User({
+    const user = new UserModel({
         name: req.body.name,
         email: req.body.email,
         password: hashedPass,
+        
     });
     try {
         const newUser = await user.save(function (err) {
             if (err) throw err;
             /* Document indexation on going */
-            User.on('es-indexed', function (err, res) {
+            UserModel.on('es-indexed', function (err, res) {
                 if (err) throw err;
                 /* Document is indexed */
             });
@@ -89,7 +89,7 @@ usersRouter.delete('/:id', getUser, async (req: Request, res: Response) => {
         await (<any>res).user.remove(function (err) {
             if (err) throw err;
             /* Document unindexing in the background */
-            User.on('es-removed', function (err, res) {
+            UserModel.on('es-removed', function (err, res) {
                 if (err) throw err;
                 /* Docuemnt is unindexed */
             });
@@ -102,7 +102,7 @@ usersRouter.delete('/:id', getUser, async (req: Request, res: Response) => {
 
 // login
 usersRouter.post('/login', async (req: Request, res: Response) => {
-    const user = await User.findOne({ name: req.body.name }).exec();
+    const user = await UserModel.findOne({ name: req.body.name }).exec();
 
     if (user == null) {
         return res.status(400).send('User does not exist.');
