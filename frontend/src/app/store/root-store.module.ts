@@ -4,6 +4,8 @@ import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { AuthStoreModule } from './authentication/auth-store.module';
+import { NgrxDataModule } from './ngrx-data/ngrx-data.module';
+import { RouterStoreModule } from './router';
 
 @NgModule({
     declarations: [],
@@ -23,7 +25,8 @@ import { AuthStoreModule } from './authentication/auth-store.module';
             maxAge: 30,
         }),
         AuthStoreModule,
-        // NgrxDataModule,
+        NgrxDataModule,
+        RouterStoreModule,
     ],
 })
 export class RootStoreModule {}

@@ -1,47 +1,91 @@
-@import "./assets/theme.scss";
+@import './assets/theme.scss';
+
+@import '~ng-uikit-pro-standard/assets/scss/core/mixins';
+@import '~ng-uikit-pro-standard/assets/scss/core/colors';
+@import '~ng-uikit-pro-standard/assets/scss/core/variables';
+@import '~ng-uikit-pro-standard/assets/scss/core/variables-pro';
+@import '~ng-uikit-pro-standard/assets/scss/core/msc/skins-pro';
 
 html {
-  height: 100%;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  user-select: none;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    user-select: none;
 }
 
 body,
 app-root,
 .skillPath-app-layout {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  width: 100%;
-  height: 100%;
-  font-family: "Roboto";
-  font-size: 14px;
-  line-height: 18px;
-  font-weight: normal;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    width: 100%;
+    height: 100%;
+    font-family: 'Roboto';
+    font-size: 14px;
+    line-height: 18px;
+    font-weight: normal;
+    background-image: url('assets/img/background-2462431_1920.jpg');
+    height: 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    z-index: 0;
 }
 
 * {
-  margin: 0;
-  padding: 0;
+    margin: 0;
+    padding: 0;
 
-  &::-webkit-scrollbar {
-    width: 7px;
-    height: 7px;
-  }
+    &::-webkit-scrollbar {
+        width: 7px;
+        height: 7px;
+    }
 
-  &::-webkit-scrollbar-track {
-    background: grey;
-    box-shadow: -1px 0px 0px grey;
-  }
+    &::-webkit-scrollbar-track {
+        background: grey;
+        box-shadow: -1px 0px 0px grey;
+    }
 
-  &::-webkit-scrollbar-thumb {
-    border-radius: 4px;
-    background: black;
-  }
+    &::-webkit-scrollbar-thumb {
+        border-radius: 4px;
+        background: black;
+    }
 }
 
 :focus {
-  outline: 0;
+    outline: 0;
 }
+
+// @import '~ng-uikit-pro-standard/assets/scss/core/mixins';
+// @import '~ng-uikit-pro-standard/assets/scss/core/colors';
+// @import '~ng-uikit-pro-standard/assets/scss/core/variables';
+// @import '~ng-uikit-pro-standard/assets/scss/core/variables-pro';
+// @import '~ng-uikit-pro-standard/assets/scss/core/msc/skins-pro';
+
+// $skins: () !default;
+// $skins: map-merge(
+//     (
+//         'testasdd': (
+//             'skin-primary-color': #fff,
+//             'skin-navbar': #fff,
+//             'skin-footer-color': #fff,
+//             'skin-accent': #fff,
+//             'skin-flat': #fff,
+//             'skin-sidenav-item': #fff,
+//             'skin-sidenav-item-hover': #fff,
+//             'skin-gradient-start': #fff,
+//             'skin-gradient-end': #fff,
+//             'skin-mask-slight': #fff,
+//             'skin-mask-light': #fff,
+//             'skin-mask-strong': #fff,
+//             'skin-sn-child': #fff,
+//             'skin-btn-primary': #fff,
+//             'skin-btn-secondary': #fff,
+//             'skin-btn-default': #fff,
+//             'skin-text': #fff,
+//         ),
+//     ),
+//     $skins
+// );

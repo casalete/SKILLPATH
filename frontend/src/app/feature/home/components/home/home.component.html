@@ -1,4 +1,4 @@
-<div class="home-container d-flex flex-column justify-content-center mx-5">
+<div class="home-container d-flex flex-column justify-content-center mx-5 sp-theme">
     <div class="col-md-6 mx-auto">
         <div class="md-form">
             <input type="text" [(ngModel)]="searchText" class="form-control" id="search" mdbInput />
@@ -16,11 +16,16 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let el of elements; let i = index">
-                    <th scope="row">{{ el.id }}</th>
-                    <td class="red-text">{{ el.first }}</td>
-                    <td>{{ el.last }}</td>
-                    <td>{{ el.handle }}</td>
+                <tr *ngFor="let topic of topics; let i = index" (click)="onTopicSelected(i)">
+                    <th scope="row">{{ topic.name }}</th>
+                    <td class="red-text">{{ topic.postsCount }}</td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <div class="d-flex justify-content-center">
+                            <button type="button" mdbBtn color="primary" mdbWavesEffect>Add Topic</button>
+                        </div>
+                    </td>
                 </tr>
             </tbody>
         </table>
