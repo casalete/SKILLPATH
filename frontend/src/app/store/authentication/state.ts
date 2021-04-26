@@ -6,7 +6,7 @@ export interface AuthState {
     jwt: string;
 }
 
-export const initialState: AuthState = {
+export const initialAuthState: AuthState = {
     // authenticatedSessionData: localStorage.getItem('authenticatedSessionData') ? JSON.parse(localStorage.getItem('authenticatedSessionData')) : null,
     error: null,
     loading: false,
