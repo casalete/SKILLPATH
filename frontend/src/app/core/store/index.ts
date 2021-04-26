@@ -1,7 +1,7 @@
 import { State } from 'src/app/store';
-import { AuthState } from 'src/app/store/authentication/authentication.state';
+import { AuthState } from 'src/app/store/authentication/state';
 import { ActionReducerMap } from '@ngrx/store';
-import { authReducer } from 'src/app/store/authentication/authentication.reducer';
+import { authReducer } from 'src/app/store/authentication/reducer';
 import { createFeatureSelector } from '@ngrx/store';
 import { createSelector } from '@ngrx/store';
 

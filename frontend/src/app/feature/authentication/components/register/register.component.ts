@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { registerStart } from '../../../../store/authentication/authentication.actions';
+import { registerStart } from '../../../../store/authentication/actions';
 
 @Component({
     selector: 'app-register',

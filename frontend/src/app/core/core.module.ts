@@ -5,7 +5,7 @@ import { MDBBootstrapModulesPro, ToastModule } from 'ng-uikit-pro-standard';
 import { RouterModule } from '@angular/router';
 import { StoreModule } from '@ngrx/store';
 import { reducers } from '../store';
-import { AuthEffects } from '../store/authentication/authentication.effects';
+import { AuthEffects } from '../store/authentication/effects';
 import { EffectsModule } from '@ngrx/effects';
 import { AuthService } from './services/authService';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
