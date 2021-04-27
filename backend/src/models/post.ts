@@ -1,12 +1,28 @@
 import mongoose from 'mongoose'
 import mongoosastic from 'mongoosastic'
+import { VoteType } from './voteType';
+
+
+interface Post {
+	name: String,
+   description: String,
+   mainTopic: String,
+   author: String,
+   upVotes: Number,
+   downVotes: Number,
+   postTopics:  Array<String>,
+   creationTimestamp: Date,
+   lastVoted: Date,
+   commentList:  Array<String>,
+   votersList: [{
+     userName: String,
+     voteType: VoteType,
+   }]
+}
+
+interface PostModel extends Post, mongoose.Document {}
 
 const postSchema = new mongoose.Schema({
-   uuid: {
-      type: String,
-      required: true,
-      unique: true
-   },
    name: {
       type: String,
       required: true,
@@ -31,19 +47,21 @@ const postSchema = new mongoose.Schema({
    downVotes: {
       type: Number
    },
-   postTopics: {
-      type: Array<String>(),
+   postTopics: [{
+      type: String,
       required: true
-   },
+   }],
    creationTimestamp: {
       type: Date
    },
    lastVoted: {
       type: Date
    },
-   commentList: [{
-     id 
-   }]
+   commentList: [{type:String}],
+   votersList: [{
+      userName: String,
+      voteType: String,
+    }]
 })
 
 postSchema.plugin(mongoosastic, {
@@ -51,5 +69,4 @@ postSchema.plugin(mongoosastic, {
    "port": 9200
 });
 
-const Post = mongoose.model('Post', postSchema)
-export default Post
+export const PostModel = mongoose.model<PostModel>('Post', postSchema);

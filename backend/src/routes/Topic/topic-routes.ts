@@ -1,7 +1,6 @@
 import elastic from '@elastic/elasticsearch';
-import bcrypt from 'bcrypt';
 import express, { NextFunction, Request, Response } from 'express';
-import Topic from '../../models/topic';
+import { TopicModel } from '../../models/topic';
 import { NotFound } from '../../utils/errors';
 
 const elasticClient = new elastic.Client({
@@ -15,7 +14,7 @@ export const topicsRouter = express.Router();
 async function getTopic(req: Request, res: Response, next: NextFunction) {
     let topic;
     try {
-        topic = await Topic.findById(req.params.id);
+        topic = await TopicModel.findById(req.params.id);
         if (topic == null) {
             throw new NotFound('Cannot find topic with given id');
         }
@@ -24,14 +23,14 @@ async function getTopic(req: Request, res: Response, next: NextFunction) {
     }
     // add new key/value pair to the res obj
     Object.assign(res, { topic: topic });
-    // res = {...res, user:user},
+    // res = {...res, topic:topic},
     next(); // pass control to the next handler
 }
 
 // get all topics
 topicsRouter.get('/', async (_req: Request, res: Response) => {
     try {
-        const topics = await Topic.find();
+        const topics = await TopicModel.find();
         res.json(topics);
     } catch (err) {
         res.status(500).json({ message: err.message });
@@ -47,7 +46,7 @@ topicsRouter.get('/:id', getTopic, (_req: Request, res: Response) => {
 topicsRouter.post('/', async (req: Request, res: Response) => {
     //const hashedPass: string = await bcrypt.hash(req.body.password, 10);
 
-    const topic = new Topic({
+    const topic = new TopicModel({
         name: req.body.name,
         suggestedTopics: req.body.suggestedTopics
     });
@@ -55,7 +54,7 @@ topicsRouter.post('/', async (req: Request, res: Response) => {
         const newTopic = await topic.save(function (err) {
             if (err) throw err;
             /* Document indexation on going */
-            Topic.on('es-indexed', function (err, res) {
+            TopicModel.on('es-indexed', function (err, res) {
                 if (err) throw err;
                 /* Document is indexed */
             });
@@ -66,7 +65,7 @@ topicsRouter.post('/', async (req: Request, res: Response) => {
     }
 });
 
-// update user's info
+// update topic's info
 topicsRouter.patch('/:id', getTopic, async (req: Request, res: Response) => {
 
     if (req.body.name != null) {
