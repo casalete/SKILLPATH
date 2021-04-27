@@ -1,4 +1,4 @@
-<div class="home-container d-flex flex-column justify-content-center mx-5 sp-theme">
+<div class="topic-container d-flex flex-column justify-content-center mx-5 sp-theme">
     <div class="col-md-6 mx-auto">
         <div class="md-form">
             <input type="text" [(ngModel)]="searchText" class="form-control" id="search" mdbInput />
@@ -13,14 +13,13 @@
                     <th *ngFor="let head of headElements; let i = index" scope="col">
                         {{ head }}
                     </th>
-                    <th></th>
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let topic of topics; let i = index" (click)="onTopicSelected(i)">
-                    <th scope="row">{{ topic.name }}</th>
-                    <td class="red-text">{{ topic.postsCount }}</td>
-                    <a mdbBtn color="primary" [routerLink]="['/', topic.name]">VIEW</a>
+                <tr *ngFor="let post of posts; let i = index" (click)="onTopicSelected(i)">
+                    <th scope="row">{{ post.author }}</th>
+                    <th scope="row">{{ post.name }}</th>
+                    <td class="red-text">{{ post.score }}</td>
                 </tr>
                 <tr>
                     <td colspan="2">

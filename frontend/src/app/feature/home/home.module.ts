@@ -6,9 +6,10 @@ import { HomeRoutingModule } from './home-routing.module';
 import { SharedModule } from '../../shared/shared/shared.module';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { HomeComponent } from './components/home/home.component';
+import { TopicComponent } from './components/topic/topic.component';
 
 @NgModule({
-    declarations: [HomeComponent],
+    declarations: [HomeComponent, TopicComponent],
     imports: [CommonModule, HomeRoutingModule, MDBBootstrapModulesPro.forRoot(), SharedModule],
 
     schemas: [],

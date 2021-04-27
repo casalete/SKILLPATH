@@ -1,27 +1,48 @@
 import { Component, HostListener, OnInit, ViewChild, OnDestroy } from '@angular/core';
-import { MdbTableDirective } from 'ng-uikit-pro-standard';
-import { SubSink } from 'subsink';
-import { TopicEntityService } from '../../../../store/ngrx-data/topic/topic-entity.service';
-import { Topic } from 'src/app/core/Models/Topic';
-import { Observable } from 'rxjs';
-import { skipWhile, switchMap } from 'rxjs/operators';
 import { Router } from '@angular/router';
+import { MdbTableDirective } from 'ng-uikit-pro-standard';
+import { Observable } from 'rxjs';
+import { Post } from 'src/app/core/Models/Post';
+import { Topic } from 'src/app/core/Models/Topic';
+import { TopicEntityService } from 'src/app/store/ngrx-data/topic/topic-entity.service';
+import { SubSink } from 'subsink';
 
 @Component({
-    selector: 'app-home',
-    templateUrl: './home.component.html',
-    styleUrls: ['./home.component.scss'],
+    selector: 'app-topic',
+    templateUrl: './topic.component.html',
+    styleUrls: ['./topic.component.scss'],
 })
-export class HomeComponent implements OnInit, OnDestroy {
+export class TopicComponent implements OnInit, OnDestroy {
     constructor(private topicEntityService: TopicEntityService, private router: Router) {}
     subs = new SubSink();
     topics$: Observable<Topic[]>;
-    topics: Topic[] = [];
+    posts: Post[] = [
+        {
+            name: 'Full Stack 2020',
+            score: 2522,
+            author: 'Serghei Mizil',
+        },
+        {
+            name: 'Full Stack 2020',
+            score: 2522,
+            author: 'Serghei Mizil',
+        },
+        {
+            name: 'Full Stack 2020',
+            score: 2522,
+            author: 'Serghei Mizil',
+        },
+        {
+            name: 'Full Stack 2020',
+            score: 2522,
+            author: 'Serghei Mizil',
+        },
+    ];
 
     @ViewChild(MdbTableDirective, { static: true }) mdbTable: MdbTableDirective;
     elements: any = [];
     // headElements = ['Topic', 'Post Count', 'Last', 'Handle'];
-    headElements = ['Topic', 'Post Count'];
+    headElements = ['Author', 'Post Name', 'Score'];
     searchText: string = '';
     previous: string;
 
@@ -30,7 +51,8 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        this.topicEntityService.getAll();
+        // this.topicEntityService.getAll();
+        [];
         for (let i = 1; i <= 8; i++) {
             this.elements.push({
                 id: i.toString(),
@@ -39,21 +61,7 @@ export class HomeComponent implements OnInit, OnDestroy {
                 handle: 'Handle ' + i,
             });
         }
-
-        this.subs.sink = this.topicEntityService.loading$
-            .pipe(
-                skipWhile((loading) => loading === true),
-                switchMap(() => this.topicEntityService.entities$),
-            )
-            .subscribe((ts: Topic[]) => {
-                this.topics = ts;
-            });
     }
-
-    // ngAfterViewInit(): void {
-    //     // this.mdbTable.setDataSource(this.topics);
-    //     // this.previous = this.mdbTable.getDataSource();
-    // }
 
     searchItems() {
         const prev = this.mdbTable.getDataSource();
@@ -67,10 +75,10 @@ export class HomeComponent implements OnInit, OnDestroy {
         }
     }
 
-    onTopicSelected(i) {
-        this.topicEntityService.updateOneInCache({ ...this.topics[i], selected: true });
-        this.router.navigate(['/topic']);
-    }
-
     ngOnDestroy(): void {}
 }
+
+//   onTopicSelected(i) {
+//       this.topicEntityService.updateOneInCache({ ...this.topics[i], selected: true });
+//       this.router.navigate(['/topic']);
+//   }

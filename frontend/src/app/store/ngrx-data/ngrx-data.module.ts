@@ -4,25 +4,39 @@ import { EntityDataModule, EntityDataService, EntityDefinitionService, EntityMet
 import { TopicDataService } from './topic/topic-data.service';
 import { TopicEntityService } from './topic/topic-entity.service';
 import { Topic } from 'src/app/core/Models/Topic';
+import { PostDataService } from './post/post-data.service';
+import { Post } from 'src/app/core/Models/Post';
+import { PostEntityService } from './post/post-entity.service';
 
 const entityMetadata: EntityMetadataMap = {
     Topic: { selectId: selectTopicId, noChangeTracking: true },
+    Post: { selectId: selectPostId, noChangeTracking: true },
 };
 export function selectTopicId(a: Topic): string {
+    return a.name;
+}
+
+export function selectPostId(a: Post): string {
     return a.name;
 }
 
 @NgModule({
     declarations: [],
     imports: [CommonModule, EntityDataModule.forRoot({ entityMetadata })],
-    providers: [TopicDataService, TopicEntityService],
+    providers: [TopicDataService, TopicEntityService, PostDataService, PostEntityService],
 })
 export class NgrxDataModule {
-    constructor(private eds: EntityDefinitionService, private entityDataService: EntityDataService, private topicDataService: TopicDataService) {
+    constructor(
+        private eds: EntityDefinitionService,
+        private entityDataService: EntityDataService,
+        private topicDataService: TopicDataService,
+        private postDataService: PostDataService,
+    ) {
         this.eds.registerMetadataMap(entityMetadata);
 
         this.entityDataService.registerServices({
             Topic: this.topicDataService,
+            Post: this.postDataService,
         });
     }
 }
