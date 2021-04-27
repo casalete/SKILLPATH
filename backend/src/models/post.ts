@@ -47,20 +47,20 @@ const postSchema = new mongoose.Schema({
    downVotes: {
       type: Number
    },
-   postTopics: {
-      type: Array<String>(),
+   postTopics: [{
+      type: String,
       required: true
-   },
+   }],
    creationTimestamp: {
       type: Date
    },
    lastVoted: {
       type: Date
    },
-   commentList: Array<String>(),
+   commentList: [{type:String}],
    votersList: [{
       userName: String,
-      voteType: VoteType,
+      voteType: String,
     }]
 })
 
@@ -69,4 +69,4 @@ postSchema.plugin(mongoosastic, {
    "port": 9200
 });
 
-export const Post = mongoose.model<PostModel>('Post', postSchema);
+export const PostModel = mongoose.model<PostModel>('Post', postSchema);

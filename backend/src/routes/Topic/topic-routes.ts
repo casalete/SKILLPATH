@@ -1,5 +1,4 @@
 import elastic from '@elastic/elasticsearch';
-import bcrypt from 'bcrypt';
 import express, { NextFunction, Request, Response } from 'express';
 import { TopicModel } from '../../models/topic';
 import { NotFound } from '../../utils/errors';
@@ -24,7 +23,7 @@ async function getTopic(req: Request, res: Response, next: NextFunction) {
     }
     // add new key/value pair to the res obj
     Object.assign(res, { topic: topic });
-    // res = {...res, user:user},
+    // res = {...res, topic:topic},
     next(); // pass control to the next handler
 }
 
@@ -66,7 +65,7 @@ topicsRouter.post('/', async (req: Request, res: Response) => {
     }
 });
 
-// update user's info
+// update topic's info
 topicsRouter.patch('/:id', getTopic, async (req: Request, res: Response) => {
 
     if (req.body.name != null) {
