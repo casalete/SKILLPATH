@@ -1,12 +1,13 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { EntityDataModule, EntityDataService, EntityDefinitionService, EntityMetadataMap } from '@ngrx/data';
+import { DefaultDataServiceConfig, EntityDataModule, EntityDataService, EntityDefinitionService, EntityMetadataMap } from '@ngrx/data';
 import { TopicDataService } from './topic/topic-data.service';
 import { TopicEntityService } from './topic/topic-entity.service';
 import { Topic } from 'src/app/core/Models/Topic';
 import { PostDataService } from './post/post-data.service';
 import { Post } from 'src/app/core/Models/Post';
 import { PostEntityService } from './post/post-entity.service';
+import { defaultDataServiceConfig } from 'src/app/core/services/ngrxDataServiceConfig';
 
 const entityMetadata: EntityMetadataMap = {
     Topic: { selectId: selectTopicId, noChangeTracking: true },
@@ -23,7 +24,13 @@ export function selectPostId(a: Post): string {
 @NgModule({
     declarations: [],
     imports: [CommonModule, EntityDataModule.forRoot({ entityMetadata })],
-    providers: [TopicDataService, TopicEntityService, PostDataService, PostEntityService],
+    providers: [
+        TopicDataService,
+        TopicEntityService,
+        PostDataService,
+        PostEntityService,
+        { provide: DefaultDataServiceConfig, useValue: defaultDataServiceConfig },
+    ],
 })
 export class NgrxDataModule {
     constructor(

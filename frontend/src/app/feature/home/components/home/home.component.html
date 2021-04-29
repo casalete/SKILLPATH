@@ -17,17 +17,10 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let topic of topics; let i = index" (click)="onTopicSelected(i)">
+                <tr *ngFor="let topic of topics; let i = index">
                     <th scope="row">{{ topic.name }}</th>
                     <td class="red-text">{{ topic.postsCount }}</td>
-                    <a mdbBtn color="primary" [routerLink]="['/', topic.name]">VIEW</a>
-                </tr>
-                <tr>
-                    <td colspan="2">
-                        <div class="d-flex justify-content-center">
-                            <button type="button" mdbBtn color="primary" mdbWavesEffect>Add Topic</button>
-                        </div>
-                    </td>
+                    <mdb-icon size="3x" fas icon="eye" class="orange-text" [routerLink]="['/', topic.name]"></mdb-icon>
                 </tr>
             </tbody>
         </table>

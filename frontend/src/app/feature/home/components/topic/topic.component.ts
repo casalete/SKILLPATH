@@ -6,6 +6,11 @@ import { Post } from 'src/app/core/Models/Post';
 import { Topic } from 'src/app/core/Models/Topic';
 import { TopicEntityService } from 'src/app/store/ngrx-data/topic/topic-entity.service';
 import { SubSink } from 'subsink';
+import { PostEntityService } from '../../../../store/ngrx-data/post/post-entity.service';
+import { QueryParams } from '@ngrx/data';
+import { Store } from '@ngrx/store';
+import { selectRouteParam, selectRouteParams } from 'src/app/store/router/selectors';
+import { skipWhile, switchMap, take } from 'rxjs/operators';
 
 @Component({
     selector: 'app-topic',
@@ -13,36 +18,15 @@ import { SubSink } from 'subsink';
     styleUrls: ['./topic.component.scss'],
 })
 export class TopicComponent implements OnInit, OnDestroy {
-    constructor(private topicEntityService: TopicEntityService, private router: Router) {}
+    constructor(private topicEntityService: TopicEntityService, private router: Router, private postEntityService: PostEntityService, private store: Store) {}
     subs = new SubSink();
     topics$: Observable<Topic[]>;
-    posts: Post[] = [
-        {
-            name: 'Full Stack 2020',
-            score: 2522,
-            author: 'Serghei Mizil',
-        },
-        {
-            name: 'Full Stack 2020',
-            score: 2522,
-            author: 'Serghei Mizil',
-        },
-        {
-            name: 'Full Stack 2020',
-            score: 2522,
-            author: 'Serghei Mizil',
-        },
-        {
-            name: 'Full Stack 2020',
-            score: 2522,
-            author: 'Serghei Mizil',
-        },
-    ];
+    posts: Post[] = [];
 
     @ViewChild(MdbTableDirective, { static: true }) mdbTable: MdbTableDirective;
     elements: any = [];
     // headElements = ['Topic', 'Post Count', 'Last', 'Handle'];
-    headElements = ['Author', 'Post Name', 'Score'];
+    headElements = ['Author', 'Post Name', 'Description', 'Score'];
     searchText: string = '';
     previous: string;
 
@@ -52,15 +36,25 @@ export class TopicComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         // this.topicEntityService.getAll();
-        [];
-        for (let i = 1; i <= 8; i++) {
-            this.elements.push({
-                id: i.toString(),
-                first: 'Wpis ' + i,
-                last: 'Last ' + i,
-                handle: 'Handle ' + i,
+        this.store
+            .select(selectRouteParam('id'))
+            .pipe(take(1))
+            .subscribe((routeParam) => {
+                const queryParams: QueryParams = {
+                    topicName: routeParam,
+                };
+                console.log(queryParams);
+                this.postEntityService.getWithQuery(queryParams);
             });
-        }
+
+        this.subs.sink = this.topicEntityService.loading$
+            .pipe(
+                skipWhile((loading) => loading === true),
+                switchMap(() => this.postEntityService.entities$),
+            )
+            .subscribe((ps: Post[]) => {
+                this.posts = ps;
+            });
     }
 
     searchItems() {

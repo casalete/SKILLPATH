@@ -2,10 +2,12 @@ import { CommonModule } from '@angular/common';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule, Optional, SkipSelf } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { DefaultDataServiceConfig } from '@ngrx/data';
 import { MDBBootstrapModulesPro, ToastModule } from 'ng-uikit-pro-standard';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { AuthInterceptor } from './interceptors/authInterceptor';
 import { AuthService } from './services/authService';
+import { defaultDataServiceConfig } from './services/ngrxDataServiceConfig';
 
 @NgModule({
     declarations: [NavbarComponent],
