@@ -7,9 +7,10 @@ import { SharedModule } from '../../shared/shared/shared.module';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { HomeComponent } from './components/home/home.component';
 import { TopicComponent } from './components/topic/topic.component';
+import { ProfileComponent } from './components/profile/profile.component';
 
 @NgModule({
-    declarations: [HomeComponent, TopicComponent],
+    declarations: [HomeComponent, TopicComponent, ProfileComponent],
     imports: [CommonModule, HomeRoutingModule, MDBBootstrapModulesPro.forRoot(), SharedModule],
 
     schemas: [],

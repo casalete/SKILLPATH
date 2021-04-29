@@ -20,7 +20,7 @@
                 <tr *ngFor="let topic of topics; let i = index">
                     <th scope="row">{{ topic.name }}</th>
                     <td class="red-text">{{ topic.postsCount }}</td>
-                    <mdb-icon size="3x" fas icon="eye" class="orange-text" [routerLink]="['/', topic.name]"></mdb-icon>
+                    <mdb-icon size="3x" fas icon="eye" class="orange-text" [routerLink]="['/topic', topic.name]"></mdb-icon>
                 </tr>
             </tbody>
         </table>

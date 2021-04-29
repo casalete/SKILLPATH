@@ -1,5 +1,9 @@
 .sp-theme {
     table.table {
         background-color: rgba(255, 255, 255, 0.75);
+        td,
+        th {
+            vertical-align: middle;
+        }
     }
 }
