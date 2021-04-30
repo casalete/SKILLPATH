@@ -1,8 +1,9 @@
+import { ProfileData } from '../../core/Models/ProfileData';
 export interface AuthState {
     error: string;
     loading: boolean;
     loadingStatus: string;
-    profile: any;
+    profileData: ProfileData;
     jwt: string;
 }
 
@@ -11,6 +12,6 @@ export const initialAuthState: AuthState = {
     error: null,
     loading: false,
     loadingStatus: null,
-    profile: null,
+    profileData: null,
     jwt: null,
 };

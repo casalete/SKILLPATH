@@ -5,6 +5,7 @@ import { Actions, Effect, ofType } from '@ngrx/effects';
 import { ToastService } from 'ng-uikit-pro-standard';
 import { catchError, exhaustMap, switchMap, tap } from 'rxjs/operators';
 import { LocalStorageService } from 'src/app/core/services/local-storage.service';
+import { storeProfileData } from './actions';
 
 import { AuthService } from '../../core/services/authService';
 import * as AuthActions from './actions';
@@ -52,6 +53,22 @@ export class AuthEffects {
         })
     );
 */
+
+    @Effect()
+    getProfileData$ = this.actions$.pipe(
+        ofType(AuthActions.getProfileDataStart),
+        switchMap((action) =>
+            this.authService.getProfileData().pipe(
+                switchMap((profileData) => {
+                    return [AuthActions.storeProfileData({ profileData })];
+                }),
+                catchError((err) => {
+                    this.toast.error('Profile Data retrieval failed!');
+                    return [];
+                }),
+            ),
+        ),
+    );
 
     /*
     @Effect()

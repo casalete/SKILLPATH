@@ -23,9 +23,7 @@
 
                     <h6 class="text-justify"><strong>About:</strong></h6>
                     <p class="text-justify">
-                        Mare Mare Tank Mare Mare Tank Mare Mare Tank Mare Mare Tank Mare Mare Tank Mare Mare Tank Mare Mare Tank Mare Mare Tank Mare Mare Tank
-                        Mare Mare Tank Mare Mare Tank Mare Mare Tank Mare Mare Tankv Mare Mare Tank Mare Mare Tank Mare Mare Tank Mare Mare Tank Mare Mare Tank
-                        Mare Mare Tank...
+                        {{ (profileData$ | async)?.about }}
                     </p>
 
                     <div class="text-right">
@@ -60,25 +58,9 @@
 
                 <!--Card content-->
                 <mdb-card-body cascade="true" class="text-center">
-                    <div class="chip">
+                    <div class="chip" *ngFor="let achievement of (profileData$ | async)?.achievements">
                         <img src="https://d30y9cdsu7xlg0.cloudfront.net/png/158907-200.png" class="img-fluid" />
-                        Scholar
-                    </div>
-                    <div class="chip">
-                        <img
-                            src="https://www.hrglobalindia.com/wp-content/uploads/2015/05/icon3-e1431786925198.png"
-                            alt="Provide non-wiki answers of 15 total score in 20 of top 40 tags"
-                            class="img-fluid"
-                        />
-                        Activist
-                    </div>
-                    <div class="chip">
-                        <img src="https://d30y9cdsu7xlg0.cloudfront.net/png/359329-200.png" class="img-fluid" />
-                        Guru
-                    </div>
-                    <div class="chip">
-                        <img src="https://d30y9cdsu7xlg0.cloudfront.net/png/62983-200.png" class="img-fluid" />
-                        Teacher
+                        {{ achievement }}
                     </div>
                 </mdb-card-body>
                 <!--/.Card content-->
@@ -104,14 +86,51 @@
                     <mdb-tab heading="Activity">
                         <div class="row">
                             <div class="col-12">
-                                <p>
-                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nihil odit magnam minima, soluta doloribus reiciendis molestiae
-                                    placeat unde eos molestias. Quisquam aperiam, pariatur. Tempora, placeat ratione porro voluptate odit minima.
-                                </p>
-                                <p>
-                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nihil odit magnam minima, soluta doloribus reiciendis molestiae
-                                    placeat unde eos molestias. Quisquam aperiam, pariatur. Tempora, placeat ratione porro voluptate odit minima.
-                                </p>
+                                <div class="row my-5">
+                                    <div class="col-md-4">
+                                        <h4 class="text-center">Followed Topics:</h4>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <mdb-material-chips *ngIf="followedTopics !== (undefined || null)" [(ngModel)]="followedTopics"></mdb-material-chips>
+                                    </div>
+                                </div>
+                                <div class="row my-5">
+                                    <div class="col-md-4">
+                                        <h4 class="text-center">Followed Users:</h4>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <mdb-material-chips
+                                            color="red"
+                                            *ngIf="followedUsers !== (undefined || null)"
+                                            [(ngModel)]="followedUsers"
+                                        ></mdb-material-chips>
+                                    </div>
+                                </div>
+                                <div class="row my-5">
+                                    <div class="col-md-4">
+                                        <h4 class="text-center">Rank</h4>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <div class="div" *ngFor="let r of (profileData$ | async)?.rank">
+                                            <div class="row my-2">
+                                                <div class="col-md-6">
+                                                    {{ r.topicName }}
+                                                </div>
+                                                <div class="col-md-6 orange-text">
+                                                    {{ r.rank }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row my-5">
+                                    <div class="col-md-4">
+                                        <h4 class="text-center">Score:</h4>
+                                    </div>
+                                    <div class="col-md-8">
+                                        {{ (profileData$ | async)?.score }}
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </mdb-tab>
