@@ -1,6 +1,9 @@
 export interface Post {
     name?: string;
     author?: string;
+    authorDisplayName?: string;
+    authorScore?: string;
+    authorAbout?: string;
     mainTopic?: string;
     description?: string;
     content?: string;
@@ -9,4 +12,6 @@ export interface Post {
     postTopics?: string[];
     votersList?: string[];
     score?: number;
+    upVotes?: number;
+    downVotes?: number;
 }

@@ -47,12 +47,13 @@ export class TopicComponent implements OnInit, OnDestroy {
                 this.postEntityService.getWithQuery(queryParams);
             });
 
-        this.subs.sink = this.topicEntityService.loading$
+        this.subs.sink = this.postEntityService.loading$
             .pipe(
                 skipWhile((loading) => loading === true),
                 switchMap(() => this.postEntityService.entities$),
             )
             .subscribe((ps: Post[]) => {
+                console.log(ps);
                 this.posts = ps;
             });
     }

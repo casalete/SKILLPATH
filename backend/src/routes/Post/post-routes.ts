@@ -9,7 +9,6 @@ const elasticClient = new elastic.Client({
 
 export const postsRouter = express.Router();
 
-
 // find post with the given id
 async function getPost(req: Request, res: Response, next: NextFunction) {
     let post;
@@ -31,13 +30,11 @@ async function getPostsForTopic(req: Request, res: Response, next: NextFunction)
     let posts;
     try {
         posts = await elasticClient.search({
-
             index: 'posts',
-        
+
             type: 'posts',
-        
-            q: `mainTopic:${req.params.topicName}`
-        
+
+            q: `mainTopic:${req.params.topicName}`,
         });
         if (posts == null) {
             throw new NotFound('Cannot find posts for given topic');
@@ -46,7 +43,7 @@ async function getPostsForTopic(req: Request, res: Response, next: NextFunction)
         next(err);
     }
     // add new key/value pair to the res obj
-    Object.assign(res, { posts: posts});
+    Object.assign(res, { posts: posts });
     // res = {...res, post:post},
     next(); // pass control to the next handler
 }
@@ -72,14 +69,18 @@ postsRouter.get(`/?topicName=${topicName}`, getPostsForTopic, (_req: Request, re
 });
 
 // create new post
-postsRouter.post('/', async (req: Request, res: Response) => {
-
+postsRouter.post('/', async (req: any, res: any) => {
     const post = new PostModel({
         name: req.body.name,
         description: req.body.description,
+        content: req.body.content,
+        links: req.body.links,
         mainTopic: req.body.mainTopic,
-        author: req.body.author,
-        postTopics: req.body.postTopics
+        author: req.user.email,
+        authorAbout: req.user.about,
+        authorDisplayName: req.user.displayName,
+        authorScore: req.user.score,
+        postTopics: req.body.postTopics,
     });
     try {
         const newPost = await post.save(function (err) {
@@ -98,7 +99,6 @@ postsRouter.post('/', async (req: Request, res: Response) => {
 
 // update post's info
 postsRouter.patch('/:id', getPost, async (req: Request, res: Response) => {
-
     if (req.body.name != null) {
         (<any>res).post.name = req.body.name;
     }

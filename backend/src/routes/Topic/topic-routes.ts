@@ -9,7 +9,6 @@ const elasticClient = new elastic.Client({
 
 export const topicsRouter = express.Router();
 
-
 // find topic with the given id
 async function getTopic(req: Request, res: Response, next: NextFunction) {
     let topic;
@@ -48,7 +47,7 @@ topicsRouter.post('/', async (req: Request, res: Response) => {
 
     const topic = new TopicModel({
         name: req.body.name,
-        suggestedTopics: req.body.suggestedTopics
+        suggestedTopics: req.body.suggestedTopics,
     });
     try {
         const newTopic = await topic.save(function (err) {
@@ -67,24 +66,23 @@ topicsRouter.post('/', async (req: Request, res: Response) => {
 
 // update topic's info
 topicsRouter.patch('/:id', getTopic, async (req: Request, res: Response) => {
-
     if (req.body.name != null) {
         (<any>res).topic.name = req.body.name;
     }
     //asta de  mai jos
-    if(req.body.suggestedTopics != null){
+    if (req.body.suggestedTopics != null) {
         (<any>res).topic.suggestedTopics = req.body.suggestedTopics;
     }
-     //poate fi scrisa si asa :
+    //poate fi scrisa si asa :
 
     // req.body.suggestedTopics &&  (<any>res).topic.suggestedTopics = req.body.suggestedTopics;
 
     //(verifica mai intai prima parte, si doar daca e adevarata, executa partea a doua)
 
-    if(req.body.postsCount != null){
+    if (req.body.postsCount != null) {
         (<any>res).topic.postsCount = req.body.postsCount;
     }
-   
+
     try {
         const updatedTopic = await (<any>res).topic.save();
         res.json(updatedTopic);

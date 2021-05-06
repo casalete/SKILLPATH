@@ -24,7 +24,7 @@
                             >
                         </h2>
                         <p>
-                            Written by <a>{{ post?.author }}</a
+                            Written by <a>{{ post?.authorDisplayName }}</a
                             >, 02.05.2021
                         </p>
                     </mdb-card-body>
@@ -58,13 +58,12 @@
                     <!--Author Data-->
                     <div class="col-12 col-sm-10 text-left">
                         <p>
-                            <strong>{{ post?.author }}</strong>
+                            <strong>{{ post?.authorDisplayName }}</strong>
+                            <mdb-icon class="orange-text mx-1" size="2x" fas icon="crown"></mdb-icon>
+                            <span>Score:</span>
+                            {{ post?.authorScore }}
                         </p>
-                        <p>Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus.</p>
-                        <p class="hidden-md-down">
-                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sint esse nulla quia quam veniam commodi dicta, iusto inventore.
-                            Voluptatum pariatur eveniet ea, officiis vitae praesentium beatae quas libero, esse facere.
-                        </p>
+                        <p>{{ post?.authorAbout }}</p>
                     </div>
                 </div>
             </div>

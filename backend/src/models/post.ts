@@ -9,6 +9,9 @@ interface Post {
     content: String;
     mainTopic: String;
     author: String;
+    authorAbout: String;
+    authorScore: Number;
+    authorDisplayName;
     upVotes: Number;
     downVotes: Number;
     postTopics: Array<String>;
@@ -53,6 +56,21 @@ const postSchema = new mongoose.Schema({
     },
     author: {
         type: String,
+        required: true,
+        unique: true,
+    },
+    authorDisplayName: {
+        type: String,
+        required: true,
+        unique: true,
+    },
+    authorAbout: {
+        type: String,
+        required: true,
+        unique: true,
+    },
+    authorScore: {
+        type: Number,
         required: true,
         unique: true,
     },
