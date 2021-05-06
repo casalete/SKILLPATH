@@ -54,6 +54,35 @@ usersRouter.get('/profile', (req: any, res: Response) => {
     }
 });
 
+usersRouter.patch('/profile', async (req: any, res: Response) => {
+    if (req.user) {
+        if (req.body.firstName != null) {
+            req.user.firstName = req.body.firstName;
+        }
+        if (req.body.lastName != null) {
+            req.user.lastName = req.body.lastName;
+        }
+        if (req.body.displayName != null) {
+            req.user.displayName = req.body.displayName;
+        }
+        if (req.body.about != null) {
+            req.user.about = req.body.about;
+        }
+        if (req.body.followedTopics != null) {
+            req.user.followedTopics = req.body.followedTopics;
+        }
+        if (req.body.followedUsers != null) {
+            req.user.followedUsers = req.body.followedUsers;
+        }
+        try {
+            const updatedUser = await req.user.save();
+            res.json(updatedUser);
+        } catch (err) {
+            res.status(400).json({ message: err.message });
+        }
+    }
+});
+
 // get a specific user
 usersRouter.get('/:id', getUser, (_req: Request, res: Response) => {
     res.json((<any>res).user);

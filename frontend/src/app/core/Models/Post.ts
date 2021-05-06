@@ -3,6 +3,8 @@ export interface Post {
     author?: string;
     mainTopic?: string;
     description?: string;
+    content?: string;
+    links: { source: string; target: string; importance: number }[];
     commentList?: string[];
     postTopics?: string[];
     votersList?: string[];

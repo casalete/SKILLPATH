@@ -3,7 +3,6 @@ export interface AuthState {
     error: string;
     loading: boolean;
     loadingStatus: string;
-    profileData: ProfileData;
     jwt: string;
 }
 
@@ -12,6 +11,5 @@ export const initialAuthState: AuthState = {
     error: null,
     loading: false,
     loadingStatus: null,
-    profileData: null,
     jwt: null,
 };

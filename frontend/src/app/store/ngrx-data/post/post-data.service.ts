@@ -11,6 +11,16 @@ export class PostDataService extends DefaultDataService<Post> {
     constructor(http: HttpClient, httpUrlGenerator: HttpUrlGenerator, config: DefaultDataServiceConfig) {
         super('Post', http, httpUrlGenerator, config);
     }
+
+    add(post: any): Observable<any> {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json',
+            }),
+        };
+        return this.http.post<any>(`${this.apiUrl}/posts`, post, httpOptions);
+    }
+
     // getAll(): Observable<Post[]> {
 
     //     const params = new HttpParams().set()

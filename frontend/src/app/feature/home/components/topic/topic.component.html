@@ -1,10 +1,13 @@
-<div class="topic-container d-flex flex-column justify-content-center mx-5 sp-theme">
+<div class="topic-container d-flex flex-column justify-content-center mx-5 sp-theme align-items-center">
     <div class="col-md-6 mx-auto">
         <div class="md-form">
             <input type="text" [(ngModel)]="searchText" class="form-control" id="search" mdbInput />
             <label for="search">Search</label>
         </div>
     </div>
+    <mdb-card class="z-depth-3">
+        <app-ngx-graph-wrapper></app-ngx-graph-wrapper>
+    </mdb-card>
 
     <div class="col-md-8 mx-auto">
         <table mdbTable hover="true" class="z-depth-3">
@@ -18,7 +21,14 @@
             <tbody>
                 <tr *ngFor="let post of posts; let i = index">
                     <th scope="row">
-                        <div class="chip m-auto" mdbPopover="Cel mai tank posibil" placement="right" mdbPopoverHeader="Nebi" triggers="hover" mdbWavesEffect>
+                        <div
+                            class="chip m-auto"
+                            mdbPopover="author description"
+                            placement="right"
+                            mdbPopoverHeader="Author Name"
+                            triggers="hover"
+                            mdbWavesEffect
+                        >
                             > <img src="https://mdbootstrap.com/img/Photos/Avatars/avatar-4.jpg" alt="Contact Person" /> {{ post.author }}
                         </div>
                     </th>
@@ -30,6 +40,7 @@
                             <span><mdb-icon class="cyan-text mr-1" size="lg" fas icon="comment"></mdb-icon>99</span>
                             <mdb-icon class="orange-text mx-3" size="lg" fas icon="thumbs-up"></mdb-icon>
                             <mdb-icon fas icon="thumbs-down" size="lg"></mdb-icon>
+                            <mdb-icon size="lg" fas icon="eye" class="orange-text mx-3" [routerLink]="['/post', post.name]"></mdb-icon>
                         </div>
                     </td>
                 </tr>

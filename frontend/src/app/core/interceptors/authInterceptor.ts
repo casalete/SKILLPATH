@@ -10,9 +10,7 @@ export class AuthInterceptor implements HttpInterceptor {
     constructor(private localStorageService: LocalStorageService) {}
 
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        console.log('test');
         const idToken = this.localStorageService.hasData('id_token') ? this.localStorageService.getData('id_token') : null;
-        console.log(req);
         if (idToken) {
             const cloned = req.clone({
                 headers: req.headers.set('Authorization', 'Bearer ' + idToken),

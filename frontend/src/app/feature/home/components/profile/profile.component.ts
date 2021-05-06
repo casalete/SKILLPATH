@@ -1,11 +1,12 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { filter, tap } from 'rxjs/operators';
 import { ProfileData } from 'src/app/core/Models/ProfileData';
-import { AuthActions } from 'src/app/store';
+import { ProfileActions } from 'src/app/store/profile';
+import { selectProfileData } from 'src/app/store/profile/selectors';
 import { SubSink } from 'subsink';
-import { selectProfileData } from '../../../../store/authentication/selectors';
 
 @Component({
     selector: 'app-profile',
@@ -16,21 +17,50 @@ export class ProfileComponent implements OnInit, OnDestroy {
     subs = new SubSink();
 
     profileData$: Observable<ProfileData>;
+    hideElement = true;
 
     followedTopics: string[];
     followedUsers: string[];
+    profileForm: FormGroup;
 
-    constructor(private store: Store) {}
+    constructor(private store: Store, private fb: FormBuilder) {}
 
     ngOnInit(): void {
-        this.store.dispatch(AuthActions.getProfileDataStart());
+        this.profileForm = this.fb.group({
+            email: ['', [Validators.required, Validators.email]],
+            displayName: ['', Validators.required],
+            firstName: ['', Validators.required],
+            lastName: ['', Validators.required],
+            about: ['', Validators.length],
+        });
+
+        this.store.dispatch(ProfileActions.getProfileDataStart());
 
         this.profileData$ = this.store.select(selectProfileData).pipe(
             filter((profileData) => !!profileData),
             tap((profileData) => {
                 this.followedTopics = profileData.followedTopics;
                 this.followedUsers = profileData.followedUsers;
-                console.log(this.followedTopics);
+
+                this.profileForm.setValue({
+                    email: profileData.email,
+                    displayName: profileData.displayName,
+                    firstName: profileData.firstName,
+                    lastName: profileData.lastName,
+                    about: profileData.about ? profileData.about : '',
+                });
+            }),
+        );
+    }
+
+    onUpdateProfile(): void {
+        const profileFormValues = this.profileForm.value;
+        console.log(profileFormValues);
+        this.store.dispatch(
+            ProfileActions.updateProfileDataStart({
+                profileData: {
+                    ...profileFormValues,
+                },
             }),
         );
     }

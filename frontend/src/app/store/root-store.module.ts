@@ -6,6 +6,7 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { AuthStoreModule } from './authentication/auth-store.module';
 import { NgrxDataModule } from './ngrx-data/ngrx-data.module';
 import { RouterStoreModule } from './router';
+import { ProfileStoreModule } from './profile/profile-store.module';
 
 @NgModule({
     declarations: [],
@@ -25,6 +26,7 @@ import { RouterStoreModule } from './router';
             maxAge: 30,
         }),
         AuthStoreModule,
+        ProfileStoreModule,
         NgrxDataModule,
         RouterStoreModule,
     ],

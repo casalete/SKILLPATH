@@ -3,6 +3,8 @@ import { Error } from 'mongoose';
 import { UserModel } from '../../models/user';
 import { BadRequest, GeneralError } from '../../utils/errors';
 
+import bcrypt from 'bcrypt';
+
 import { issueJWT } from '../../utils/utils';
 
 const Unauthorized = require('../../utils/errors').Unauthorized;
@@ -11,9 +13,10 @@ export const authRouter = express.Router();
 
 authRouter.post('/register', async function (req, res, next) {
     try {
+        const hash = await bcrypt.hash(req.body.password, 10);
         const newUser = await UserModel.create({
             email: req.body.email,
-            password: req.body.password,
+            password: hash,
             firstName: req.body.firstName,
             lastName: req.body.lastName,
             displayName: req.body.displayName,

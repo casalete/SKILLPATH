@@ -1,12 +1,9 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { ToastService } from 'ng-uikit-pro-standard';
-import { catchError, exhaustMap, switchMap, tap } from 'rxjs/operators';
+import { catchError, exhaustMap, switchMap } from 'rxjs/operators';
 import { LocalStorageService } from 'src/app/core/services/local-storage.service';
-import { storeProfileData } from './actions';
-
 import { AuthService } from '../../core/services/authService';
 import * as AuthActions from './actions';
 
@@ -18,7 +15,6 @@ export class AuthEffects {
         private actions$: Actions,
         private authService: AuthService,
         private router: Router,
-        private http: HttpClient,
         private toast: ToastService,
         private localStorageService: LocalStorageService,
     ) {}
@@ -53,22 +49,6 @@ export class AuthEffects {
         })
     );
 */
-
-    @Effect()
-    getProfileData$ = this.actions$.pipe(
-        ofType(AuthActions.getProfileDataStart),
-        switchMap((action) =>
-            this.authService.getProfileData().pipe(
-                switchMap((profileData) => {
-                    return [AuthActions.storeProfileData({ profileData })];
-                }),
-                catchError((err) => {
-                    this.toast.error('Profile Data retrieval failed!');
-                    return [];
-                }),
-            ),
-        ),
-    );
 
     /*
     @Effect()

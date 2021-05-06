@@ -4,45 +4,24 @@
             <mdb-card cascade="true" narrower="true">
                 <!--Card image-->
                 <div class="view view-cascade overlay hm-white-slight waves-light" mdbWavesEffect>
-                    <!-- <div class="avatar mx-auto white"> -->
                     <mdb-card-img src="https://mdbootstrap.com/img/Photos/Others/men.jpg" class="rounded-circle img-fluid"></mdb-card-img>
-                    <!-- </div> -->
-
-                    <!-- <img src="https://mdbootstrap.com/img/Photos/Avatars/img%20(10).jpg" class="img-fluid" />
-                    <a>
-                        <div class="mask"></div>
-                    </a> -->
                 </div>
                 <!--/Card image-->
 
                 <!--Card content-->
                 <mdb-card-body cascade="true" class="text-center">
                     <!--Title-->
-                    <h4 class="card-title font-bold mb-2"><strong>Nebiamin</strong></h4>
+                    <h4 class="card-title font-bold mb-2">
+                        <strong>{{ (profileData$ | async)?.displayName }}</strong>
+                    </h4>
                     <h5 class="indigo-text"><strong>Knowledge Activist</strong></h5>
 
-                    <h6 class="text-justify"><strong>About:</strong></h6>
-                    <p class="text-justify">
+                    <hr />
+                    <p class="text-center">
                         {{ (profileData$ | async)?.about }}
                     </p>
-
-                    <div class="text-right">
-                        <button type="button" mdbBtn outline="true" color="primary" rounded="true" size="sm" mdbWavesEffect>More...</button>
-                    </div>
-
                     <hr />
-                    <!--Linkedin-->
-                    <a class="icons-sm li-ic px-3">
-                        <mdb-icon fab icon="linkedin-in"></mdb-icon>
-                    </a>
-                    <!--Twitter-->
-                    <a class="icons-sm tw-ic px-3">
-                        <mdb-icon fab icon="twitter"></mdb-icon>
-                    </a>
-                    <!--Dribbble-->
-                    <a class="icons-sm fb-ic px-3">
-                        <mdb-icon fab icon="facebook-f"></mdb-icon>
-                    </a>
+                    <h6><mdb-icon class="orange-text" size="2x" fas icon="crown"></mdb-icon>{{ (profileData$ | async)?.score }}</h6>
                 </mdb-card-body>
                 <!--/.Card content-->
             </mdb-card>
@@ -75,10 +54,86 @@
                     <mdb-tab heading="Profile Data">
                         <div class="row">
                             <div class="col-12">
-                                <p>
-                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nihil odit magnam minima, soluta doloribus reiciendis molestiae
-                                    placeat unde eos molestias. Quisquam aperiam, pariatur. Tempora, placeat ratione porro voluptate odit minima.
-                                </p>
+                                <form [formGroup]="profileForm" autocomplete="off" class="text-center" style="color: #757575">
+                                    <div class="form-row">
+                                        <!-- E-mail -->
+                                        <div class="col">
+                                            <div class="md-form">
+                                                <input
+                                                    autocomplete="“off”"
+                                                    type="email"
+                                                    id="materialRegisterFormEmail"
+                                                    class="form-control"
+                                                    formControlName="email"
+                                                    mdbInput
+                                                />
+                                                <label for="materialRegisterFormEmail">E-mail</label>
+                                            </div>
+                                        </div>
+
+                                        <!-- Display Name -->
+                                        <div class="col">
+                                            <div class="md-form">
+                                                <input
+                                                    autocomplete="“off”"
+                                                    type="text"
+                                                    id="materialRegisterFormDisplayName"
+                                                    class="form-control"
+                                                    formControlName="displayName"
+                                                    mdbInput
+                                                />
+                                                <label for="materialRegisterFormDisplayName">Display name</label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-row">
+                                        <div class="col">
+                                            <!-- First name -->
+                                            <div class="md-form">
+                                                <input
+                                                    autocomplete="off"
+                                                    type="text"
+                                                    id="materialRegisterFormFirstName"
+                                                    class="form-control"
+                                                    formControlName="firstName"
+                                                    mdbInput
+                                                />
+                                                <label for="materialRegisterFormFirstName">First name</label>
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <!-- Last name -->
+                                            <div class="md-form">
+                                                <input
+                                                    autocomplete="off"
+                                                    type="text"
+                                                    id="materialRegisterFormLastName"
+                                                    class="form-control"
+                                                    formControlName="lastName"
+                                                    mdbInput
+                                                />
+                                                <label for="materialRegisterFormLastName">Last name</label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="md-form">
+                                        <textarea
+                                            class="md-textarea form-control"
+                                            rows="3"
+                                            id="input_text"
+                                            type="text"
+                                            length="120"
+                                            mdbCharCounter
+                                            mdbInput
+                                            formControlName="about"
+                                        ></textarea>
+                                        <label for="input_text">About</label>
+                                    </div>
+
+                                    <button type="button" mdbBtn color="primary" mdbWavesEffect (click)="onUpdateProfile()">Update Profile</button>
+                                </form>
                             </div>
                         </div>
                     </mdb-tab>

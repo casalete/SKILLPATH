@@ -13,6 +13,4 @@ export const registerError = createAction('[Auth] Register Error', props<{ error
 export const logout = createAction('[Auth] LOGOUT');
 export const clearError = createAction('[Auth] Clear Error');
 
-export const getProfileDataStart = createAction('[Auth] Get Profile Data Start');
-export const storeProfileData = createAction('[Auth] Store Profile Data', props<{ profileData: ProfileData }>());
 // export const getProfileDataError = createAction('[Auth] Get Profile Data Error', props<{ err: string }>());

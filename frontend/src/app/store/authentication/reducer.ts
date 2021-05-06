@@ -47,19 +47,6 @@ const reducer = createReducer(
         authError: null,
         profileError: null,
     })),
-
-    on(AuthActions.getProfileDataStart, (state) => ({
-        ...state,
-        loading: true,
-        loadingStatus: 'Loading Profile Data...',
-    })),
-
-    on(AuthActions.storeProfileData, (state, { profileData }) => ({
-        ...state,
-        profileData,
-        loading: false,
-        loadingStatus: null,
-    })),
 );
 
 export function authReducer(state: AuthState, action: Action): any {
