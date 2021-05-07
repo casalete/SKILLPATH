@@ -14,18 +14,7 @@ export class PostComponent implements OnInit {
     showMoreButton: any;
     postId: string;
     post: any;
-    // data: any = [
-    //     ['Mathematics', 'ML', 2],
-    //     ['Algorithms', 'ML', 1],
-    //     ['Statistics', 'ML', 2],
-    //     ['Probabilities', 'ML', 1],
-    //     ['Probabilities', 'Statistics', 2],
-    //     ['Mathematics', 'Probabilities', 2],
-    //     ['Mathematics', 'Optics', 2],
-    //     ['Optics', 'CV', 1],
-    //     ['Algorithms', 'CV', 1],
-    //     ['ML', 'CV', 3],
-    // ];
+
     links: { source: String; target: String; importance: Number }[];
     constructor(private store: Store, private postEntityService: PostEntityService) {}
 

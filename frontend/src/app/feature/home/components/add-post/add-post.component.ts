@@ -58,7 +58,7 @@ export class AddPostComponent implements OnInit, OnDestroy {
             targetTopic: ['', Validators.required],
             importance: ['', Validators.required],
             content: ['', Validators.required],
-            description: [''],
+            description: ['', Validators.required],
         });
 
         this.topicResults$ = this.addPostForm.controls.postTopic.valueChanges.pipe(map((value: string) => this.filter(value)));
@@ -101,6 +101,7 @@ export class AddPostComponent implements OnInit, OnDestroy {
     ngOnDestroy(): void {}
 
     onSubmit(): void {
+        console.log(this.addPostForm.controls.description.value);
         const post = {
             name: this.addPostForm.controls.name.value,
             postTopics: this.postTopics,
