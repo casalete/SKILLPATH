@@ -25,6 +25,11 @@ const commentSchema = new mongoose.Schema({
         required: true,
         unique : true
     },
+    postId: {
+        type: String,
+        required: true,
+        unique: true,
+    },
     postName: {
         type: String,
         required: true,
@@ -51,8 +56,8 @@ const commentSchema = new mongoose.Schema({
     },
     votersList: [{
         userName: String,
-        voteType: VoteType,
-    }]  
+        voteType: String,
+    }] 
 });
 
 commentSchema.plugin(mongoosastic, {
@@ -60,5 +65,5 @@ commentSchema.plugin(mongoosastic, {
     port: 9200,
 });
 
-export const Comment = mongoose.model<CommentModel>('Comment', commentSchema);
+export const CommentModel = mongoose.model<CommentModel>('Comment', commentSchema);
 

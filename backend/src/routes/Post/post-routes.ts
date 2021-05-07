@@ -33,10 +33,14 @@ async function getPostsForTopic(req: Request, res: Response, next: NextFunction)
         posts = await elasticClient.search({
 
             index: 'posts',
-        
-            type: 'posts',
-        
-            q: `mainTopic:${req.params.topicName}`
+
+            body:{
+                "query": {
+                    "match": {
+                        "mainTopic":`${req.query.mainTopic}`
+                    }
+                }
+            }
         
         });
         if (posts == null) {
@@ -61,15 +65,17 @@ postsRouter.get('/', async (_req: Request, res: Response) => {
     }
 });
 
+let topicName; //just for testing, must find a better way to do it
+// get a specific post by mainTopic from elasticsearch
+postsRouter.get('/getPostsByTopic', getPostsForTopic, (_req: Request, res: Response) => {
+    res.json((<any>res).posts);
+});
+
 // get a specific post by id
 postsRouter.get('/:id', getPost, (_req: Request, res: Response) => {
     res.json((<any>res).post);
 });
-let topicName; //just for testing, must find a better way to do it
-// get a specific post by mainTopic from elasticsearch
-postsRouter.get(`/?topicName=${topicName}`, getPostsForTopic, (_req: Request, res: Response) => {
-    res.json((<any>res).posts);
-});
+
 
 // create new post
 postsRouter.post('/', async (req: Request, res: Response) => {

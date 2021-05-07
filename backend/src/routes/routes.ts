@@ -2,7 +2,7 @@ import express, { application } from 'express';
 import { usersRouter } from './User/user-routes';
 import { topicsRouter } from './Topic/topic-routes';
 import { postsRouter } from './Post/post-routes';
-//import { commentsRouter } from './Comments/comments-routes';
+import { commentsRouter } from './Comment/comment-routes';
 import { authRouter } from './auth/auth-router';
 import passport from 'passport';
 
@@ -16,5 +16,5 @@ router.use('/topics', passport.authenticate('jwt', { session: false }), topicsRo
 
 router.use('/posts', passport.authenticate('jwt', { session: false }), postsRouter);
 
-//router.use('/comments', passport.authenticate('jwt', { session: false }), commentsRouter);
+router.use('/comments', passport.authenticate('jwt', { session: false }), commentsRouter);
 
