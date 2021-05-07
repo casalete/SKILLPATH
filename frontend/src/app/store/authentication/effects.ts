@@ -1,13 +1,11 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { ToastService } from 'ng-uikit-pro-standard';
-import { catchError, exhaustMap, switchMap, tap } from 'rxjs/operators';
+import { catchError, exhaustMap, switchMap } from 'rxjs/operators';
 import { LocalStorageService } from 'src/app/core/services/local-storage.service';
-
 import { AuthService } from '../../core/services/authService';
-import * as AuthActions from './authentication.actions';
+import * as AuthActions from './actions';
 
 // import { LocalStorageService } from 'src/app/core/services/local-storage.service';
 
@@ -17,7 +15,6 @@ export class AuthEffects {
         private actions$: Actions,
         private authService: AuthService,
         private router: Router,
-        private http: HttpClient,
         private toast: ToastService,
         private localStorageService: LocalStorageService,
     ) {}

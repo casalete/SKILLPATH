@@ -2,91 +2,100 @@ import mongoose from 'mongoose';
 import mongoosastic from 'mongoosastic';
 import bcrypt from 'bcrypt';
 
+export interface Rank {
+    topicName: String;
+    rank: Number;
+}
 interface User {
-	authData: Object,
-	firstName: String,
-	lastName: String,
-	username: String,	
-	password: String,
-	email: String,
-	rank: {topicName: String, rank: Number},
-	followedTopics: String[],
-	followedUsers: String[],
-	lastActivity: Date
+    authData: Object;
+    firstName: String;
+    lastName: String;
+    password: String;
+    email: String;
+    rank: Rank[];
+    score: Number;
+    followedTopics: String[];
+    followedUsers: String[];
+    lastActivity: Date;
+    about?: String;
+    displayName?: String;
+    achievements: String[];
 }
 
 interface UserModel extends User, mongoose.Document {}
 
-
 const userSchema = new mongoose.Schema({
-	uuid: {
-		type: String,
-		required: true,
-		unique: true
-	},
-	authData: {
-		type : Object
-	},
-	firstName: {
-		type: String,
-		required: true,
-		maxlength: 100,
-	},
-	lastName: {
-		type: String,
-		required: true,
-		maxlength: 100,
-	},
-	username: {
-		type: String,
-		required: true,
-		trim: true,
-		unique: 1,
-	},
-	password: {
-		type: String,
-		required: true,
-		minlength: 8,
-	},
-	email: {
-		type: String,
-		required: true,
-		trim: true,
-		unique: 1,
-	},
-	rank: {
-		type: {topicName: String, rank: Number}
-	},
-	followedTopics: [{
-		type: String
-	}],
-	followedUsers: [{
-		type: String
-	}],
-	lastActivity: {
-		type: Date
-	}
+    firstName: {
+        type: String,
+        required: true,
+        maxlength: 100,
+    },
+    lastName: {
+        type: String,
+        required: true,
+        maxlength: 100,
+    },
+    password: {
+        type: String,
+        required: true,
+        minlength: 8,
+    },
+    email: {
+        type: String,
+        required: true,
+        trim: true,
+        unique: 1,
+    },
+    about: {
+        type: String,
+    },
+    displayName: {
+        type: String,
+    },
+    rank: [
+        {
+            type: Object,
+        },
+    ],
+    score: Number,
+    followedTopics: [
+        {
+            type: String,
+        },
+    ],
+    followedUsers: [
+        {
+            type: String,
+        },
+    ],
+    achievements: [
+        {
+            type: String,
+        },
+    ],
+    lastActivity: {
+        type: Date,
+    },
 });
 
-userSchema.pre('save', async function (next) {
-	const user: any = this;
-	const hash = await bcrypt.hash(user.password, 10);
+// userSchema.pre('save', async function (next) {
+//     const user: any = this;
+//     const hash = await bcrypt.hash(user.password, 10);
 
-	user.password = hash;
-	next();
-});
+//     user.password = hash;
+//     next();
+// });
 
 userSchema.methods.isValidPassword = async function (password) {
-	const user: any = this;
-	const compare = await bcrypt.compare(password, user.password);
+    const user: any = this;
+    const compare = await bcrypt.compare(password, user.password);
 
-	return compare;
+    return compare;
 };
 
 userSchema.plugin(mongoosastic, {
-	host: 'localhost',
-	port: 9200,
+    host: 'localhost',
+    port: 9200,
 });
 
 export const UserModel = mongoose.model<UserModel>('User', userSchema);
-

@@ -1,0 +1,34 @@
+.profile-container {
+    margin-top: 72px;
+
+    .profile-wrapper {
+        .topics-color {
+            .md-chip-list {
+                .md-chip {
+                    background-color: red;
+                }
+            }
+        }
+        .users-color {
+            .md-chip-list {
+                .md-chip {
+                    background-color: blue;
+                }
+            }
+        }
+
+        height: 100%;
+        mdb-card {
+            height: 80%;
+        }
+
+        mdb-tabset {
+            .md-chip-list input {
+                border: none;
+                outline: 0;
+                background: transparent;
+                display: inline-block;
+            }
+        }
+    }
+}

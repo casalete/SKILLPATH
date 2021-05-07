@@ -1,0 +1,154 @@
+<main>
+    <div class="container py-5">
+        <!--Grid row-->
+        <div class="row my-5">
+            <div class="col-md-12">
+                <!--Featured image-->
+                <mdb-card cascade="true" wider="true" reverse="true">
+                    <!-- <div class="view view-cascade overlay hm-white-slight">
+                        <img src="https://mdbootstrap.com/img/Photos/Slides/img%20(134).jpg" alt="Wide sample post image" />
+                        <a>
+                            <div class=""></div>
+                        </a>
+                    </div> -->
+                    <!-- <app-sankey></app-sankey> -->
+                    <mdb-card class="d-flex, justify-content-center align-items-center p-3 google-chart">
+                        <app-sankey-google [data]="links"> </app-sankey-google>
+                    </mdb-card>
+
+                    <!--Post data-->
+                    <mdb-card-body cascade="true" class="text-center">
+                        <h2>
+                            <a
+                                ><strong>{{ post?.name }}</strong></a
+                            >
+                        </h2>
+                        <p>
+                            Written by <a>{{ post?.authorDisplayName }}</a>
+                        </p>
+                    </mdb-card-body>
+                    <!--Post data-->
+                </mdb-card>
+
+                <!--Excerpt-->
+                <mdb-card wider="true" class="px-3">
+                    <div class="my-3">
+                        <p>
+                            {{ post?.content }}
+                        </p>
+                    </div>
+                </mdb-card>
+            </div>
+        </div>
+        <!--Grid row-->
+
+        <hr class="mb-5 mt-4" />
+
+        <section>
+            <div class="author-box mt-5">
+                <!--Name-->
+                <h4 class="h4 text-center">About the author</h4>
+                <hr />
+                <div class="row">
+                    <!--Avatar-->
+                    <div class="col-12 col-sm-2">
+                        <img src="http://mdbootstrap.com/img/Photos/Avatars/img%20(32).jpg" class="img-fluid z-depth-2" />
+                    </div>
+                    <!--Author Data-->
+                    <div class="col-12 col-sm-10 text-left">
+                        <p>
+                            <strong>{{ post?.authorDisplayName }}</strong>
+                            <mdb-icon class="orange-text mx-1" size="2x" fas icon="crown"></mdb-icon>
+                            <span>Score:</span>
+                            {{ post?.authorScore }}
+                        </p>
+                        <p>{{ post?.authorAbout }}</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-4 pt-5">
+            <!--Main wrapper-->
+            <div class="comments-list text-md-left text-center">
+                <div class="section-heading">
+                    <h3 class="section-heading h3 pt-3 mb-5">Comments <span class="badge pink">1</span></h3>
+                </div>
+                <!--First row-->
+                <mdb-card>
+                    <div class="row align-items-center pl-3">
+                        <!--Image column-->
+                        <div class="col-sm-1">
+                            <img src="https://mdbootstrap.com/img/Photos/Avatars/img (9).jpg" class="avatar rounded-circle img-fluid z-depth-2" />
+                        </div>
+                        <!--/.Image column-->
+
+                        <!--Content column-->
+                        <div class="col-sm-11 pt-3">
+                            <!-- <mdb-card class="px-3 py-3"> -->
+                            <a>
+                                <h5 class="font-bold">Tom Smith</h5>
+                            </a>
+                            <div>
+                                <ul class="list-unstyled">
+                                    <li><mdb-icon far icon="clock"></mdb-icon> 05/10/2015</li>
+                                </ul>
+                            </div>
+                            <p class="px-3">
+                                Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure
+                                dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+                                proident. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute
+                                irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat
+                                non proident. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis
+                                aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
+                                cupidatat non proident. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                                consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint
+                                occaecat cupidatat non proident.
+                            </p>
+                            <!-- </mdb-card> -->
+                        </div>
+                        <!--/.Content column-->
+                    </div>
+                </mdb-card>
+            </div>
+
+            <!--/.Main wrapper-->
+        </section>
+
+        <section class="pb-5 mt-5">
+            <!--Leave a reply form-->
+            <div class="reply-form">
+                <h3 class="h3 pt-3">Leave a reply</h3>
+                <p class="text-center">(Logged In User)</p>
+
+                <!--Third row-->
+                <div class="row align-items-center">
+                    <!--Image column-->
+                    <div class="col-1">
+                        <img
+                            src="https://mdbootstrap.com/img/Photos/Avatars/img (32).jpg"
+                            alt="Sample avatar image"
+                            class="avatar rounded-circle img-fluid z-depth-2"
+                        />
+                    </div>
+                    <!--/.Image column-->
+
+                    <!--Content column-->
+                    <div class="col-11">
+                        <div class="md-form">
+                            <textarea type="text" id="form-mess" class="md-textarea form-control" mdbInput></textarea>
+                            <label for="form-mess">Your message</label>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12 text-center">
+                        <button mdbBtn color="pink" rounded="true" class="waves-effect waves-light">Submit</button>
+                    </div>
+                    <!--/.Content column-->
+                </div>
+                <!--/.Third row-->
+            </div>
+            <!--/.Leave a reply form-->
+        </section>
+    </div>
+</main>

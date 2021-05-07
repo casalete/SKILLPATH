@@ -1,4 +1,4 @@
-<div class="home-container d-flex flex-column justify-content-center mx-5">
+<div class="home-container d-flex flex-column justify-content-center mx-5 sp-theme">
     <div class="col-md-6 mx-auto">
         <div class="md-form">
             <input type="text" [(ngModel)]="searchText" class="form-control" id="search" mdbInput />
@@ -6,21 +6,21 @@
         </div>
     </div>
 
-    <div class="col-md-8 mx-auto">
+    <div class="col-md-10 mx-auto">
         <table mdbTable hover="true" class="z-depth-3">
             <thead class="primary-color">
                 <tr>
                     <th *ngFor="let head of headElements; let i = index" scope="col">
                         {{ head }}
                     </th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let el of elements; let i = index">
-                    <th scope="row">{{ el.id }}</th>
-                    <td class="red-text">{{ el.first }}</td>
-                    <td>{{ el.last }}</td>
-                    <td>{{ el.handle }}</td>
+                <tr *ngFor="let topic of topics; let i = index">
+                    <th scope="row">{{ topic.name }}</th>
+                    <td class="red-text">{{ topic.postsCount }}</td>
+                    <mdb-icon size="3x" fas icon="eye" class="orange-text" [routerLink]="['/topic', topic.name]"></mdb-icon>
                 </tr>
             </tbody>
         </table>

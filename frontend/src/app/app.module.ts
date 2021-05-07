@@ -14,23 +14,11 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { CoreModule } from './core/core.module';
-import { reducers } from './store';
+import { RootStoreModule } from './store/root-store.module';
 
 @NgModule({
     declarations: [AppComponent],
-    imports: [
-        BrowserModule,
-        BrowserAnimationsModule,
-        CoreModule,
-        AppRoutingModule,
-        HttpClientModule,
-        AppRoutingModule,
-        StoreModule.forRoot(reducers),
-        MDBBootstrapModulesPro.forRoot(),
-        EffectsModule.forRoot(),
-        StoreDevtoolsModule.instrument({ maxAge: 50 }),
-        StoreRouterConnectingModule.forRoot({ routerState: RouterState.Minimal }),
-    ],
+    imports: [BrowserModule, BrowserAnimationsModule, CoreModule, AppRoutingModule, RootStoreModule, MDBBootstrapModulesPro.forRoot()],
     providers: [MDBSpinningPreloader],
     bootstrap: [AppComponent],
 
