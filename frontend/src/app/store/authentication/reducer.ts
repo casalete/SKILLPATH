@@ -1,10 +1,10 @@
 import { Action, createReducer, on } from '@ngrx/store';
 
-import * as AuthActions from './authentication.actions';
-import { AuthState, initialState } from './authentication.state';
+import * as AuthActions from './actions';
+import { AuthState, initialAuthState } from './state';
 
 const reducer = createReducer(
-    initialState,
+    initialAuthState,
     on(AuthActions.loginStart, (state) => ({
         ...state,
         loading: true,

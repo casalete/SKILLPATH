@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { registerStart } from '../../../../store/authentication/authentication.actions';
+import { registerStart } from '../../../../store/authentication/actions';
 
 @Component({
     selector: 'app-register',
@@ -17,7 +17,7 @@ export class RegisterComponent implements OnInit {
         this.registerForm = this.fb.group({
             email: ['', [Validators.required, Validators.email]],
             password: ['', Validators.required],
-            username: ['', Validators.required],
+            displayName: ['', Validators.required],
             firstName: ['', Validators.required],
             lastName: ['', Validators.required],
         });
@@ -32,7 +32,7 @@ export class RegisterComponent implements OnInit {
         this.store.dispatch(
             registerStart({
                 userRegisterPayload: {
-                    username: registerFormValue.username,
+                    displayName: registerFormValue.displayName,
                     email: registerFormValue.email,
                     password: registerFormValue.password,
                     firstName: registerFormValue.firstName,

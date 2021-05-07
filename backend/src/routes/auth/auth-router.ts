@@ -3,6 +3,8 @@ import { Error } from 'mongoose';
 import { UserModel } from '../../models/user';
 import { BadRequest, GeneralError } from '../../utils/errors';
 
+import bcrypt from 'bcrypt';
+
 import { issueJWT } from '../../utils/utils';
 
 const Unauthorized = require('../../utils/errors').Unauthorized;
@@ -11,12 +13,13 @@ export const authRouter = express.Router();
 
 authRouter.post('/register', async function (req, res, next) {
     try {
+        const hash = await bcrypt.hash(req.body.password, 10);
         const newUser = await UserModel.create({
-            username: req.body.username,
             email: req.body.email,
-            password: req.body.password,
+            password: hash,
             firstName: req.body.firstName,
             lastName: req.body.lastName,
+            displayName: req.body.displayName,
         });
 
         res.json({ success: true, user: newUser });
@@ -31,7 +34,7 @@ authRouter.post('/register', async function (req, res, next) {
 
 authRouter.post('/login', async function (req, res, next) {
     try {
-        const user: any = await UserModel.findOne({ username: req.body.username });
+        const user: any = await UserModel.findOne({ email: req.body.email });
         if (!user) {
             return res.status(401).json({ success: false, msg: 'could not find user' });
         }

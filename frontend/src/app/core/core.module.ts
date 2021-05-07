@@ -1,35 +1,15 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { NavbarComponent } from './components/navbar/navbar.component';
-import { MDBBootstrapModulesPro, ToastModule } from 'ng-uikit-pro-standard';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { NgModule, Optional, SkipSelf } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { StoreModule } from '@ngrx/store';
-import { reducers } from '../store';
-import { AuthEffects } from '../store/authentication/authentication.effects';
-import { EffectsModule } from '@ngrx/effects';
-import { AuthService } from './services/authService';
-import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { MDBBootstrapModulesPro, ToastModule } from 'ng-uikit-pro-standard';
+import { NavbarComponent } from './components/navbar/navbar.component';
 import { AuthInterceptor } from './interceptors/authInterceptor';
-
-// const entityMetadata: EntityMetadataMap = {
-//   User: { selectId: selectUserId, noChangeTracking: true },
-// };
-// export function selectUserId(a: any): string {
-//   return a.username;
-// }
+import { AuthService } from './services/authService';
 
 @NgModule({
     declarations: [NavbarComponent],
-    imports: [
-        CommonModule,
-        MDBBootstrapModulesPro.forRoot(),
-        RouterModule,
-        StoreModule.forFeature('core', reducers),
-        EffectsModule.forFeature([AuthEffects]),
-        ToastModule.forRoot(),
-
-        // EntityDataModule.forRoot({ entityMetadata }),
-    ],
+    imports: [CommonModule, HttpClientModule, MDBBootstrapModulesPro.forRoot(), RouterModule, ToastModule.forRoot()],
     exports: [NavbarComponent],
     providers: [
         AuthService,
@@ -40,4 +20,10 @@ import { AuthInterceptor } from './interceptors/authInterceptor';
         },
     ],
 })
-export class CoreModule {}
+export class CoreModule {
+    constructor(@Optional() @SkipSelf() core: CoreModule) {
+        if (core) {
+            throw new Error('You should import core module only in the root module');
+        }
+    }
+}

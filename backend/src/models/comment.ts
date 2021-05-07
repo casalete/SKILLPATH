@@ -3,18 +3,20 @@ import mongoosastic from 'mongoosastic';
 import { VoteType } from './voteType';
 
 interface Comment {
-	author: String,
-	postName: String,
-    content: String,
-    topicName: String,
-    upVotes: Number,
-    downVotes: Number,
-    lastUpdated: Date,
-    score: Number,
-	votersList: [{
-        userName: String,
-        voteType: VoteType,
-    }]
+    author: String;
+    postId: String;
+    content: String;
+    topicName: String;
+    upVotes: Number;
+    downVotes: Number;
+    lastUpdated: Date;
+    score: Number;
+    votersList: [
+        {
+            userName: String;
+            voteType: VoteType;
+        },
+    ];
 }
 
 interface CommentModel extends Comment, mongoose.Document {}
@@ -23,41 +25,37 @@ const commentSchema = new mongoose.Schema({
     author: {
         type: String,
         required: true,
-        unique : true
     },
     postId: {
         type: String,
         required: true,
         unique: true,
     },
-    postName: {
-        type: String,
-        required: true,
-        unique: true,
-    },
     content: {
         type: String,
-        required: true
+        required: true,
     },
     topicName: {
-        type : String
+        type: String,
     },
     upVotes: {
-        type: Number
+        type: Number,
     },
     downVotes: {
-        type: Number
+        type: Number,
     },
     lastUpdated: {
-        type : Date
+        type: Date,
     },
-    score : {
-        type : Number
+    score: {
+        type: Number,
     },
-    votersList: [{
-        userName: String,
-        voteType: String,
-    }] 
+    votersList: [
+        {
+            userName: String,
+            voteType: String,
+        },
+    ],
 });
 
 commentSchema.plugin(mongoosastic, {
@@ -66,4 +64,3 @@ commentSchema.plugin(mongoosastic, {
 });
 
 export const CommentModel = mongoose.model<CommentModel>('Comment', commentSchema);
-

@@ -1,0 +1,58 @@
+<div class="topic-container d-flex flex-column justify-content-center mx-5 sp-theme align-items-center">
+    <div class="col-md-6 mx-auto">
+        <div class="md-form">
+            <input type="text" [(ngModel)]="searchText" class="form-control" id="search" mdbInput />
+            <label for="search">Search</label>
+        </div>
+    </div>
+    <mdb-card class="z-depth-3">
+        <app-ngx-graph-wrapper></app-ngx-graph-wrapper>
+    </mdb-card>
+
+    <div class="col-md-8 mx-auto">
+        <table mdbTable hover="true" class="z-depth-3">
+            <thead class="primary-color">
+                <tr>
+                    <th *ngFor="let head of headElements; let i = index" scope="col">
+                        {{ head }}
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let post of posts; let i = index">
+                    <th scope="row" class="d-flex justify-content-start">
+                        <div
+                            class="chip m-auto d-flex justify-content-start"
+                            mdbPopover="Score:{{ post.authorScore }}"
+                            placement="right"
+                            mdbPopoverHeader="{{ post.authorDisplayName }}"
+                            triggers="hover"
+                            mdbWavesEffect
+                        >
+                            <img src="https://mdbootstrap.com/img/Photos/Avatars/avatar-4.jpg" alt="Contact Person" />
+                            {{ post.authorDisplayName }}
+                        </div>
+                    </th>
+                    <th scope="row">{{ post.name }}</th>
+                    <th scope="row">{{ post.description }}</th>
+                    <td class="red-text">
+                        {{ post.score }}
+                        <div class="d-flex justify-content-center">
+                            <mdb-icon class="cyan-text mr-1" size="lg" fas icon="comment"></mdb-icon>1
+                            <mdb-icon class="orange-text mx-3" size="lg" fas icon="thumbs-up"></mdb-icon>
+                            <mdb-icon fas icon="thumbs-down" size="lg"></mdb-icon>
+                            <mdb-icon size="lg" fas icon="eye" class="orange-text mx-3" [routerLink]="['/post', post.id]"></mdb-icon>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="4">
+                        <div class="d-flex justify-content-center">
+                            <button type="button" mdbBtn color="primary" mdbWavesEffect [routerLink]="['/add-post']">Add Post</button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
