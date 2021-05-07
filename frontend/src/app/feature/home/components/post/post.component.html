@@ -122,30 +122,41 @@
                 <p class="text-center">(Logged In User)</p>
 
                 <!--Third row-->
-                <div class="row align-items-center">
-                    <!--Image column-->
-                    <div class="col-1">
-                        <img
-                            src="https://mdbootstrap.com/img/Photos/Avatars/img (32).jpg"
-                            alt="Sample avatar image"
-                            class="avatar rounded-circle img-fluid z-depth-2"
-                        />
-                    </div>
-                    <!--/.Image column-->
-
-                    <!--Content column-->
-                    <div class="col-11">
-                        <div class="md-form">
-                            <textarea type="text" id="form-mess" class="md-textarea form-control" mdbInput></textarea>
-                            <label for="form-mess">Your message</label>
+                <form (ngSubmit)="onSubmit()" #commentForm="ngForm">
+                    <div class="form-row align-items-center">
+                        <!--Image column-->
+                        <div class="col-1">
+                            <img
+                                src="https://mdbootstrap.com/img/Photos/Avatars/img (32).jpg"
+                                alt="Sample avatar image"
+                                class="avatar rounded-circle img-fluid z-depth-2"
+                            />
                         </div>
-                    </div>
+                        <!--/.Image column-->
+                        <div class="col-11">
+                            <!--Content column-->
 
-                    <div class="col-md-12 text-center">
-                        <button mdbBtn color="pink" rounded="true" class="waves-effect waves-light">Submit</button>
+                            <div class="md-form">
+                                <textarea
+                                    type="text"
+                                    id="commentInput"
+                                    class="md-textarea form-control"
+                                    [(ngModel)]="comment"
+                                    name="commentInput"
+                                    required
+                                    mdbInput
+                                ></textarea>
+                                <label for="commentInput">Your message</label>
+                            </div>
+                        </div>
+                        <div class="col-md-12 text-center">
+                            <button type="submit" [disabled]="!commentForm.form.valid" mdbBtn color="pink" rounded="true" class="waves-effect waves-light">
+                                Submit
+                            </button>
+                        </div>
+                        <!--/.Content column-->
                     </div>
-                    <!--/.Content column-->
-                </div>
+                </form>
                 <!--/.Third row-->
             </div>
             <!--/.Leave a reply form-->

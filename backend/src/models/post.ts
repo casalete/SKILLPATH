@@ -33,7 +33,6 @@ const postSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true,
-        unique: true,
     },
     links: [
         {
@@ -57,22 +56,18 @@ const postSchema = new mongoose.Schema({
     author: {
         type: String,
         required: true,
-        unique: true,
     },
     authorDisplayName: {
         type: String,
         required: true,
-        unique: true,
     },
     authorAbout: {
         type: String,
         required: true,
-        unique: true,
     },
     authorScore: {
         type: Number,
         required: true,
-        unique: true,
     },
     upVotes: {
         type: Number,

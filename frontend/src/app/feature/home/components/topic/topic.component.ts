@@ -41,9 +41,8 @@ export class TopicComponent implements OnInit, OnDestroy {
             .pipe(take(1))
             .subscribe((routeParam) => {
                 const queryParams: QueryParams = {
-                    topicName: routeParam,
+                    mainTopic: routeParam,
                 };
-                console.log(queryParams);
                 this.postEntityService.getWithQuery(queryParams);
             });
 
@@ -53,7 +52,6 @@ export class TopicComponent implements OnInit, OnDestroy {
                 switchMap(() => this.postEntityService.entities$),
             )
             .subscribe((ps: Post[]) => {
-                console.log(ps);
                 this.posts = ps;
             });
     }
@@ -70,7 +68,9 @@ export class TopicComponent implements OnInit, OnDestroy {
         }
     }
 
-    ngOnDestroy(): void {}
+    ngOnDestroy(): void {
+        this.subs.unsubscribe();
+    }
 }
 
 //   onTopicSelected(i) {

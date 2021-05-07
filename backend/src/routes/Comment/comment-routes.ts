@@ -9,21 +9,25 @@ const elasticClient = new elastic.Client({
 
 export const commentsRouter = express.Router();
 
-async function getCommentsForPost(req: Request, res: Response, next: NextFunction) {
+async function getCommentsForPost(req: any, res: Response, next: NextFunction) {
     let comments;
     try {
         comments = await elasticClient.search({
-
             index: 'comments',
 
-            body:{
-                "query": {
-                    "match": {
-                        "postId":`${req.query.postId}`
-                    }
-                }
-            }
-        
+            body: {
+                query: {
+                    bool: {
+                        must: [
+                            {
+                                match: {
+                                    postId: `${req.params.id}`,
+                                },
+                            },
+                        ],
+                    },
+                },
+            },
         });
         if (comments == null) {
             throw new NotFound('Cannot find comments for given post');
@@ -32,7 +36,7 @@ async function getCommentsForPost(req: Request, res: Response, next: NextFunctio
         next(err);
     }
     // add new key/value pair to the res obj
-    Object.assign(res, { comments: comments});
+    Object.assign(res, { comments: comments });
     // res = {...res, post:post},
     next(); // pass control to the next handler
 }
@@ -43,12 +47,10 @@ commentsRouter.get('/getCommentsForPost', getCommentsForPost, (_req: Request, re
     res.json((<any>res).comments);
 });
 
-commentsRouter.post('/', async (req : any, res: any) => {
-
+commentsRouter.post('/', async (req: any, res: any) => {
     const comment = new CommentModel({
         author: req.user.email,
         postId: req.body.postId,
-        postName: req.body.postName,
         content: req.body.content,
     });
     try {

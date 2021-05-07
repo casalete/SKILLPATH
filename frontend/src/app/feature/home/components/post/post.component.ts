@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { filter, take, tap } from 'rxjs/operators';
+import { filter, skipWhile, switchMap, take, tap } from 'rxjs/operators';
+import { Post } from 'src/app/core/Models/Post';
 import { selectRouteParam } from 'src/app/store/router/selectors';
+import { SubSink } from 'subsink';
 import { PostEntityService } from '../../../../store/ngrx-data/post/post-entity.service';
 
 @Component({
@@ -14,6 +16,8 @@ export class PostComponent implements OnInit {
     showMoreButton: any;
     postId: string;
     post: any;
+    comment: string;
+    subs = new SubSink();
 
     links: { source: String; target: String; importance: Number }[];
     constructor(private store: Store, private postEntityService: PostEntityService) {}
@@ -23,28 +27,37 @@ export class PostComponent implements OnInit {
             .select(selectRouteParam('id'))
             .pipe(take(1))
             .subscribe((routeParam) => {
-                // const queryParams: QueryParams = {
-                //     postName: routeParam,
-                // };
-                // console.log(queryParams);
-                // this.postEntityService.getWithQuery(queryParams);
                 this.postId = routeParam;
-                this.postEntityService.collection$
-                    .pipe(
-                        take(1),
-                        tap((posts) => {
-                            this.post = posts.entities[this.postId];
-                            this.links = this.post?.links.map((link) => [link.source, link.target, link.importance]);
-                            console.log(this.links);
-                        }),
-                    )
-                    .subscribe();
+                this.postEntityService.getByKey(this.postId);
+                // this.postEntityService.collection$
+                //     .pipe(
+                //         take(1),
+                //         tap((posts) => {
+                //             this.post = posts.entities[this.postId];
+                //             this.links = this.post?.links.map((link) => [link.source, link.target, link.importance]);
+                //         }),
+                //     )
+                //     .subscribe();
+            });
+        this.subs.sink = this.postEntityService.loading$
+            .pipe(
+                skipWhile((loading) => loading === true),
+                switchMap(() => this.postEntityService.entities$),
+            )
+            .subscribe((ps: Post[]) => {
+                console.log(ps);
+                this.post = ps[this.postId];
+                this.links = this.post?.links.map((link) => [link.source, link.target, link.importance]);
             });
         // setTimeout(this.swapData, 5000);
     }
 
     truncated(index: number) {
         this.showMoreButton = index === null;
+    }
+
+    onSubmit(): void {
+        console.log(this.comment);
     }
 
     swapData(): void {

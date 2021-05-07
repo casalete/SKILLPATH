@@ -78,7 +78,7 @@
                     <textarea
                         class="md-textarea form-control description"
                         rows="3"
-                        id="input_text"
+                        id="input_text1"
                         type="text"
                         length="300"
                         mdbCharCounter
@@ -91,7 +91,7 @@
                     <textarea
                         class="md-textarea form-control content"
                         rows="3"
-                        id="input_text"
+                        id="input_text2"
                         type="text"
                         length="3000"
                         mdbCharCounter
@@ -102,7 +102,18 @@
                 </div>
 
                 <!-- Sign up button -->
-                <button mdbBtn color="info" outline="true" rounded="true" block="true" class="my-4 waves-effect z-depth-0" mdbWavesEffect (click)="onSubmit()">
+                <button
+                    (keydown.enter)="$event.preventDefault()"
+                    mdbBtn
+                    [disabled]="addPostForm.invalid"
+                    color="info"
+                    outline="true"
+                    rounded="true"
+                    block="true"
+                    class="my-4 waves-effect z-depth-0"
+                    mdbWavesEffect
+                    (click)="onSubmit()"
+                >
                     Add Post
                 </button>
             </form>
