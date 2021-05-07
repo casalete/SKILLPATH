@@ -115,3 +115,16 @@ postsRouter.patch('/:id', getPost, async (req: Request, res: Response) => {
         res.status(400).json({ message: err.message });
     }
 });
+
+postsRouter.delete('/delete/:id', function (req, res) {
+    var id = req.params.id;
+    
+    PostModel.findByIdAndRemove(id).exec();
+    PostModel.on('es-removed', function (err, res) {
+        if (err) throw err;
+        /* Document is removed */
+    });
+    res.json({ success: id });
+    res.redirect('/');
+    
+  });
