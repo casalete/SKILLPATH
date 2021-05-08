@@ -7,6 +7,8 @@ const options = {
     secretOrKey: 'SKILLPATH_SECRET_PASSWORD',
 };
 
+// functieCareAtaseazaAchievements : user.achivements
+
 module.exports = (passport) => {
     passport.use(
         new JwtStrategy(options, function (jwt_payload, done) {

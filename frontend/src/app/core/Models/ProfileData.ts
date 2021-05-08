@@ -3,7 +3,7 @@ export interface ProfileData {
     lastName: string;
     password: string;
     email: string;
-    rank: { topicName: string; rank: number };
+    rank: { topicName: string; rank: number }[];
     followedTopics: string[];
     followedUsers: string[];
     about?: string;

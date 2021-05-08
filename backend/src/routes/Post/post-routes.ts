@@ -55,31 +55,17 @@ async function getPostWithComments(req: any, res: any, next: NextFunction) {
     } catch (err) {
         next(err);
     }
-    // add new key/value pair to the res obj
-    // Object.assign(res, { post: post });
-    Object.assign(res, { post: postResult });
-    Object.assign(res, { comments: commentsResult?.body?.hits?.hits?.map((i) => ({ ...i._source, id: i._id })) });
-    // res = {...res, post:post},
+
+    const postWithComments = { ...postResult?._doc, comments: commentsResult?.body?.hits?.hits?.map((i) => ({ ...i._source, id: i._id })) };
+    if (postWithComments) {
+        Object.assign(res, { post: postWithComments });
+    }
+
     next(); // pass control to the next handler
 }
 
-// async function getPostById(req: Request, res: Response, next:NextFunction){
-//     try{
-//         const post = await elasticClient.search({
-//             index: 'posts',
-//             body: {
-//                 query: {
-//                     match: {
-//                         _id: `${req.query.}`,
-//                     },
-//                 },
-//             },
-//         });
-//     }
-// }
-
 async function getPostsForTopic(req: Request, res: Response, next: NextFunction) {
-    let posts;
+    let posts, comments, postsWithCommentsLength;
     try {
         posts = await elasticClient.search({
             index: 'posts',
@@ -97,10 +83,34 @@ async function getPostsForTopic(req: Request, res: Response, next: NextFunction)
     } catch (err) {
         next(err);
     }
-    // add new key/value pair to the res obj
-    Object.assign(res, { posts: posts?.body?.hits?.hits?.map((i) => ({ ...i._source, id: i._id })) });
-    // res = {...res, post:post},
-    next(); // pass control to the next handler
+    try {
+        const postIds = posts?.body?.hits?.hits?.map((i) => i._id).join(',');
+        posts = posts?.body?.hits?.hits?.map((p) => ({ ...p._source, _id: p._id }));
+        comments = await await elasticClient.search({
+            index: 'comments',
+            body: {
+                query: {
+                    match: {
+                        postId: `${postIds}`,
+                    },
+                },
+            },
+        });
+        if (comments) {
+            comments = comments.body?.hits?.hits?.map((c) => ({ ...c._source, _id: c._id }));
+            postsWithCommentsLength = posts.map((post) => ({
+                ...post,
+                commentsLength: comments.filter((c) => c.postId === post._id).length,
+            }));
+            Object.assign(res, { postsWithCommentsLength: postsWithCommentsLength });
+        } else {
+            Object.assign(res, { post: posts });
+        }
+    } catch (err) {
+        console.log('No comments found for post');
+        next();
+    }
+    next();
 }
 
 // get all posts
@@ -116,14 +126,18 @@ postsRouter.get('/', async (_req: Request, res: Response) => {
 let topicName; //just for testing, must find a better way to do it
 // get a specific post by mainTopic from elasticsearch
 postsRouter.get('/getPostsByTopic', getPostsForTopic, (_req: Request, res: Response) => {
-    console.log('test');
-    res.json((<any>res).posts);
+    if ((<any>res).postsWithCommentsLength) {
+        res.json((<any>res).postsWithCommentsLength);
+    } else if ((<any>res).posts) {
+        res.json((<any>res).posts);
+    } else {
+        res.status(404).json({ message: 'No Posts found for topic' });
+    }
 });
 
 // get a specific post by id
 postsRouter.get('/:id', getPostWithComments, (_req: Request, res: Response) => {
-    console.log('test');
-    res.json({ post: (<any>res).post, comments: (<any>res).comments });
+    res.json({ ...(<any>res).post });
 });
 
 // create new post
@@ -170,7 +184,7 @@ postsRouter.patch('/:id', getPost, async (req: Request, res: Response) => {
 
 postsRouter.delete('/delete/:id', function (req, res) {
     var id = req.params.id;
-    
+
     PostModel.findByIdAndRemove(id).exec();
     PostModel.on('es-removed', function (err, res) {
         if (err) throw err;
@@ -178,5 +192,4 @@ postsRouter.delete('/delete/:id', function (req, res) {
     });
     res.json({ success: id });
     res.redirect('/');
-    
-  });
+});

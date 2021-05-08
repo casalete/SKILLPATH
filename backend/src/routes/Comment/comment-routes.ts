@@ -50,6 +50,7 @@ commentsRouter.get('/getCommentsForPost', getCommentsForPost, (_req: Request, re
 commentsRouter.post('/', async (req: any, res: any) => {
     const comment = new CommentModel({
         author: req.user.email,
+        authorDisplayName: req.user.displayName,
         postId: req.body.postId,
         content: req.body.content,
     });
@@ -66,4 +67,16 @@ commentsRouter.post('/', async (req: any, res: any) => {
     } catch (err) {
         res.status(400).json({ message: err.message });
     }
+});
+
+commentsRouter.delete('/:id', function (req, res) {
+    var id = req.params.id;
+
+    CommentModel.findByIdAndRemove(id).exec();
+    CommentModel.on('es-removed', function (err, res) {
+        if (err) throw err;
+        /* Document is removed */
+    });
+    res.json({ success: id });
+    res.redirect('/');
 });

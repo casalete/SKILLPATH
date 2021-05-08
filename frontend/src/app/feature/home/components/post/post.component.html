@@ -75,41 +75,35 @@
                     <h3 class="section-heading h3 pt-3 mb-5">Comments <span class="badge pink">1</span></h3>
                 </div>
                 <!--First row-->
-                <mdb-card>
-                    <div class="row align-items-center pl-3">
-                        <!--Image column-->
-                        <div class="col-sm-1">
-                            <img src="https://mdbootstrap.com/img/Photos/Avatars/img (9).jpg" class="avatar rounded-circle img-fluid z-depth-2" />
-                        </div>
-                        <!--/.Image column-->
-
-                        <!--Content column-->
-                        <div class="col-sm-11 pt-3">
-                            <!-- <mdb-card class="px-3 py-3"> -->
-                            <a>
-                                <h5 class="font-bold">Tom Smith</h5>
-                            </a>
-                            <div>
-                                <ul class="list-unstyled">
-                                    <li><mdb-icon far icon="clock"></mdb-icon> 05/10/2015</li>
-                                </ul>
+                <div class="comment-card" *ngFor="let comment of post?.comments">
+                    <mdb-card class="my-4">
+                        <div class="row align-items-center pl-3">
+                            <!--Image column-->
+                            <div class="col-sm-1">
+                                <img src="https://mdbootstrap.com/img/Photos/Avatars/img (32).jpg" class="avatar rounded-circle img-fluid z-depth-2" />
                             </div>
-                            <p class="px-3">
-                                Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure
-                                dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                                proident. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute
-                                irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat
-                                non proident. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis
-                                aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
-                                cupidatat non proident. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                                consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint
-                                occaecat cupidatat non proident.
-                            </p>
-                            <!-- </mdb-card> -->
+                            <!--/.Image column-->
+
+                            <!--Content column-->
+                            <div class="col-sm-11 pt-3">
+                                <!-- <mdb-card class="px-3 py-3"> -->
+                                <a>
+                                    <h5 class="font-bold">{{ comment?.authorDisplayName }}</h5>
+                                </a>
+                                <!-- <div>
+                                    <ul class="list-unstyled">
+                                        <li><mdb-icon far icon="clock"></mdb-icon> {{comment?.createdAt}}</li>
+                                    </ul>
+                                </div> -->
+                                <p class="px-3">
+                                    {{ comment?.content }}
+                                </p>
+                                <!-- </mdb-card> -->
+                            </div>
+                            <!--/.Content column-->
                         </div>
-                        <!--/.Content column-->
-                    </div>
-                </mdb-card>
+                    </mdb-card>
+                </div>
             </div>
 
             <!--/.Main wrapper-->

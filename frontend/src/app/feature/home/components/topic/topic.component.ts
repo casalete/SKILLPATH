@@ -29,13 +29,13 @@ export class TopicComponent implements OnInit, OnDestroy {
     headElements = ['Author', 'Post Name', 'Description', 'Score'];
     searchText: string = '';
     previous: string;
+    mainTopic: string;
 
     @HostListener('input') oninput() {
         this.searchItems();
     }
 
     ngOnInit() {
-        // this.topicEntityService.getAll();
         this.store
             .select(selectRouteParam('id'))
             .pipe(take(1))
@@ -43,6 +43,7 @@ export class TopicComponent implements OnInit, OnDestroy {
                 const queryParams: QueryParams = {
                     mainTopic: routeParam,
                 };
+                this.mainTopic = routeParam;
                 this.postEntityService.getWithQuery(queryParams);
             });
 
@@ -72,8 +73,3 @@ export class TopicComponent implements OnInit, OnDestroy {
         this.subs.unsubscribe();
     }
 }
-
-//   onTopicSelected(i) {
-//       this.topicEntityService.updateOneInCache({ ...this.topics[i], selected: true });
-//       this.router.navigate(['/topic']);
-//   }

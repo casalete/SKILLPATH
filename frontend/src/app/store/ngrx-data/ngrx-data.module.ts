@@ -18,7 +18,7 @@ export function selectTopicId(a: Topic): string {
 }
 
 export function selectPostId(a: Post): string {
-    return a.name;
+    return a._id;
 }
 
 @NgModule({

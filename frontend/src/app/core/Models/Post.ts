@@ -1,4 +1,5 @@
 export interface Post {
+    _id?: string;
     name?: string;
     author?: string;
     authorDisplayName?: string;
@@ -9,6 +10,7 @@ export interface Post {
     content?: string;
     links: { source: string; target: string; importance: number }[];
     commentList?: string[];
+    commentsLength?: number;
     postTopics?: string[];
     votersList?: string[];
     score?: number;

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { filter, skipWhile, switchMap, take, tap } from 'rxjs/operators';
+import { filter, map, skipWhile, switchMap, take, tap } from 'rxjs/operators';
 import { Post } from 'src/app/core/Models/Post';
 import { selectRouteParam } from 'src/app/store/router/selectors';
 import { SubSink } from 'subsink';
@@ -29,24 +29,18 @@ export class PostComponent implements OnInit {
             .subscribe((routeParam) => {
                 this.postId = routeParam;
                 this.postEntityService.getByKey(this.postId);
-                // this.postEntityService.collection$
-                //     .pipe(
-                //         take(1),
-                //         tap((posts) => {
-                //             this.post = posts.entities[this.postId];
-                //             this.links = this.post?.links.map((link) => [link.source, link.target, link.importance]);
-                //         }),
-                //     )
-                //     .subscribe();
             });
         this.subs.sink = this.postEntityService.loading$
             .pipe(
                 skipWhile((loading) => loading === true),
                 switchMap(() => this.postEntityService.entities$),
+                filter((entities) => {
+                    return entities.length !== 0;
+                }),
+                map((entities) => entities.filter((entity) => entity._id === this.postId)),
             )
-            .subscribe((ps: Post[]) => {
-                console.log(ps);
-                this.post = ps[this.postId];
+            .subscribe((ps: any) => {
+                this.post = ps[0];
                 this.links = this.post?.links.map((link) => [link.source, link.target, link.importance]);
             });
         // setTimeout(this.swapData, 5000);
@@ -58,6 +52,10 @@ export class PostComponent implements OnInit {
 
     onSubmit(): void {
         console.log(this.comment);
+        this.postEntityService
+            .addComment({ postId: this.postId, content: this.comment })
+            .pipe(take(1))
+            .subscribe(() => this.postEntityService.getByKey(this.postId));
     }
 
     swapData(): void {
