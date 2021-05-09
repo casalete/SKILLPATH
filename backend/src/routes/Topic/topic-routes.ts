@@ -13,7 +13,7 @@ export const topicsRouter = express.Router();
 async function getTopic(req: Request, res: Response, next: NextFunction) {
     let topic;
     try {
-        topic = await TopicModel.findById(req.params.id);
+        topic = await TopicModel.findOne({ name: req.params.topicName });
         if (topic == null) {
             throw new NotFound('Cannot find topic with given id');
         }
@@ -37,7 +37,7 @@ topicsRouter.get('/', async (_req: Request, res: Response) => {
 });
 
 // get a specific topic
-topicsRouter.get('/:id', getTopic, (_req: Request, res: Response) => {
+topicsRouter.get('/:topicName', getTopic, (_req: Request, res: Response) => {
     res.json((<any>res).topic);
 });
 

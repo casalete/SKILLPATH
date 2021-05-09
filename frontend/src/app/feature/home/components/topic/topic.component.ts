@@ -29,7 +29,8 @@ export class TopicComponent implements OnInit, OnDestroy {
     headElements = ['Author', 'Post Name', 'Description', 'Score'];
     searchText: string = '';
     previous: string;
-    mainTopic: string;
+    mainTopicName: string;
+    mainTopic: Topic;
 
     @HostListener('input') oninput() {
         this.searchItems();
@@ -43,7 +44,8 @@ export class TopicComponent implements OnInit, OnDestroy {
                 const queryParams: QueryParams = {
                     mainTopic: routeParam,
                 };
-                this.mainTopic = routeParam;
+                this.mainTopicName = routeParam;
+                this.topicEntityService.getByKey(this.mainTopicName);
                 this.postEntityService.getWithQuery(queryParams);
             });
 
@@ -54,6 +56,16 @@ export class TopicComponent implements OnInit, OnDestroy {
             )
             .subscribe((ps: Post[]) => {
                 this.posts = ps;
+            });
+
+        this.subs.sink = this.topicEntityService.loading$
+            .pipe(
+                skipWhile((loading) => loading === true),
+                switchMap(() => this.topicEntityService.entities$),
+            )
+            .subscribe((topics: Topic[]) => {
+                this.mainTopic = topics.filter((topic) => topic.name === this.mainTopicName)[0];
+                console.log(this.mainTopic);
             });
     }
 

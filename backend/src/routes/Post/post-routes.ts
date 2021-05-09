@@ -107,7 +107,7 @@ async function getPostsForTopic(req: Request, res: Response, next: NextFunction)
             Object.assign(res, { post: posts });
         }
     } catch (err) {
-        console.log('No comments found for post');
+        console.log(err.message);
         next();
     }
     next();

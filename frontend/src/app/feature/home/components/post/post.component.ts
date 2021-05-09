@@ -40,6 +40,7 @@ export class PostComponent implements OnInit {
                 map((entities) => entities.filter((entity) => entity._id === this.postId)),
             )
             .subscribe((ps: any) => {
+                console.log('pe loading de postEntity');
                 this.post = ps[0];
                 this.links = this.post?.links.map((link) => [link.source, link.target, link.importance]);
             });
@@ -55,7 +56,12 @@ export class PostComponent implements OnInit {
         this.postEntityService
             .addComment({ postId: this.postId, content: this.comment })
             .pipe(take(1))
-            .subscribe(() => this.postEntityService.getByKey(this.postId));
+            .subscribe(() => {
+                setTimeout(() => {
+                    this.postEntityService.getByKey(this.postId);
+                    console.log('subscribe la onsubmit');
+                }, 1000);
+            });
     }
 
     swapData(): void {

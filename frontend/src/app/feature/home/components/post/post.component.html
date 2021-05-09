@@ -72,7 +72,9 @@
             <!--Main wrapper-->
             <div class="comments-list text-md-left text-center">
                 <div class="section-heading">
-                    <h3 class="section-heading h3 pt-3 mb-5">Comments <span class="badge pink">1</span></h3>
+                    <h3 class="section-heading h3 pt-3 mb-5">
+                        Comments <span class="badge pink">{{ post?.comments.length }}</span>
+                    </h3>
                 </div>
                 <!--First row-->
                 <div class="comment-card" *ngFor="let comment of post?.comments">
