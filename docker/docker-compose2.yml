@@ -23,6 +23,17 @@ services:
             - db-data:/data/db:delegated
         ports:
             - 27017:27017
+    sp-backend:
+        image: sp_be:latest
+        restart: on-failure
+        links:
+            - my-mongoDB
+        ports:
+            - 3000:3000
+    sp-frontend:
+        image: sp_fe:latest
+        ports:
+            - 8080:80
 
 volumes:
     db-data:

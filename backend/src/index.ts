@@ -29,7 +29,7 @@ app.use(function (req: Request, res: Response, next: NextFunction) {
     }
 });
 
-let whitelist = ['http://localhost:4200'];
+let whitelist = ['http://localhost:4200', 'http://localhost:8080'];
 app.use(
     cors({
         origin: function (origin, callback) {
@@ -40,7 +40,7 @@ app.use(
             }
             return callback(null, true);
         },
-    })
+    }),
 );
 connectToDatabase();
 

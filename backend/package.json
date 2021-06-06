@@ -3,7 +3,7 @@
     "version": "1.0.0",
     "main": "index.ts",
     "scripts": {
-        "start": "node dist/index.js",
+        "start": "NODE_PATH=./dist node dist/index.js",
         "dev": "nodemon src/index.ts",
         "build": "tsc -p .",
         "lint": "eslint '*/**/*.{js,ts,tsx}' --quiet --fix"
