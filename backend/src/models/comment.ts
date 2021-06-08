@@ -14,7 +14,7 @@ interface Comment {
     score: Number;
     votersList: [
         {
-            userName: String;
+            email: String;
             voteType: VoteType;
         },
     ];
@@ -56,7 +56,7 @@ const commentSchema = new mongoose.Schema({
     },
     votersList: [
         {
-            userName: String,
+            email: String,
             voteType: String,
         },
     ],

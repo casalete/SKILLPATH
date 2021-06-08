@@ -4,10 +4,21 @@ import { ToastService } from 'ng-uikit-pro-standard';
 import { catchError, switchMap } from 'rxjs/operators';
 import * as ProfileActions from './actions';
 import { ProfileService } from '../../core/services/profileService';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { environment } from 'src/environments/environment';
+import { CommentService } from '../../core/services/commentService';
 
 @Injectable()
 export class ProfileEffects {
-    constructor(private actions$: Actions, private profileService: ProfileService, private toast: ToastService) {}
+    apiUrl = `${environment.apiUrl}`;
+
+    constructor(
+        private actions$: Actions,
+        private profileService: ProfileService,
+        private toast: ToastService,
+        private http: HttpClient,
+        private commentService: CommentService,
+    ) {}
 
     @Effect()
     getProfileData$ = this.actions$.pipe(
@@ -39,5 +50,16 @@ export class ProfileEffects {
                 }),
             ),
         ),
+    );
+
+    @Effect()
+    voteComment$ = this.actions$.pipe(
+        ofType(ProfileActions.voteComment),
+        switchMap((action) => {
+            return this.commentService.voteComment(action.voteType, action.commentId).pipe(
+                switchMap(() => []),
+                catchError(() => []),
+            );
+        }),
     );
 }

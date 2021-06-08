@@ -7,3 +7,5 @@ export const storeProfileData = createAction('[Profile] Store Profile Data', pro
 export const updateProfileDataStart = createAction('[Profile] Update Profile Data Start', props<{ profileData: Partial<ProfileData> }>());
 export const updateProfileDataSuccess = createAction('[Profile] Update Profile Data Success', props<{ profileData: Partial<ProfileData> }>());
 export const updateProfileDataError = createAction('[Profile] Update Profile Data Error', props<{ error: string }>());
+
+export const voteComment = createAction('[Profile] Vote comment', props<{ voteType: string; commentId: string }>());
