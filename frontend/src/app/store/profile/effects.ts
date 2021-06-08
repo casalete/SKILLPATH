@@ -7,6 +7,7 @@ import { ProfileService } from '../../core/services/profileService';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { CommentService } from '../../core/services/commentService';
+import { PostEntityService } from '../ngrx-data/post/post-entity.service';
 
 @Injectable()
 export class ProfileEffects {
@@ -18,6 +19,7 @@ export class ProfileEffects {
         private toast: ToastService,
         private http: HttpClient,
         private commentService: CommentService,
+        private postEntityService: PostEntityService,
     ) {}
 
     @Effect()
@@ -50,16 +52,5 @@ export class ProfileEffects {
                 }),
             ),
         ),
-    );
-
-    @Effect()
-    voteComment$ = this.actions$.pipe(
-        ofType(ProfileActions.voteComment),
-        switchMap((action) => {
-            return this.commentService.voteComment(action.voteType, action.commentId).pipe(
-                switchMap(() => []),
-                catchError(() => []),
-            );
-        }),
     );
 }

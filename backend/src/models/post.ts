@@ -18,6 +18,7 @@ interface Post {
     creationTimestamp: Date;
     lastVoted: Date;
     commentList: Array<String>;
+    score: Number;
     votersList: [
         {
             userName: String;
@@ -88,6 +89,9 @@ const postSchema = new mongoose.Schema({
         type: Date,
     },
     commentList: [{ type: String }],
+    score: {
+        type: Number,
+    },
     votersList: [
         {
             userName: String,

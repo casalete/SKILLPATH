@@ -4,17 +4,16 @@ import { ToastService } from 'ng-uikit-pro-standard';
 import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-import { ProfileData } from '../Models/ProfileData';
 
 @Injectable({
     providedIn: 'root',
 })
-export class CommentService {
+export class PostService {
     constructor(private http: HttpClient, private toast: ToastService) {}
 
     apiUrl = `${environment.apiUrl}`;
 
-    voteComment(voteType: string, id: string): Observable<any> {
+    votePost(voteType: string, id: string): Observable<any> {
         const httpOptions = {
             headers: new HttpHeaders({
                 'Content-Type': 'application/json',
@@ -22,7 +21,7 @@ export class CommentService {
         };
         return this.http
             .patch<any>(
-                `${this.apiUrl}/comments/vote`,
+                `${this.apiUrl}/posts/vote`,
                 { voteType, id },
                 {
                     headers: new HttpHeaders({
@@ -32,7 +31,7 @@ export class CommentService {
             )
             .pipe(
                 catchError((err) => {
-                    this.toast.error('Could not update Comment');
+                    this.toast.error('Could not apply vote');
                     return [];
                 }),
             );

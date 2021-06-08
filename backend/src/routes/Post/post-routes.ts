@@ -13,7 +13,7 @@ export const postsRouter = express.Router();
 async function getPost(req: Request, res: Response, next: NextFunction) {
     let post;
     try {
-        post = await PostModel.findById(req.params.id);
+        post = await PostModel.findOne({ name: req.body.id });
         if (post == null) {
             throw new NotFound('Cannot find post with given id');
         }
@@ -170,13 +170,37 @@ postsRouter.post('/', async (req: any, res: any) => {
 });
 
 // update post's info
-postsRouter.patch('/:id', getPost, async (req: Request, res: Response) => {
-    if (req.body.name != null) {
-        (<any>res).post.name = req.body.name;
+postsRouter.patch('/vote', getPost, async (req: any, res: any) => {
+    if (req.body.voteType != null) {
+        (<any>res).post.votersList.push({ email: req.user.email, voteType: req.body.voteType });
+        if (req.body.voteType === 'UP') {
+            if ((<any>res).post.upVotes) {
+                (<any>res).post.upVotes = (<any>res).post.upVotes + 1;
+            } else {
+                (<any>res).post.upVotes = 1;
+            }
+            if ((<any>res).post.score) {
+                (<any>res).post.score = (<any>res).post.score + 5;
+            } else {
+                (<any>res).post.score = 5;
+            }
+        }
+        if (req.body.voteType === 'DOWN') {
+            if ((<any>res).post.downVotes) {
+                (<any>res).post.downVotes = (<any>res).post.downVotes + 1;
+            } else {
+                (<any>res).post.downVotes = 1;
+            }
+            if ((<any>res).post.score) {
+                (<any>res).post.score = (<any>res).post.score - 3;
+            } else {
+                (<any>res).post.score = -3;
+            }
+        }
     }
     try {
-        const updatedPost = await (<any>res).post.save();
-        res.json(updatedPost);
+        const updatedpost = await (<any>res).post.save();
+        res.json(updatedpost);
     } catch (err) {
         res.status(400).json({ message: err.message });
     }

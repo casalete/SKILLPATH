@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { filter, map, skipWhile, switchMap, take, tap } from 'rxjs/operators';
 import { Post } from 'src/app/core/Models/Post';
-import { voteComment } from 'src/app/store/profile/actions';
+import { voteCommentStart } from 'src/app/store/post/actions';
 import { selectRouteParam } from 'src/app/store/router/selectors';
 import { SubSink } from 'subsink';
 import { PostEntityService } from '../../../../store/ngrx-data/post/post-entity.service';
@@ -31,6 +31,11 @@ export class PostComponent implements OnInit {
                 this.postId = routeParam;
                 this.postEntityService.getByKey(this.postId);
             });
+    }
+
+    ngOnInit(): void {
+        this.initializePage();
+
         this.subs.sink = this.postEntityService.loading$
             .pipe(
                 skipWhile((loading) => loading === true),
@@ -45,10 +50,6 @@ export class PostComponent implements OnInit {
                 this.post = ps[0];
                 this.links = this.post?.links.map((link) => [link.source, link.target, link.importance]);
             });
-    }
-
-    ngOnInit(): void {
-        this.initializePage();
         // setTimeout(this.swapData, 5000);
     }
 
@@ -57,17 +58,15 @@ export class PostComponent implements OnInit {
     }
 
     upVoteComment(event: any): void {
-        console.log({ voteType: 'UP', commentId: event.id });
-        this.store.dispatch(voteComment({ voteType: 'UP', commentId: event.id }));
-        this.postEntityService.clearCache();
-        this.initializePage();
+        this.store.dispatch(voteCommentStart({ voteType: 'UP', commentId: event.id, postId: this.postId }));
+        // this.postEntityService.clearCache();
+        // this.initializePage();
     }
 
     downVoteComment(event: any): void {
-        console.log({ voteType: 'DOWN', commentId: event.id });
-        this.store.dispatch(voteComment({ voteType: 'DOWN', commentId: event.id }));
-        this.postEntityService.clearCache();
-        this.initializePage();
+        this.store.dispatch(voteCommentStart({ voteType: 'DOWN', commentId: event.id, postId: this.postId }));
+        // this.postEntityService.clearCache();
+        // this.initializePage();
     }
 
     onSubmit(): void {

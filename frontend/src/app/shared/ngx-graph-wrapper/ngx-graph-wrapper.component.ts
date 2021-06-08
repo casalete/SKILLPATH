@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, OnInit } from '@angular/core';
 import { Subject } from 'rxjs';
 
 @Component({
@@ -6,12 +6,20 @@ import { Subject } from 'rxjs';
     templateUrl: './ngx-graph-wrapper.component.html',
     styleUrls: ['./ngx-graph-wrapper.component.scss'],
 })
-export class NgxGraphWrapperComponent implements OnInit {
+export class NgxGraphWrapperComponent implements OnInit, OnChanges {
     center$: Subject<boolean> = new Subject();
     zoomToFit$: Subject<boolean> = new Subject();
     panToNode$: Subject<number> = new Subject();
+    @Input() links: any = [];
+
+    @Input() nodes: any = [];
 
     constructor() {}
+
+    ngOnChanges(): void {
+        console.log(this.links);
+        console.log(this.nodes);
+    }
 
     ngOnInit(): void {}
 

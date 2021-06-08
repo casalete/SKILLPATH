@@ -11,6 +11,7 @@ import { QueryParams } from '@ngrx/data';
 import { Store } from '@ngrx/store';
 import { selectRouteParam, selectRouteParams } from 'src/app/store/router/selectors';
 import { skipWhile, switchMap, take } from 'rxjs/operators';
+import { votePostStart } from 'src/app/store/post/actions';
 
 @Component({
     selector: 'app-topic',
@@ -31,6 +32,9 @@ export class TopicComponent implements OnInit, OnDestroy {
     previous: string;
     mainTopicName: string;
     mainTopic: Topic;
+    queryParams: QueryParams;
+    nodes: Array<{ id: string; label: string }> = [];
+    links: Array<{ id: string; source: string; target: string }> = [];
 
     @HostListener('input') oninput() {
         this.searchItems();
@@ -41,12 +45,12 @@ export class TopicComponent implements OnInit, OnDestroy {
             .select(selectRouteParam('id'))
             .pipe(take(1))
             .subscribe((routeParam) => {
-                const queryParams: QueryParams = {
+                this.queryParams = {
                     mainTopic: routeParam,
                 };
                 this.mainTopicName = routeParam;
                 this.topicEntityService.getByKey(this.mainTopicName);
-                this.postEntityService.getWithQuery(queryParams);
+                this.postEntityService.getWithQuery(this.queryParams);
             });
 
         this.subs.sink = this.postEntityService.loading$
@@ -65,7 +69,15 @@ export class TopicComponent implements OnInit, OnDestroy {
             )
             .subscribe((topics: Topic[]) => {
                 this.mainTopic = topics.filter((topic) => topic.name === this.mainTopicName)[0];
-                console.log(this.mainTopic);
+                this.nodes = [
+                    { id: '0', label: this.mainTopicName },
+                    ...this.mainTopic.suggestedTopics.map((suggestedTopic, index) => ({ id: (index + 1).toString(), label: suggestedTopic })),
+                ];
+                this.links = this.mainTopic.suggestedTopics.map((suggestedTopic, index) => ({
+                    id: suggestedTopic,
+                    source: '0',
+                    target: (index + 1).toString(),
+                }));
             });
     }
 
@@ -79,6 +91,16 @@ export class TopicComponent implements OnInit, OnDestroy {
             this.elements = this.mdbTable.searchLocalDataBy(this.searchText);
             this.mdbTable.setDataSource(prev);
         }
+    }
+
+    upVotePost(event: any): void {
+        console.log({ voteType: 'UP', postId: event.name });
+        this.store.dispatch(votePostStart({ voteType: 'UP', postId: event.name, queryParams: this.queryParams }));
+    }
+
+    downVotePost(event: any): void {
+        console.log({ voteType: 'DOWN', postId: event.name });
+        this.store.dispatch(votePostStart({ voteType: 'DOWN', postId: event.name, queryParams: this.queryParams }));
     }
 
     ngOnDestroy(): void {

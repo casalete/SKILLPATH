@@ -7,6 +7,7 @@ import { AuthStoreModule } from './authentication/auth-store.module';
 import { NgrxDataModule } from './ngrx-data/ngrx-data.module';
 import { RouterStoreModule } from './router';
 import { ProfileStoreModule } from './profile/profile-store.module';
+import { PostStoreModule } from './post/post-store.module';
 
 @NgModule({
     declarations: [],
@@ -29,6 +30,7 @@ import { ProfileStoreModule } from './profile/profile-store.module';
         ProfileStoreModule,
         NgrxDataModule,
         RouterStoreModule,
+        PostStoreModule,
     ],
 })
 export class RootStoreModule {}
