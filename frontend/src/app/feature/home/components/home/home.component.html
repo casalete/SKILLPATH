@@ -1,28 +1,61 @@
-<div class="home-container d-flex flex-column justify-content-center mx-5 sp-theme">
-    <div class="col-md-6 mx-auto">
+<div class="row">
+    <div class="col-6 mx-auto">
         <div class="md-form">
             <input type="text" [(ngModel)]="searchText" class="form-control" id="search" mdbInput />
             <label for="search">Search</label>
         </div>
     </div>
+</div>
 
-    <div class="col-md-10 mx-auto">
-        <table mdbTable hover="true" class="z-depth-3">
-            <thead class="primary-color">
-                <tr>
-                    <th *ngFor="let head of headElements; let i = index" scope="col">
-                        {{ head }}
-                    </th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let topic of topics; let i = index">
-                    <th scope="row">{{ topic.name }}</th>
-                    <td class="red-text">{{ topic.postsCount }}</td>
-                    <mdb-icon size="3x" fas icon="eye" class="orange-text" [routerLink]="['/topic', topic.name]"></mdb-icon>
-                </tr>
-            </tbody>
-        </table>
+<!-- <table mdbTable hover="true" class="z-depth-3">
+    <thead class="primary-color">
+        <tr>
+            <th *ngFor="let head of headElements; let i = index" scope="col">
+                {{ head }}
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let topic of topics; let i = index">
+            <th scope="row">{{ topic.name }}</th>
+            <td class="red-text">{{ topic.postsCount }}</td>
+            <mdb-icon fas icon="eye" class="orange-text" [routerLink]="['/topic', topic.name]"></mdb-icon>
+        </tr>
+    </tbody>
+</table> -->
+
+<div class="row">
+    <div class="col-lg-4 col-md-6 my-3" *ngFor="let topic of topics; let i = index">
+        <mdb-card cascade="true" wider="true">
+            <div class="view view-cascade gradient-card-header peach-gradient p-1">
+                <h2 class="card-header-title mb-0">{{ topic.name }}</h2>
+            </div>
+            <mdb-card-body cascade="true" class="text-center">
+                <div class="row d-flex justify-content-center">
+                    <div class="col-md-6 text-center">
+                        <h4 class="h1 font-weight-normal mb-3">
+                            <mdb-icon fas icon="road" class="indigo-text mr-1"></mdb-icon>
+                            <span class="d-inline-block count-up">{{ topic.postsCount ? topic.postsCount : 0 }}</span>
+                        </h4>
+                        <p class="font-weight-normal text-muted">Posts</p>
+                    </div>
+
+                    <div class="col-md-6 text-center">
+                        <h4 class="h1 font-weight-normal mb-3">
+                            <mdb-icon fas icon="users" class="mr-1"></mdb-icon>
+                            <span class="d-inline-block count1" data-from="0" data-to="250" data-time="2000">{{ topic.followers ? topic.followers : 0 }}</span>
+                        </h4>
+                        <p class="font-weight-normal text-muted">Followers</p>
+                    </div>
+                </div>
+                <a [routerLink]="['/topic', topic.name]" class="orange-text d-flex flex-row-reverse">
+                    <h5 class="waves-effect p-2" mdbWavesEffect>
+                        View Topic
+                        <mdb-icon fas icon="chevron-right"></mdb-icon>
+                    </h5>
+                </a>
+            </mdb-card-body>
+        </mdb-card>
     </div>
 </div>

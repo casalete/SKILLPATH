@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { LinksComponent } from 'ng-uikit-pro-standard';
+import { LinksComponent, ToastService } from 'ng-uikit-pro-standard';
 import { BehaviorSubject, from, Observable, of, Subject } from 'rxjs';
 import { map, skipWhile, startWith, switchMap, take } from 'rxjs/operators';
 import { Topic } from 'src/app/core/Models/Topic';
@@ -11,6 +11,7 @@ import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { Store } from '@ngrx/store';
 import { selectRouteParam } from 'src/app/store/router/selectors';
+import { CdkDragDrop, moveItemInArray, transferArrayItem, CdkDrag } from '@angular/cdk/drag-drop';
 
 @Component({
     selector: 'app-add-post',
@@ -29,11 +30,19 @@ export class AddPostComponent implements OnInit, OnDestroy {
     apiUrl = `${environment.apiUrl}`;
 
     postTopics: string[] = [];
+    source: string[] = [];
+    target: string[] = [];
 
     topicResults$: Observable<string[]>;
     // targetTopicResults$: Observable<string[]>;
 
-    constructor(private fb: FormBuilder, private topicEntityService: TopicEntityService, private postEntityService: PostEntityService, private store: Store) {}
+    constructor(
+        private fb: FormBuilder,
+        private topicEntityService: TopicEntityService,
+        private postEntityService: PostEntityService,
+        private store: Store,
+        private toast: ToastService,
+    ) {}
 
     ngOnInit(): void {
         this.store
@@ -57,8 +66,6 @@ export class AddPostComponent implements OnInit, OnDestroy {
         this.addPostForm = this.fb.group({
             name: ['', Validators.required],
             postTopic: ['', [Validators.required]],
-            sourceTopic: ['', Validators.required],
-            targetTopic: ['', Validators.required],
             importance: ['', Validators.required],
             content: ['', Validators.required],
             description: ['', Validators.required],
@@ -71,7 +78,29 @@ export class AddPostComponent implements OnInit, OnDestroy {
         // this.addPostForm.controls.targetTopic.valueChanges.subscribe((test) => {
         //     console.log(test);
         // });
+
+        // this.addPostForm.controls.importance.setValue(1);
     }
+
+    drop(event: CdkDragDrop<string[]>) {
+        console.log(event);
+        if (event.previousContainer === event.container) {
+            moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+        } else {
+            console.log(event.container.data, event.previousContainer.data);
+            if (!(event.container.id === 'cdk-drop-list-0')) {
+                if (event.container.data.length === 0) {
+                    transferArrayItem(event.previousContainer.data, event.container.data, event.previousIndex, event.currentIndex);
+                } else {
+                    this.toast.error('Container Already has an item');
+                }
+            } else {
+                transferArrayItem(event.previousContainer.data, event.container.data, event.previousIndex, event.currentIndex);
+            }
+        }
+    }
+
+    /** Predicate function that only allows even numbers to be dropped into a list. */
 
     filter(value: string): string[] {
         const filterValue = value.toLowerCase();
@@ -90,16 +119,23 @@ export class AddPostComponent implements OnInit, OnDestroy {
     }
 
     createLink(): void {
-        this.links = [
-            ...this.links,
-            {
-                source: this.addPostForm.controls.sourceTopic.value as string,
-                target: this.addPostForm.controls.targetTopic.value as string,
-                importance: this.addPostForm.controls.importance.value as number,
-            },
-        ];
+        if (this.addPostForm.controls.importance.value) {
+            this.links = [
+                ...this.links,
+                {
+                    source: this.source[0] as string,
+                    target: this.target[0] as string,
+                    importance: this.addPostForm.controls.importance.value as number,
+                },
+            ];
+            this.source = [];
+            this.target = [];
+            this.addPostForm.controls.importance.reset();
 
-        this.links$.next(this.links);
+            this.links$.next(this.links);
+        } else {
+            this.toast.error('Set link importance first!');
+        }
     }
     ngOnDestroy(): void {}
 

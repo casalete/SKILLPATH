@@ -41,6 +41,18 @@ const reducer = createReducer(
         loadingStatus: null,
         error: error,
     })),
+    on(ProfileActions.followTopicSuccess, (state, { profileData }) => ({
+        ...state,
+        loading: false,
+        loadingStatus: null,
+        profileData: { ...state.profileData, ...profileData },
+    })),
+    on(ProfileActions.followTopicError, (state, { error }) => ({
+        ...state,
+        loading: false,
+        loadingStatus: null,
+        error: error,
+    })),
     on(ProfileActions.updateProfileDataError, (state, { error }) => ({
         ...state,
         loading: false,

@@ -11,8 +11,16 @@
     input[type='search-md'],
     input[type='search'],
     textarea.md-textarea {
-        background-color: rgba(255, 255, 255, 0.4);
+        background-color: rgba(255, 255, 255, 0.75);
         border-radius: 0.5rem;
         color: black;
+    }
+
+    label {
+        padding: 0 0.75rem;
+
+        &.active {
+            color: black;
+        }
     }
 }

@@ -26,6 +26,7 @@ interface Post {
             voteType: VoteType;
         },
     ];
+    followers: number;
     links: { source: String; target: String; importance: Number }[];
 }
 
@@ -45,11 +46,10 @@ const postSchema = new mongoose.Schema({
     ],
     description: {
         type: String,
-        required: true,
     },
+    followers: Number,
     content: {
         type: String,
-        required: true,
     },
     mainTopic: {
         type: String,

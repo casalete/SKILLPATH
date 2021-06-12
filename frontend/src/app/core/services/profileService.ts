@@ -38,6 +38,15 @@ export class ProfileService {
                 'Content-Type': 'application/json',
             }),
         };
-        return this.http.post<ProfileData>(`${this.apiUrl}/users/follow`, user, httpOptions);
+        return this.http.post<ProfileData>(`${this.apiUrl}/users/follow`, { id: user }, httpOptions);
+    }
+
+    followTopic(topic: string) {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json',
+            }),
+        };
+        return this.http.post<ProfileData>(`${this.apiUrl}/topics/follow`, { topicName: topic }, httpOptions);
     }
 }

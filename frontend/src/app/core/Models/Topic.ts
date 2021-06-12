@@ -3,4 +3,5 @@ export interface Topic {
     postsCount?: number;
     suggestedTopics: string[];
     selected?: boolean;
+    followers: number;
 }

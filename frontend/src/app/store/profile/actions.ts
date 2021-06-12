@@ -11,3 +11,7 @@ export const updateProfileDataError = createAction('[Profile] Update Profile Dat
 export const followUserStart = createAction('[Profile] Follow User Start', props<{ user: string }>());
 export const followUserSuccess = createAction('[Profile] Follow User Success', props<{ profileData: Partial<ProfileData> }>());
 export const followUserError = createAction('[Profile] Follow User Error', props<{ error: string }>());
+
+export const followTopicStart = createAction('[Profile] Follow Topic Start', props<{ topic: string }>());
+export const followTopicSuccess = createAction('[Profile] Follow Topic Success', props<{ profileData: Partial<ProfileData> }>());
+export const followTopicError = createAction('[Profile] Follow Error Error', props<{ error: string }>());

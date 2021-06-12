@@ -1,63 +1,67 @@
-<div class="topic-container d-flex flex-column justify-content-center mx-5 sp-theme align-items-center">
-    <div class="fixed-action-btn" style="bottom: 45px; right: 24">
-        <a mdbBtn floating="true" size="lg" class="waves-light btn-default" mdbWavesEffect (click)="followTopic()">
-            <mdb-icon fas icon="star"></mdb-icon>
-        </a>
-    </div>
-    <div class="col-md-6 mx-auto">
-        <div class="md-form">
-            <input type="text" [(ngModel)]="searchText" class="form-control" id="search" mdbInput />
-            <label for="search">Search</label>
-        </div>
-    </div>
-    <mdb-card class="z-depth-3">
-        <app-ngx-graph-wrapper [links]="links" [nodes]="nodes"></app-ngx-graph-wrapper>
-    </mdb-card>
-
-    <div class="col-md-8 mx-auto">
-        <table mdbTable hover="true" class="z-depth-3">
-            <thead class="primary-color">
-                <tr>
-                    <th *ngFor="let head of headElements; let i = index" scope="col">
-                        {{ head }}
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let post of posts; let i = index">
-                    <th scope="row" class="d-flex justify-content-start">
-                        <div
-                            class="chip m-auto d-flex justify-content-start"
-                            mdbPopover="Score:{{ post.authorScore }}"
-                            placement="right"
-                            mdbPopoverHeader="{{ post.authorDisplayName }}"
-                            triggers="hover"
-                            mdbWavesEffect
-                        >
-                            <img [src]="post.authorImage" alt="Author" />
-                            {{ post.authorDisplayName }}
-                        </div>
-                    </th>
-                    <th scope="row">{{ post.name }}</th>
-                    <th scope="row">{{ post.description }}</th>
-                    <td>
-                        {{ post.score }}
-                        <div class="d-flex justify-content-center">
-                            <mdb-icon class="cyan-text mr-1" size="lg" fas icon="comment"></mdb-icon>{{ post.commentsLength }}
-                            <p><mdb-icon class="orange-text mx-1" size="lg" fas icon="thumbs-up" (click)="upVotePost(post)"></mdb-icon>{{ post.upVotes }}</p>
-                            <p><mdb-icon fas class="mx-1" icon="thumbs-down" size="lg" (click)="downVotePost(post)"></mdb-icon>{{ post.downVotes }}</p>
-                            <mdb-icon size="lg" fas icon="eye" class="orange-text pl-4" [routerLink]="['/post', post._id]"></mdb-icon>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="4">
-                        <div class="d-flex justify-content-center">
-                            <button type="button" mdbBtn color="primary" mdbWavesEffect [routerLink]="['/add-post', mainTopicName]">Add Post</button>
-                        </div>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+<div class="fixed-action-btn" style="bottom: 45px; right: 24">
+    <a mdbBtn floating="true" size="lg" class="waves-light btn-default" mdbWavesEffect (click)="followTopic()">
+        <mdb-icon fas icon="star"></mdb-icon>
+    </a>
+</div>
+<div class="col-md-6 mx-auto">
+    <div class="md-form">
+        <input type="text" [(ngModel)]="searchText" class="form-control" id="search" mdbInput />
+        <label for="search">Search</label>
     </div>
 </div>
+<mdb-card class="z-depth-3 mb-5" *ngIf="nodes.length + links.length > 0">
+    <app-ngx-graph-wrapper [links]="links" [nodes]="nodes"></app-ngx-graph-wrapper>
+</mdb-card>
+
+<table mdbTable [hover]="true" [small]="true" class="z-depth-3 mb-5">
+    <thead class="primary-color">
+        <tr>
+            <th *ngFor="let head of headElements; let i = index" scope="col">
+                {{ head }}
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let post of posts; let i = index">
+            <th scope="row" class="d-flex justify-content-center align-items-center p-1">
+                <div
+                    class="chip m-0 p-0"
+                    mdbPopover="Score:{{ post.authorScore }}"
+                    placement="right"
+                    mdbPopoverHeader="{{ post.authorDisplayName }}"
+                    triggers="hover"
+                    mdbWavesEffect
+                >
+                    <img [src]="post.authorImage" alt="Author" />
+                    {{ post.authorDisplayName }}
+                </div>
+            </th>
+            <th scope="row" class="p-1">{{ post.name }}</th>
+            <th scope="row" class="p-1">{{ post.description }}</th>
+            <td>
+                {{ post.score }}
+            </td>
+            <td>
+                <div class="d-flex justify-content-around align-items-center">
+                    <div class="d-flex justify-content-around align-items-center">
+                        <div class="mr-2"><mdb-icon class="cyan-text mr-1" size="lg" fas icon="comment"></mdb-icon>{{ post.commentsLength }}</div>
+                        <div class="mr-2">
+                            <mdb-icon class="orange-text mx-1" size="lg" fas icon="thumbs-up" (click)="upVotePost(post)"></mdb-icon>{{ post.upVotes }}
+                        </div>
+                        <div class="mr-2">
+                            <mdb-icon fas class="mx-1" icon="thumbs-down" size="lg" (click)="downVotePost(post)"></mdb-icon>{{ post.downVotes }}
+                        </div>
+                    </div>
+                    <mdb-icon size="lg" fas icon="eye" class="orange-text" [routerLink]="['/post', post._id]"></mdb-icon>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="5">
+                <div class="d-flex justify-content-center">
+                    <button type="button" mdbBtn color="primary" mdbWavesEffect [routerLink]="['/add-post', mainTopicName]">Add Post</button>
+                </div>
+            </td>
+        </tr>
+    </tbody>
+</table>

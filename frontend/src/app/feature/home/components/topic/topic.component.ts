@@ -12,6 +12,7 @@ import { Store } from '@ngrx/store';
 import { selectRouteParam, selectRouteParams } from 'src/app/store/router/selectors';
 import { skipWhile, switchMap, take } from 'rxjs/operators';
 import { votePostStart } from 'src/app/store/post/actions';
+import { followTopicStart } from 'src/app/store/profile/actions';
 
 @Component({
     selector: 'app-topic',
@@ -27,7 +28,7 @@ export class TopicComponent implements OnInit, OnDestroy {
     @ViewChild(MdbTableDirective, { static: true }) mdbTable: MdbTableDirective;
     elements: any = [];
     // headElements = ['Topic', 'Post Count', 'Last', 'Handle'];
-    headElements = ['Author', 'Post Name', 'Description', 'Score'];
+    headElements = ['Author', 'Post Name', 'Description', 'Score', 'Details'];
     searchText: string = '';
     previous: string;
     mainTopicName: string;
@@ -93,7 +94,9 @@ export class TopicComponent implements OnInit, OnDestroy {
         }
     }
 
-    followTopic() {}
+    followTopic(): void {
+        this.store.dispatch(followTopicStart({ topic: this.mainTopic.name }));
+    }
 
     upVotePost(event: any): void {
         console.log({ voteType: 'UP', postId: event.name });

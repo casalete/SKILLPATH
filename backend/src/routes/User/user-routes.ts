@@ -42,7 +42,7 @@ async function getUserByEmail(req: Request, res: Response, next: NextFunction) {
         next(err);
     }
     // add new key/value pair to the res obj
-    Object.assign(res, { foundUser: user });
+    Object.assign(req, { foundUser: user });
     // res = {...res, user:user},
     next(); // pass control to the next handler
 }
@@ -146,25 +146,21 @@ usersRouter.patch('/profile', multer({ storage: storage }).single('image'), asyn
     }
 });
 
-usersRouter.patch('/follow', getUserByEmail, async (req: any, res: Response) => {
-    const user = req.user;
-    const userToFollow = req.body.user;
-    const followedUsers = req.user.followedUsers;
-    const newFollowedUsers = [...followedUsers, userToFollow];
-    user.followedUsers = newFollowedUsers;
-
+usersRouter.post('/follow', getUserByEmail, async (req: any, res: Response) => {
     try {
-        const followedUser = await UserModel.findOne({ email: req.body.id });
-        if (user == null) {
-            throw new NotFound('Cannot find user');
-        }
-        followedUser.followers = followedUser.followers + 1;
-        await followedUser.save();
+        const user = req.user;
+        const userToFollow = req.foundUser;
+        const followedUsers = req.user.followedUsers;
+        const newFollowedUsers = [...followedUsers, userToFollow];
+        user.followedUsers = newFollowedUsers;
+
+        userToFollow.followers = userToFollow.followers + 1;
+        await userToFollow.save();
+        await user.save();
+        res.json(user);
     } catch (err) {
         throw err;
     }
-
-    await user.save();
 });
 
 // let streamUpload = (req) => {

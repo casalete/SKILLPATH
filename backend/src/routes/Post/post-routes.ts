@@ -155,6 +155,7 @@ postsRouter.post('/', async (req: any, res: any) => {
         authorScore: req.user.score,
         postTopics: req.body.postTopics,
         authorImage: req.user.imagePath,
+        score: 0,
     });
     try {
         const newPost = await post.save(function (err) {
@@ -171,7 +172,7 @@ postsRouter.post('/', async (req: any, res: any) => {
                 new TopicModel({
                     name: postTopic,
                     suggestedTopics: [],
-                    postCount: 0,
+                    postsCount: 0,
                 }),
         );
         let savedTopicModels = [];
@@ -201,6 +202,7 @@ postsRouter.post('/', async (req: any, res: any) => {
             }
             const dict = {};
             const suggestedTopics = await mainTopic.suggestedTopics;
+            mainTopic.postsCount = mainTopic.postsCount && mainTopic.postsCount !== 0 ? mainTopic.postsCount + 1 : 1;
 
             if (suggestedTopics.length === 0) {
                 mainTopic.suggestedTopics = req.body.postTopics;
@@ -270,12 +272,11 @@ postsRouter.post('/', async (req: any, res: any) => {
         //     console.log('Unable to update main topic');
         // }
 
-        res.status(201).json(newPost);
+        res.status(201).json(post);
     } catch (err) {
         res.status(400).json({ message: err.message });
     }
 });
-
 // update post's info
 postsRouter.patch('/vote', getPost, async (req: any, res: any) => {
     if (req.body.voteType != null) {

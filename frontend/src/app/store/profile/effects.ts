@@ -8,6 +8,7 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { CommentService } from '../../core/services/commentService';
 import { PostEntityService } from '../ngrx-data/post/post-entity.service';
+import { followTopicStart, followTopicSuccess } from './actions';
 
 @Injectable()
 export class ProfileEffects {
@@ -65,6 +66,23 @@ export class ProfileEffects {
                 catchError((err) => {
                     this.toast.error('User follow failed!');
                     return [ProfileActions.followUserError({ error: err.error.error })];
+                }),
+            ),
+        ),
+    );
+
+    @Effect()
+    followTopic$ = this.actions$.pipe(
+        ofType(ProfileActions.followTopicStart),
+        switchMap((action) =>
+            this.profileService.followTopic(action.topic).pipe(
+                switchMap((profileData) => {
+                    this.toast.success('Topic added to follow list!');
+                    return [ProfileActions.followTopicSuccess({ profileData })];
+                }),
+                catchError((err) => {
+                    this.toast.error('Topic follow failed!');
+                    return [ProfileActions.followTopicError({ error: err.error.error })];
                 }),
             ),
         ),

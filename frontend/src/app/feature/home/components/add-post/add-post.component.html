@@ -1,125 +1,316 @@
-<div class="add-post-container d-flex flex-column align-items-center">
-    <!-- Material form register -->
-    <!-- <mdb-card class="d-flex, justify-content-center align-items-center p-3 google-chart">
+<!-- Material form register -->
+<!-- <mdb-card class="d-flex, justify-content-center align-items-center p-3 google-chart">
         <app-sankey-google> </app-sankey-google>
     </mdb-card> -->
-    <mdb-card class="col-10 mx-auto" narrower="true" cascade="true">
-        <div class="view view-cascade">
-            <h3 class="card-header-title my-2 white-text text-center py-2 primary-color">Add Post</h3>
-        </div>
+<mdb-card narrower="true" cascade="true">
+    <div class="view view-cascade">
+        <h3 class="card-header-title white-text text-center mb-0 py-2 primary-color">Add Post</h3>
+    </div>
 
-        <!--Card content-->
-        <mdb-card-body cascade="true" class="px-lg-5 pt-0">
-            <!-- Form -->
-            <div *ngIf="postTopics.length !== 0" class="mt-3">
-                <mdb-material-chips [(ngModel)]="postTopics"></mdb-material-chips>
+    <!--Card content-->
+    <mdb-card-body cascade="true" class="px-lg-5 pt-0">
+        <!-- Form -->
+        <!-- <div *ngIf="postTopics.length !== 0" class="mt-3">
+            <mdb-material-chips [(ngModel)]="postTopics"></mdb-material-chips>
+        </div> -->
+
+        <form [formGroup]="addPostForm" autocomplete="off" class="text-center" style="color: #757575">
+            <div class="form-row">
+                <!-- First name -->
+                <div class="col-6">
+                    <div class="md-form">
+                        <input type="email" id="name" class="form-control" formControlName="name" mdbInput />
+                        <label for="name">Name</label>
+                    </div>
+                </div>
+                <!-- First name -->
+                <div class="col-6">
+                    <div class="md-form">
+                        <input
+                            formControlName="postTopic"
+                            type="text"
+                            class="completer-input form-control mdb-autocomplete mb-0"
+                            [mdbAutoCompleter]="auto"
+                            placeholder="Add topic"
+                            (keydown.enter)="addTopic()"
+                        />
+                        <mdb-auto-completer #auto="mdbAutoCompleter" textNoResults="No topic found. Add a new topic if needed">
+                            <mdb-option *ngFor="let option of topicResults$ | async" [value]="option">
+                                {{ option }}
+                            </mdb-option>
+                        </mdb-auto-completer>
+                    </div>
+                </div>
+            </div>
+            <div class="row drag-and-drop py-3">
+                <div class="col-md-3">
+                    <h5 class="text-center">Post Topics</h5>
+                    <div
+                        cdkDropList
+                        #postTopicList="cdkDropList"
+                        [cdkDropListData]="postTopics"
+                        [cdkDropListConnectedTo]="[sourceTopicList, targetTopicList]"
+                        class="example-list"
+                        (cdkDropListDropped)="drop($event)"
+                    >
+                        <div class="example-box" *ngFor="let item of postTopics" cdkDrag>{{ item }}</div>
+                        <div *ngIf="postTopics.length === 0">Add Topics to work with</div>
+                        <!-- </div>
+                        <div *ngFor="let item of postTopics" class="task" cdkDrag>
+                            {{ item }}
+                        </div> 
+                        <div *ngIf="postTopics.length === 0">No topic selected</div> 
+                   </div> -->
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <h5 class="text-center">Source</h5>
+                    <div
+                        cdkDropList
+                        #sourceTopicList="cdkDropList"
+                        [cdkDropListData]="source"
+                        [cdkDropListConnectedTo]="[postTopicList, targetTopicList]"
+                        class="example-list"
+                        (cdkDropListDropped)="drop($event)"
+                    >
+                        <div class="example-box" *ngFor="let item of source" cdkDrag>{{ item }}</div>
+                        <div *ngIf="source.length === 0">Drag source topic here</div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <h5 class="text-center">Target</h5>
+                    <div
+                        class="lane lane-2"
+                        cdkDropList
+                        #targetTopicList="cdkDropList"
+                        [cdkDropListData]="target"
+                        [cdkDropListConnectedTo]="[postTopicList, sourceTopicList]"
+                        (cdkDropListDropped)="drop($event)"
+                    >
+                        <div class="example-box" *ngFor="let item of target" cdkDrag>{{ item }}</div>
+                        <div *ngIf="target.length === 0">Drag target topic here</div>
+                    </div>
+                </div>
+
+                <!-- <ul class="list-group" id="all" cdkDropList [cdkDropListData]="postTopics" (cdkDropListDropped)="drop($event)">
+                        <div *ngIf="postTopics.length !== 0">
+                            <li
+                                class="list-group-item d-flex justify-content-between align-items-center"
+                                *ngFor="let topic of postTopics"
+                                cdkDragBoundary=".drag-and-drop"
+                                cdkDrag
+                            >
+                                <mdb-icon fas icon="bars" cdkDragHandle class="drag-and-drop-handle"></mdb-icon>
+                                <span class="mx-auto">{{ topic }}</span>
+                            </li>
+                        </div> -->
+
+                <!-- <div *ngIf="postTopics.length === 0">
+                            <li class="list-group-item disabled">No topic selected</li>
+                        </div>
+                    </ul> -->
+
+                <!-- <div class="col-7">
+                            <ul class="list-group list-group-flush" *ngFor="let link of links$ | async">
+                                <li class="list-group-item">{{ link.source }} --- {{ link.importance }} --- {{ link.target }}</li>
+                            </ul>
+                        </div> -->
+                <!-- </div> -->
+                <!-- <div class="col-md-4">
+                    <h5 class="text-center">Source Topic</h5>
+                    <ul class="list-group first-options-list" id="source" cdkDropList [cdkDropListData]="source" (cdkDropListDropped)="drop($event)">
+                        <li
+                            class="list-group-item d-flex justify-content-between align-items-center"
+                            *ngFor="let option of source"
+                            [value]="option.value"
+                            cdkDragBoundary=".drag-and-drop"
+                            cdkDrag
+                        >
+                            <mdb-icon fas icon="bars" cdkDragHandle class="drag-and-drop-handle"></mdb-icon>
+                            <span class="mx-auto">{{ option.label }}</span>
+                        </li>
+                    </ul>
+                </div> -->
+                <!-- <div class="col-md-4">
+                    <h5 class="text-center">Target Topic</h5>
+                    <ul class="list-group" id="target" cdkDropList [cdkDropListData]="target" (cdkDropListDropped)="drop($event)">
+                        <li
+                            class="list-group-item d-flex justify-content-between align-items-center"
+                            *ngFor="let option of target"
+                            [value]="option.value"
+                            cdkDragBoundary=".drag-and-drop"
+                            cdkDrag
+                        >
+                            <mdb-icon fas icon="bars" cdkDragHandle class="drag-and-drop-handle"></mdb-icon>
+                            <span class="mx-auto">{{ option.label }}</span>
+                        </li>
+                    </ul>
+                </div> -->
+                <div class="col-2 d-flex align-items-center">
+                    <a mdbBtn size="sm" color="primary" mdbWavesEffect class="mx-4" (click)="createLink()">
+                        <mdb-icon size="2x" fas icon="plus"></mdb-icon>
+                    </a>
+                </div>
             </div>
 
-            <form [formGroup]="addPostForm" autocomplete="off" class="text-center" style="color: #757575">
-                <div class="form-row">
-                    <!-- First name -->
-                    <div class="col-8">
-                        <div class="md-form">
-                            <input type="email" id="name" class="form-control" formControlName="name" mdbInput />
-                            <label for="name">Name</label>
-                        </div>
-                    </div>
-                </div>
-                <div class="form-row">
-                    <!-- First name -->
-                    <div class="col-8">
-                        <div class="md-form">
-                            <input
-                                formControlName="postTopic"
-                                type="text"
-                                class="completer-input form-control mdb-autocomplete mb-0"
-                                [mdbAutoCompleter]="auto"
-                                placeholder="Add topic"
-                                (keydown.enter)="addTopic()"
-                            />
-                            <mdb-auto-completer #auto="mdbAutoCompleter" textNoResults="No topic found. Add a new topic if needed">
-                                <mdb-option *ngFor="let option of topicResults$ | async" [value]="option">
-                                    {{ option }}
-                                </mdb-option>
-                            </mdb-auto-completer>
-                        </div>
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="col-4">
-                        <div class="md-form">
-                            <mdb-select-2 placeholder="Select Source Topic" label="Source Topic" formControlName="sourceTopic">
-                                <mdb-select-option *ngFor="let option of options$ | async" [value]="option.value">{{ option.label }}</mdb-select-option>
-                            </mdb-select-2>
-                        </div>
-                        <div class="md-form">
-                            <mdb-select-2 placeholder="Select Target Topic" label="Target Topic" formControlName="targetTopic">
-                                <mdb-select-option *ngFor="let option of options$ | async" [value]="option.value">{{ option.label }}</mdb-select-option>
-                            </mdb-select-2>
-                        </div>
-                        <div class="md-form">
-                            <input type="number" id="importance" class="form-control" mdbInput formControlName="importance" />
-                            <label for="importance">Importance</label>
-                        </div>
-                    </div>
-                    <div class="col-1 d-flex align-items-center">
-                        <a mdbBtn floating="true" size="sm" color="primary" mdbWavesEffect class="mx-4" (click)="createLink()">
-                            <mdb-icon fas icon="plus"></mdb-icon>
-                        </a>
-                    </div>
-
-                    <div class="col-7">
-                        <ul class="list-group list-group-flush" *ngFor="let link of links$ | async">
-                            <li class="list-group-item">{{ link.source }} --- {{ link.importance }} --- {{ link.target }}</li>
-                        </ul>
-                    </div>
-                </div>
+            <div class="form-row d-flex justify-content-center align-items-center">
                 <div class="md-form">
-                    <textarea
-                        class="md-textarea form-control description"
-                        rows="3"
-                        id="input_text1"
-                        type="text"
-                        length="300"
-                        mdbCharCounter
-                        mdbInput
-                        formControlName="description"
-                    ></textarea>
-                    <label for="input_text">Description</label>
+                    <input type="number" id="importance" class="form-control" mdbInput formControlName="importance" />
+                    <label for="importance">Importance</label>
                 </div>
-                <div class="md-form">
-                    <textarea
-                        class="md-textarea form-control content"
-                        rows="3"
-                        id="input_text2"
-                        type="text"
-                        length="3000"
-                        mdbCharCounter
-                        mdbInput
-                        formControlName="content"
-                    ></textarea>
-                    <label for="input_text">Content</label>
+            </div>
+
+            <div class="form-row d-flex justify-content-center align-items-center">
+                Links list:
+                <ul class="list-group list-group-flush" *ngFor="let link of links$ | async">
+                    <li class="list-group-item">{{ link.source }} --- {{ link.importance }} ---> {{ link.target }}</li>
+                </ul>
+            </div>
+            <!-- <div class="col-4">
+                    Links list:
+                    <ul class="list-group list-group-flush" *ngFor="let link of links$ | async">
+                        <li class="list-group-item">{{ link.source }} --- {{ link.importance }} --- {{ link.target }}</li>
+                    </ul>
+                </div>
+            </div> -->
+
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+
+            <!-- <div class="row drag-and-drop py-3" cdkDropListGroup>
+                <div class="col-md-4">
+                    <h5 class="text-center">Post Topics</h5>
+                    <ul class="list-group" id="all" cdkDropList [cdkDropListData]="postTopics" (cdkDropListDropped)="drop($event)">
+                        <div *ngIf="postTopics.length !== 0">
+                            <li
+                                class="list-group-item d-flex justify-content-between align-items-center"
+                                *ngFor="let topic of postTopics"
+                                cdkDragBoundary=".drag-and-drop"
+                                cdkDrag
+                            >
+                                <mdb-icon fas icon="bars" cdkDragHandle class="drag-and-drop-handle"></mdb-icon>
+                                <span class="mx-auto">{{ topic }}</span>
+                            </li>
+                        </div> -->
+            <!-- <div class="col-7">
+                            <ul class="list-group list-group-flush" *ngFor="let link of links$ | async">
+                                <li class="list-group-item">{{ link.source }} --- {{ link.importance }} --- {{ link.target }}</li>
+                            </ul>
+                        </div> -->
+            <!-- <div *ngIf="postTopics.length === 0">
+                            <li class="list-group-item disabled">No topic selected</li>
+                        </div>
+                    </ul>
+                </div> -->
+            <!-- <div class="col-md-4">
+                    <h5 class="text-center">Source Topic</h5>
+                    <ul class="list-group first-options-list" id="source" cdkDropList [cdkDropListData]="source" (cdkDropListDropped)="drop($event)">
+                        <li
+                            class="list-group-item d-flex justify-content-between align-items-center"
+                            *ngFor="let option of source"
+                            [value]="option.value"
+                            cdkDragBoundary=".drag-and-drop"
+                            cdkDrag
+                        >
+                            <mdb-icon fas icon="bars" cdkDragHandle class="drag-and-drop-handle"></mdb-icon>
+                            <span class="mx-auto">{{ option.label }}</span>
+                        </li>
+                    </ul>
+                </div> -->
+            <!-- <div class="col-md-4">
+                    <h5 class="text-center">Target Topic</h5>
+                    <ul class="list-group" id="target" cdkDropList [cdkDropListData]="target" (cdkDropListDropped)="drop($event)">
+                        <li
+                            class="list-group-item d-flex justify-content-between align-items-center"
+                            *ngFor="let option of target"
+                            [value]="option.value"
+                            cdkDragBoundary=".drag-and-drop"
+                            cdkDrag
+                        >
+                            <mdb-icon fas icon="bars" cdkDragHandle class="drag-and-drop-handle"></mdb-icon>
+                            <span class="mx-auto">{{ option.label }}</span>
+                        </li>
+                    </ul>
+                </div> -->
+            <!-- </div> -->
+            <!-- <div class="form-row">
+                <div class="col-4">
+                    <div class="md-form">
+                        <mdb-select-2 placeholder="Select Source Topic" label="Source Topic" formControlName="sourceTopic">
+                            <mdb-select-option *ngFor="let option of options$ | async" [value]="option.value">{{ option.label }}</mdb-select-option>
+                        </mdb-select-2>
+                    </div>
+                    <div class="md-form">
+                        <mdb-select-2 placeholder="Select Target Topic" label="Target Topic" formControlName="targetTopic">
+                            <mdb-select-option *ngFor="let option of options$ | async" [value]="option.value">{{ option.label }}</mdb-select-option>
+                        </mdb-select-2>
+                    </div>
+                    <div class="md-form">
+                        <input type="number" id="importance" class="form-control" mdbInput formControlName="importance" />
+                        <label for="importance">Importance</label>
+                    </div>
+                </div>
+                <div class="col-1 d-flex align-items-center">
+                    <a mdbBtn floating="true" size="sm" color="primary" mdbWavesEffect class="mx-4" (click)="createLink()">
+                        <mdb-icon fas icon="plus"></mdb-icon>
+                    </a>
                 </div>
 
-                <!-- Sign up button -->
-                <button
-                    (keydown.enter)="$event.preventDefault()"
-                    mdbBtn
-                    [disabled]="addPostForm.invalid"
-                    color="info"
-                    outline="true"
-                    rounded="true"
-                    block="true"
-                    class="my-4 waves-effect z-depth-0"
-                    mdbWavesEffect
-                    (click)="onSubmit()"
-                >
-                    Add Post
-                </button>
-            </form>
+                <div class="col-7">
+                    <ul class="list-group list-group-flush" *ngFor="let link of links$ | async">
+                        <li class="list-group-item">{{ link.source }} --- {{ link.importance }} --- {{ link.target }}</li>
+                    </ul>
+                </div>
+            </div> -->
+            <div class="md-form">
+                <textarea
+                    class="md-textarea form-control description"
+                    rows="3"
+                    id="input_text1"
+                    type="text"
+                    length="300"
+                    mdbCharCounter
+                    mdbInput
+                    formControlName="description"
+                ></textarea>
+                <label for="input_text">Description</label>
+            </div>
+            <div class="md-form">
+                <textarea
+                    class="md-textarea form-control content"
+                    rows="3"
+                    id="input_text2"
+                    type="text"
+                    length="3000"
+                    mdbCharCounter
+                    mdbInput
+                    formControlName="content"
+                ></textarea>
+                <label for="input_text">Content</label>
+            </div>
 
-            <!-- Form -->
-        </mdb-card-body>
-    </mdb-card>
-    <!-- Material form register -->
-</div>
+            <!-- Sign up button -->
+            <button
+                (keydown.enter)="$event.preventDefault()"
+                mdbBtn
+                [disabled]="links.length === 0"
+                color="info"
+                outline="true"
+                rounded="true"
+                block="true"
+                class="my-4 waves-effect z-depth-0"
+                mdbWavesEffect
+                (click)="onSubmit()"
+            >
+                Add Post
+            </button>
+        </form>
+
+        <!-- Form -->
+    </mdb-card-body>
+</mdb-card>
+<!-- Material form register -->

@@ -2,13 +2,13 @@ import mongoose from 'mongoose';
 import mongoosastic from 'mongoosastic';
 
 interface Topic {
-	name: String,
-	postsCount: Number,
-	suggestedTopics: String[],
+    name: String;
+    postsCount: Number;
+    suggestedTopics: String[];
+    followers: number;
 }
 
 interface TopicModel extends Topic, mongoose.Document {}
-
 
 const topicSchema = new mongoose.Schema({
     name: {
@@ -17,11 +17,14 @@ const topicSchema = new mongoose.Schema({
         unique: true,
     },
     postsCount: {
-        type: Number
+        type: Number,
     },
-    suggestedTopics: [{
-        type : String
-    }]
+    suggestedTopics: [
+        {
+            type: String,
+        },
+    ],
+    followers: Number,
 });
 
 topicSchema.plugin(mongoosastic, {
@@ -30,4 +33,3 @@ topicSchema.plugin(mongoosastic, {
 });
 
 export const TopicModel = mongoose.model<TopicModel>('Topic', topicSchema);
-

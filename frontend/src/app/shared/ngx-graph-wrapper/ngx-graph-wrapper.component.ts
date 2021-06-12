@@ -19,6 +19,9 @@ export class NgxGraphWrapperComponent implements OnInit, OnChanges {
     ngOnChanges(): void {
         console.log(this.links);
         console.log(this.nodes);
+        this.fitGraph();
+        this.centerGraph();
+        this.panToNode();
     }
 
     ngOnInit(): void {}
