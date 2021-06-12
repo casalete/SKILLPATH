@@ -30,7 +30,7 @@ const routes: Routes = [
         data: { layout: { navbar: true } },
     },
     {
-        path: 'add-post', // child route path
+        path: 'add-post/:id', // child route path
         component: AddPostComponent, // child route component that the router renders
         data: { layout: { navbar: true } },
     },

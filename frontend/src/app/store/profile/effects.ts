@@ -42,13 +42,29 @@ export class ProfileEffects {
     updateProfileData$ = this.actions$.pipe(
         ofType(ProfileActions.updateProfileDataStart),
         switchMap((action) =>
-            this.profileService.updateProfileData(action.profileData).pipe(
+            this.profileService.updateProfileData(action.profileData, action.picture).pipe(
                 switchMap((profileData) => {
-                    return [ProfileActions.updateProfileDataSuccess({ profileData })];
+                    return [ProfileActions.updateProfileDataSuccess({ profileData, picture: action.picture })];
                 }),
                 catchError((err) => {
                     this.toast.error('Profile Data Update failed!');
                     return [ProfileActions.updateProfileDataError({ error: err.error.error })];
+                }),
+            ),
+        ),
+    );
+
+    @Effect()
+    followUser$ = this.actions$.pipe(
+        ofType(ProfileActions.followUserStart),
+        switchMap((action) =>
+            this.profileService.followUser(action.user).pipe(
+                switchMap((profileData) => {
+                    return [ProfileActions.followUserSuccess({ profileData })];
+                }),
+                catchError((err) => {
+                    this.toast.error('User follow failed!');
+                    return [ProfileActions.followUserError({ error: err.error.error })];
                 }),
             ),
         ),

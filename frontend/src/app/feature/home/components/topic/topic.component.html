@@ -1,4 +1,9 @@
 <div class="topic-container d-flex flex-column justify-content-center mx-5 sp-theme align-items-center">
+    <div class="fixed-action-btn" style="bottom: 45px; right: 24">
+        <a mdbBtn floating="true" size="lg" class="waves-light btn-default" mdbWavesEffect (click)="followTopic()">
+            <mdb-icon fas icon="star"></mdb-icon>
+        </a>
+    </div>
     <div class="col-md-6 mx-auto">
         <div class="md-form">
             <input type="text" [(ngModel)]="searchText" class="form-control" id="search" mdbInput />
@@ -29,7 +34,7 @@
                             triggers="hover"
                             mdbWavesEffect
                         >
-                            <img src="https://mdbootstrap.com/img/Photos/Avatars/avatar-4.jpg" alt="Contact Person" />
+                            <img [src]="post.authorImage" alt="Author" />
                             {{ post.authorDisplayName }}
                         </div>
                     </th>
@@ -39,16 +44,16 @@
                         {{ post.score }}
                         <div class="d-flex justify-content-center">
                             <mdb-icon class="cyan-text mr-1" size="lg" fas icon="comment"></mdb-icon>{{ post.commentsLength }}
-                            <mdb-icon class="orange-text mx-3" size="lg" fas icon="thumbs-up" (click)="upVotePost(post)"></mdb-icon>
-                            <mdb-icon fas icon="thumbs-down" size="lg" (click)="downVotePost(post)"></mdb-icon>
-                            <mdb-icon size="lg" fas icon="eye" class="orange-text mx-3" [routerLink]="['/post', post._id]"></mdb-icon>
+                            <p><mdb-icon class="orange-text mx-1" size="lg" fas icon="thumbs-up" (click)="upVotePost(post)"></mdb-icon>{{ post.upVotes }}</p>
+                            <p><mdb-icon fas class="mx-1" icon="thumbs-down" size="lg" (click)="downVotePost(post)"></mdb-icon>{{ post.downVotes }}</p>
+                            <mdb-icon size="lg" fas icon="eye" class="orange-text pl-4" [routerLink]="['/post', post._id]"></mdb-icon>
                         </div>
                     </td>
                 </tr>
                 <tr>
                     <td colspan="4">
                         <div class="d-flex justify-content-center">
-                            <button type="button" mdbBtn color="primary" mdbWavesEffect [routerLink]="['/add-post']">Add Post</button>
+                            <button type="button" mdbBtn color="primary" mdbWavesEffect [routerLink]="['/add-post', mainTopicName]">Add Post</button>
                         </div>
                     </td>
                 </tr>

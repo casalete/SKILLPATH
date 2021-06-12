@@ -3,8 +3,11 @@
         <div class="col-md-3">
             <mdb-card cascade="true" narrower="true">
                 <!--Card image-->
-                <div class="view view-cascade overlay hm-white-slight waves-light" mdbWavesEffect>
+                <!-- <div class="view view-cascade overlay hm-white-slight waves-light" mdbWavesEffect>
                     <mdb-card-img src="https://mdbootstrap.com/img/Photos/Others/men.jpg" class="rounded-circle img-fluid"></mdb-card-img>
+                </div> -->
+                <div class="view view-cascade overlay hm-white-slight waves-light" mdbWavesEffect>
+                    <mdb-card-img [src]="(profileData$ | async)?.imagePath" [alt]="'test'" class="rounded-circle img-fluid"></mdb-card-img>
                 </div>
                 <!--/Card image-->
 
@@ -131,8 +134,17 @@
                                         ></textarea>
                                         <label for="input_text">About</label>
                                     </div>
+                                    <div class="row d-flex, justify-content-center my-3 align-items-center">
+                                        <mdb-icon size="3x" fas icon="camera" (click)="profilePictureInput.click()"></mdb-icon>
+                                        <p class="pt-3 pl-3">Upload photo</p>
+                                    </div>
 
-                                    <button type="button" mdbBtn color="primary" mdbWavesEffect (click)="onUpdateProfile()">Update Profile</button>
+                                    <input accept="image/*" #profilePictureInput hidden type="file" (change)="uploadProfilePicture($event)" />
+                                    <div class="image-preview" *ngIf="imagePreview !== '' && imagePreview">
+                                        <img [src]="imagePreview" />
+                                    </div>
+
+                                    <button type="button" mdbBtn color="primary" mdbWavesEffect (click)="onUpdateProfile(profileForm)">Update Profile</button>
                                 </form>
                             </div>
                         </div>

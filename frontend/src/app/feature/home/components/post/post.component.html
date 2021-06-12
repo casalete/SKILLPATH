@@ -1,5 +1,28 @@
 <main>
     <div class="container py-5">
+        <!-- <div class="fixed-action-btn" style="bottom: 45px; right: 24px">
+            <a mdbBtn floating="true" size="lg" color="orange" class="waves-light" mdbWavesEffect (click)="fixed.toggle($event)">
+                <mdb-icon fas icon="thumbs-up"></mdb-icon>
+            </a>
+
+            <div class="fixed_collapse" mdbCollapse="isCollapsed" #fixed="bs-collapse">
+                <a mdbBtn floating="true" color="red" class="waves-light" mdbWavesEffect><mdb-icon fas icon="star"></mdb-icon></a>
+                <a mdbBtn floating="true" color="yellow" class="darken-1 waves-light" mdbWavesEffect><mdb-icon fas icon="user"></mdb-icon></a>
+                <a mdbBtn floating="true" color="green" class="waves-light" mdbWavesEffect><mdb-icon fas icon="envelope"></mdb-icon></a>
+                <a mdbBtn floating="true" color="blue" class="waves-light" mdbWavesEffect><mdb-icon fas icon="shopping-cart"></mdb-icon></a>
+            </div>
+        </div> -->
+
+        <div class="fixed-action-btn" style="bottom: 45px; right: 24px">
+            <a mdbBtn floating="true" size="lg" class="waves-light btn-primary" mdbWavesEffect (click)="upVotePost()">
+                <mdb-icon fas icon="thumbs-up"></mdb-icon>
+            </a>
+        </div>
+        <div class="fixed-action-btn" style="bottom: 45px; right: 120px">
+            <a mdbBtn floating="true" size="lg" class="waves-light btn-default" mdbWavesEffect (click)="followAuthor()">
+                <mdb-icon fas icon="user-secret"></mdb-icon>
+            </a>
+        </div>
         <!--Grid row-->
         <div class="row my-5">
             <div class="col-md-12">
@@ -52,7 +75,7 @@
                 <div class="row">
                     <!--Avatar-->
                     <div class="col-12 col-sm-2">
-                        <img src="http://mdbootstrap.com/img/Photos/Avatars/img%20(32).jpg" class="img-fluid z-depth-2" />
+                        <img [src]="post?.authorImage" class="img-fluid z-depth-2" />
                     </div>
                     <!--Author Data-->
                     <div class="col-12 col-sm-10 text-left">
@@ -73,7 +96,7 @@
             <div class="comments-list text-md-left text-center">
                 <div class="section-heading">
                     <h3 class="section-heading h3 pt-3 mb-5">
-                        Comments <span class="badge pink">{{ post?.comments.length }}</span>
+                        Comments <span class="badge btn-default">{{ post?.comments.length }}</span>
                     </h3>
                 </div>
                 <!--First row-->
@@ -136,11 +159,7 @@
                     <div class="form-row align-items-center">
                         <!--Image column-->
                         <div class="col-1">
-                            <img
-                                src="https://mdbootstrap.com/img/Photos/Avatars/img (32).jpg"
-                                alt="Sample avatar image"
-                                class="avatar rounded-circle img-fluid z-depth-2"
-                            />
+                            <img [src]="(profileData$ | async)?.imagePath" alt="Sample avatar image" class="avatar rounded-circle img-fluid z-depth-2" />
                         </div>
                         <!--/.Image column-->
                         <div class="col-11">
@@ -160,7 +179,7 @@
                             </div>
                         </div>
                         <div class="col-md-12 text-center">
-                            <button type="submit" [disabled]="!commentForm.form.valid" mdbBtn color="pink" rounded="true" class="waves-effect waves-light">
+                            <button type="submit" [disabled]="!commentForm.form.valid" mdbBtn rounded="true" class="waves-effect waves-light btn-primary">
                                 Submit
                             </button>
                         </div>

@@ -20,6 +20,7 @@ authRouter.post('/register', async function (req, res, next) {
             firstName: req.body.firstName,
             lastName: req.body.lastName,
             displayName: req.body.displayName,
+            imagePath: 'https://media.istockphoto.com/photos/unknown-person-silhouette-picture-id499728904',
         });
 
         res.json({ success: true, user: newUser });

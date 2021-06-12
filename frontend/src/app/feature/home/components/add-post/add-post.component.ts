@@ -1,14 +1,16 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { LinksComponent } from 'ng-uikit-pro-standard';
 import { BehaviorSubject, from, Observable, of, Subject } from 'rxjs';
-import { map, skipWhile, startWith, switchMap } from 'rxjs/operators';
+import { map, skipWhile, startWith, switchMap, take } from 'rxjs/operators';
 import { Topic } from 'src/app/core/Models/Topic';
 import { SubSink } from 'subsink';
 import { TopicEntityService } from '../../../../store/ngrx-data/topic/topic-entity.service';
 import { PostEntityService } from '../../../../store/ngrx-data/post/post-entity.service';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
+import { Store } from '@ngrx/store';
+import { selectRouteParam } from 'src/app/store/router/selectors';
 
 @Component({
     selector: 'app-add-post',
@@ -22,24 +24,25 @@ export class AddPostComponent implements OnInit, OnDestroy {
     options$ = new BehaviorSubject<{ value: string; label: string }[]>([]);
     links: { source: string; target: string; importance: number }[] = [];
     links$ = new BehaviorSubject<{ source: string; target: string; importance: number }[]>([]);
+    postId: string;
 
     apiUrl = `${environment.apiUrl}`;
-
-    // ['Mathematics', 'ML', 2],
-    // [
-    //     { value: '1', label: 'Option 1' },
-    //     { value: '2', label: 'Option 2' },
-    //     { value: '3', label: 'Option 3' },
-    // ];
 
     postTopics: string[] = [];
 
     topicResults$: Observable<string[]>;
     // targetTopicResults$: Observable<string[]>;
 
-    constructor(private fb: FormBuilder, private topicEntityService: TopicEntityService, private postEntityService: PostEntityService) {}
+    constructor(private fb: FormBuilder, private topicEntityService: TopicEntityService, private postEntityService: PostEntityService, private store: Store) {}
 
     ngOnInit(): void {
+        this.store
+            .select(selectRouteParam('id'))
+            .pipe(take(1))
+            .subscribe((routeParam) => {
+                this.postId = routeParam;
+            });
+
         this.subs.sink = this.topicEntityService.loading$
             .pipe(
                 skipWhile((loading) => loading === true),
@@ -108,7 +111,7 @@ export class AddPostComponent implements OnInit, OnDestroy {
             links: this.links,
             description: this.addPostForm.controls.description.value,
             content: this.addPostForm.controls.content.value,
-            mainTopic: 'Angular',
+            mainTopic: this.postId,
         };
         console.log(post);
         this.postEntityService.add(post);

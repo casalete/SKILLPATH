@@ -1,11 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
 import { filter, map, skipWhile, switchMap, take, tap } from 'rxjs/operators';
 import { Post } from 'src/app/core/Models/Post';
-import { voteCommentStart } from 'src/app/store/post/actions';
+import { ProfileData } from 'src/app/core/Models/ProfileData';
+import { voteCommentStart, votePostStart } from 'src/app/store/post/actions';
 import { selectRouteParam } from 'src/app/store/router/selectors';
 import { SubSink } from 'subsink';
 import { PostEntityService } from '../../../../store/ngrx-data/post/post-entity.service';
+import { selectProfileData } from '../../../../store/profile/selectors';
+import { followUserStart, followUserSuccess } from '../../../../store/profile/actions';
 
 @Component({
     selector: 'app-post',
@@ -19,6 +23,7 @@ export class PostComponent implements OnInit {
     post: any;
     comment: string;
     subs = new SubSink();
+    profileData$: Observable<ProfileData>;
 
     links: { source: String; target: String; importance: Number }[];
     constructor(private store: Store, private postEntityService: PostEntityService) {}
@@ -34,6 +39,7 @@ export class PostComponent implements OnInit {
     }
 
     ngOnInit(): void {
+        this.profileData$ = this.store.select(selectProfileData);
         this.initializePage();
 
         this.subs.sink = this.postEntityService.loading$
@@ -61,6 +67,14 @@ export class PostComponent implements OnInit {
         this.store.dispatch(voteCommentStart({ voteType: 'UP', commentId: event.id, postId: this.postId }));
         // this.postEntityService.clearCache();
         // this.initializePage();
+    }
+
+    followAuthor(): void {
+        this.store.dispatch(followUserStart({ user: this.post.author }));
+    }
+
+    upVotePost(): void {
+        this.store.dispatch(votePostStart({ voteType: 'UP', postId: this.post.name }));
     }
 
     downVoteComment(event: any): void {

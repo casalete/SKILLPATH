@@ -4,6 +4,7 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { filter, tap } from 'rxjs/operators';
 import { ProfileData } from 'src/app/core/Models/ProfileData';
+import { mimeType } from 'src/app/shared/validators/mime-type.validator';
 import { ProfileActions } from 'src/app/store/profile';
 import { selectProfileData } from 'src/app/store/profile/selectors';
 import { SubSink } from 'subsink';
@@ -22,6 +23,9 @@ export class ProfileComponent implements OnInit, OnDestroy {
     followedTopics: string[];
     followedUsers: string[];
     profileForm: FormGroup;
+    imagePreview: string;
+    image: any;
+    profileImage: any;
 
     constructor(private store: Store, private fb: FormBuilder) {}
 
@@ -41,6 +45,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
             tap((profileData) => {
                 this.followedTopics = profileData.followedTopics;
                 this.followedUsers = profileData.followedUsers;
+                this.profileImage = profileData.imagePath;
 
                 this.profileForm.setValue({
                     email: profileData.email,
@@ -53,14 +58,42 @@ export class ProfileComponent implements OnInit, OnDestroy {
         );
     }
 
-    onUpdateProfile(): void {
+    uploadProfilePicture(event: any): void {
+        const file = (event.target as HTMLInputElement).files[0];
+        try {
+            // this.profileForm.patchValue({ image: file });
+            // this.profileForm.get('image').updateValueAndValidity();
+            this.image = file;
+        } catch (e) {
+            console.log(e);
+        }
+
+        const reader = new FileReader();
+        reader.onload = () => {
+            this.imagePreview = reader.result as string;
+        };
+        reader.readAsDataURL(file);
+
+        // const uploadProfilePictureDialog = this.dialog.open(UploadProfilePictureModalComponent, {
+        //     panelClass: 'cr-upload-profile-picture-modal',
+        //     data: {
+        //         username: this.userProfile.username,
+        //         uploadedProfilePicture: event,
+        //         pictureType: event.target.files[0].type,
+        //     },
+        // });
+    }
+
+    onUpdateProfile(profileForm: FormGroup): void {
+        // console.log(this.profileForm.get('image').value);
+        // console.log(profileForm.get('image').value);
+        // console.log(this.image);
+        // console.log(this.profileForm.value);
         const profileFormValues = this.profileForm.value;
-        console.log(profileFormValues);
         this.store.dispatch(
             ProfileActions.updateProfileDataStart({
-                profileData: {
-                    ...profileFormValues,
-                },
+                profileData: this.profileForm.value,
+                picture: this.image,
             }),
         );
     }

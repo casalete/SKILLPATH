@@ -28,6 +28,19 @@ const reducer = createReducer(
         loadingStatus: null,
         profileData: { ...state.profileData, ...profileData },
     })),
+
+    on(ProfileActions.followUserSuccess, (state, { profileData }) => ({
+        ...state,
+        loading: false,
+        loadingStatus: null,
+        profileData: { ...state.profileData, ...profileData },
+    })),
+    on(ProfileActions.followUserError, (state, { error }) => ({
+        ...state,
+        loading: false,
+        loadingStatus: null,
+        error: error,
+    })),
     on(ProfileActions.updateProfileDataError, (state, { error }) => ({
         ...state,
         loading: false,

@@ -21,12 +21,23 @@ export class ProfileService {
         return this.http.get<ProfileData>(`${this.apiUrl}/users/profile`, httpOptions);
     }
 
-    updateProfileData(profileData: Partial<ProfileData>): Observable<ProfileData> {
+    updateProfileData(profileData: Partial<ProfileData>, picture: any): Observable<ProfileData> {
+        const postData = new FormData();
+        postData.append('profile', JSON.stringify(profileData));
+        console.log(picture);
+        if (picture) {
+            postData.append('image', picture);
+        }
+
+        return this.http.patch<ProfileData>(`${this.apiUrl}/users/profile`, postData);
+    }
+
+    followUser(user: string) {
         const httpOptions = {
             headers: new HttpHeaders({
                 'Content-Type': 'application/json',
             }),
         };
-        return this.http.patch<ProfileData>(`${this.apiUrl}/users/profile`, profileData, httpOptions);
+        return this.http.post<ProfileData>(`${this.apiUrl}/users/follow`, user, httpOptions);
     }
 }

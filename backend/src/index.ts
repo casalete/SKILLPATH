@@ -3,6 +3,7 @@ import express, { Application, NextFunction, Request, Response } from 'express';
 import { router } from './routes/routes';
 import connectToDatabase from './config/db-connect';
 import { handleErrors } from './middleware/handleErrors';
+import path from 'path';
 
 const passport = require('passport');
 
@@ -16,6 +17,7 @@ app.use(passport.initialize());
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use('/images', express.static(path.join('backend/images')));
 
 app.use(function (req: Request, res: Response, next: NextFunction) {
     res.header('Access-Control-Allow-Credentials', 'true');

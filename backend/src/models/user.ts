@@ -13,13 +13,14 @@ interface User {
     password: String;
     email: String;
     rank: Rank[];
-    score: Number;
+    score: number;
     followedTopics: String[];
     followedUsers: String[];
     lastActivity: Date;
     about?: String;
     displayName?: String;
     achievements: String[];
+    followers?: number;
 }
 
 interface UserModel extends User, mongoose.Document {}
@@ -34,6 +35,9 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
         maxlength: 100,
+    },
+    imagePath: {
+        type: String,
     },
     password: {
         type: String,
@@ -76,6 +80,7 @@ const userSchema = new mongoose.Schema({
     lastActivity: {
         type: Date,
     },
+    followers: Number,
 });
 
 // userSchema.pre('save', async function (next) {

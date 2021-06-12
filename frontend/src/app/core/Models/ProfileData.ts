@@ -9,4 +9,5 @@ export interface ProfileData {
     about?: string;
     displayName?: string;
     achievements: string[];
+    imagePath?: any;
 }

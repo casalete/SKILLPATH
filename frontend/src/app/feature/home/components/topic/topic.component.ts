@@ -93,6 +93,8 @@ export class TopicComponent implements OnInit, OnDestroy {
         }
     }
 
+    followTopic() {}
+
     upVotePost(event: any): void {
         console.log({ voteType: 'UP', postId: event.name });
         this.store.dispatch(votePostStart({ voteType: 'UP', postId: event.name, queryParams: this.queryParams }));

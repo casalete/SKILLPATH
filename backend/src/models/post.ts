@@ -11,6 +11,7 @@ interface Post {
     author: String;
     authorAbout: String;
     authorScore: Number;
+    authorImage: any;
     authorDisplayName;
     upVotes: Number;
     downVotes: Number;
@@ -58,17 +59,18 @@ const postSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    authorImage: {
+        type: String,
+    },
     authorDisplayName: {
         type: String,
         required: true,
     },
     authorAbout: {
         type: String,
-        required: true,
     },
     authorScore: {
         type: Number,
-        required: true,
     },
     upVotes: {
         type: Number,

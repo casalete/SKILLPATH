@@ -1,6 +1,7 @@
 import elastic from '@elastic/elasticsearch';
 import express, { NextFunction, Request, Response } from 'express';
 import { PostModel } from '../../models/post';
+import { TopicModel } from '../../models/topic';
 import { NotFound } from '../../utils/errors';
 
 const elasticClient = new elastic.Client({
@@ -153,6 +154,7 @@ postsRouter.post('/', async (req: any, res: any) => {
         authorDisplayName: req.user.displayName,
         authorScore: req.user.score,
         postTopics: req.body.postTopics,
+        authorImage: req.user.imagePath,
     });
     try {
         const newPost = await post.save(function (err) {
@@ -163,6 +165,111 @@ postsRouter.post('/', async (req: any, res: any) => {
                 /* Document is indexed */
             });
         });
+
+        const topicModels = req.body.postTopics.map(
+            (postTopic) =>
+                new TopicModel({
+                    name: postTopic,
+                    suggestedTopics: [],
+                    postCount: 0,
+                }),
+        );
+        let savedTopicModels = [];
+        await topicModels.forEach(async (topicModel) => {
+            try {
+                const topic = await TopicModel.findOne({ name: topicModel.name });
+                if (topic == null) {
+                    const savedTopic = await topicModel.save(function (err) {
+                        if (err) throw err;
+                        /* Document indexation on going */
+                        TopicModel.on('es-indexed', function (err, res) {
+                            if (err) throw err;
+                            /* Document is indexed */
+                        });
+                    });
+                    savedTopicModels.push(topicModel);
+                }
+            } catch (err) {
+                console.log('unable to save topic');
+            }
+            console.log(`topic saved : ${topicModel.name}`);
+        });
+
+        const mt = await TopicModel.findOne({ name: req.body.mainTopic }, async (err, mainTopic) => {
+            if (err) {
+                console.log('could not find main topic in post');
+            }
+            const dict = {};
+            const suggestedTopics = await mainTopic.suggestedTopics;
+
+            if (suggestedTopics.length === 0) {
+                mainTopic.suggestedTopics = req.body.postTopics;
+                await mainTopic.save();
+            } else {
+                await suggestedTopics.forEach((item) => (dict[item] = true));
+                const diffList = req.body.postTopics.reduce(function (prev, crt) {
+                    if (dict.hasOwnProperty(crt) === false) {
+                        prev.push(crt);
+                    }
+                    return prev;
+                }, []);
+                if (diffList.length !== 0) {
+                    mainTopic.suggestedTopics = [...mainTopic.suggestedTopics, ...diffList];
+                    await mainTopic.save();
+                }
+            }
+        });
+        // mt.suggestedTopics = newSuggestedTopics;
+
+        // try {
+        //     let topicModelsToAdd;
+        //     let topicsToAdd;
+        //     let newSuggestedTopics;
+
+        //     const mt = await TopicModel.findOne({ name: req.body.mainTopic }, async (err, mainTopic) => {
+        //         if (err) {
+        //             console.log('could not find main topic in post');
+        //         }
+        //         console.log('mainTopic:');
+        //         console.log(mainTopic);
+        //         // const suggestedTopics = mainTopic.get('suggestedTopics', String, { getters: false });
+        //         const suggestedTopics = mainTopic.suggestedTopics();
+        //         topicModelsToAdd = await TopicModel.find().where('name').nin(suggestedTopics);
+        //         newSuggestedTopics = [...topicsToAdd, ...savedTopicModels];
+        //         // newSuggestedTopics.push()
+        //     });
+        //     mt.suggestedTopics = newSuggestedTopics;
+        //     const savedMt = await mt.save();
+        //     // const mainTopicSuggestedTopics = mainTopic.suggestedTopics.map((st) => {
+        //     //     console.log(st.toObject().name);
+        //     //     return st.toObject().name;
+        //     // });
+        //     // topicsToAdd = await TopicModel.find().where('name').nin(mainTopicSuggestedTopics).exec();
+
+        //     // topic.suggestedTopics.forEach(async topicName=>{
+        //     //     try{
+        //     //         const topic = await TopicModel.findOne({ name: topicName });
+        //     //     if (topic == null) {
+        //     //         topicModel.save(function (err) {
+        //     //             if (err) throw err;
+        //     //             /* Document indexation on going */
+        //     //             TopicModel.on('es-indexed', function (err, res) {
+        //     //                 if (err) throw err;
+        //     //                 /* Document is indexed */
+        //     //             });
+        //     //         });
+        //     //     }
+        //     //     }catch(e){
+        //     //         throw e
+        //     //     }
+        //     // }
+
+        //     // )
+        // } catch (err) {
+        //     console.log(err);
+        //     console.log('Unable to update main topic');
+        // }
+
         res.status(201).json(newPost);
     } catch (err) {
         res.status(400).json({ message: err.message });

@@ -56,7 +56,7 @@ export class PostEffects {
         ofType(PostActions.votePostStart),
         switchMap((action) => {
             return this.postService.votePost(action.voteType, action.postId).pipe(
-                switchMap(() => [PostActions.votePostSuccess({ queryParams: action.queryParams })]),
+                switchMap(() => (action.queryParams ? [PostActions.votePostSuccess({ queryParams: action.queryParams })] : [PostActions.votePostSuccess({})])),
                 catchError((err) => [PostActions.votePostError({ error: err.error.error })]),
             );
         }),
@@ -66,15 +66,18 @@ export class PostEffects {
     votePostSuccess$ = this.actions$.pipe(
         ofType(PostActions.votePostSuccess),
         tap((action) => {
+            this.toast.success('Post Upvoted Successfully!');
             this.postEntityService.clearCache();
-            this.postEntityService.getWithQuery(action.queryParams).pipe(
-                map((res) => {
-                    return [];
-                }),
-                catchError((err) => {
-                    return [];
-                }),
-            );
+            if (action.queryParams) {
+                this.postEntityService.getWithQuery(action.queryParams).pipe(
+                    map((res) => {
+                        return [];
+                    }),
+                    catchError((err) => {
+                        return [];
+                    }),
+                );
+            }
         }),
     );
 }

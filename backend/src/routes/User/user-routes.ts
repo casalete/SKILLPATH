@@ -3,6 +3,10 @@ import bcrypt from 'bcrypt';
 import express, { NextFunction, Request, Response } from 'express';
 import { UserModel } from '../../models/user';
 import { NotFound } from '../../utils/errors';
+import multer from 'multer';
+import cloudinary from 'cloudinary';
+import streamifier from 'streamifier';
+import { CloudinaryStorage } from 'multer-storage-cloudinary';
 
 const elasticClient = new elastic.Client({
     node: 'http://localhost:9200',
@@ -23,6 +27,22 @@ async function getUser(req: Request, res: Response, next: NextFunction) {
     }
     // add new key/value pair to the res obj
     Object.assign(res, { user: user });
+    // res = {...res, user:user},
+    next(); // pass control to the next handler
+}
+
+async function getUserByEmail(req: Request, res: Response, next: NextFunction) {
+    let user;
+    try {
+        user = await UserModel.findOne({ email: req.body.id });
+        if (user == null) {
+            throw new NotFound('Cannot find usser with given id');
+        }
+    } catch (err) {
+        next(err);
+    }
+    // add new key/value pair to the res obj
+    Object.assign(res, { foundUser: user });
     // res = {...res, user:user},
     next(); // pass control to the next handler
 }
@@ -50,12 +70,47 @@ usersRouter.get('/profile', (req: any, res: Response) => {
             followedUsers: req.user.followedUsers,
             followedTopics: req.user.followedTopics,
             achievements: req.user.achievements,
+            imagePath: req.user.imagePath,
         });
     }
 });
+// CLOUDINARY_URL
 
-usersRouter.patch('/profile', async (req: any, res: Response) => {
+cloudinary.v2.config({
+    cloud_name: 'casalete',
+    api_key: '831616563229892',
+    api_secret: '2_11iECEZMMnQXcLALP6OyeSdvQ',
+});
+
+const MIME_TYPE_MAP = {
+    'image/png': 'png',
+    'image/jpeg': 'jpg',
+    'image/jpg': 'jpg',
+};
+
+const storage = multer.diskStorage({
+    destination: 'images',
+    // destination: (req, file, cb) => {
+    //     const isValid = MIME_TYPE_MAP[file.mimetype];
+    //     let error = new Error('Invalid mime type');
+    //     if (isValid) {
+    //         error = null;
+    //     }
+    //     cb(error, '/images');
+    // },
+    filename: (req, file, cb) => {
+        const name = file.originalname.toLowerCase().split(' ').join('-');
+        const ext = MIME_TYPE_MAP[file.mimetype];
+        cb(null, name + '-' + Date.now() + '.' + ext);
+    },
+});
+
+usersRouter.patch('/profile', multer({ storage: storage }).single('image'), async (req: any, res: Response) => {
+    const url = req.protocol + '://' + req.get('host');
+
     if (req.user) {
+        req.body = JSON.parse(req.body.profile);
+        console.log(req.body);
         if (req.body.firstName != null) {
             req.user.firstName = req.body.firstName;
         }
@@ -75,6 +130,14 @@ usersRouter.patch('/profile', async (req: any, res: Response) => {
             req.user.followedUsers = req.body.followedUsers;
         }
         try {
+            if (req.file) {
+                req.user.imagePath = url + '/images/' + req.file.filename;
+
+                // const result = await streamUpload(req);
+                const result = await cloudinary.v2.uploader.upload(req.file.path);
+                req.user.imagePath = result.secure_url;
+            }
+
             const updatedUser = await req.user.save();
             res.json(updatedUser);
         } catch (err) {
@@ -82,6 +145,42 @@ usersRouter.patch('/profile', async (req: any, res: Response) => {
         }
     }
 });
+
+usersRouter.patch('/follow', getUserByEmail, async (req: any, res: Response) => {
+    const user = req.user;
+    const userToFollow = req.body.user;
+    const followedUsers = req.user.followedUsers;
+    const newFollowedUsers = [...followedUsers, userToFollow];
+    user.followedUsers = newFollowedUsers;
+
+    try {
+        const followedUser = await UserModel.findOne({ email: req.body.id });
+        if (user == null) {
+            throw new NotFound('Cannot find user');
+        }
+        followedUser.followers = followedUser.followers + 1;
+        await followedUser.save();
+    } catch (err) {
+        throw err;
+    }
+
+    await user.save();
+});
+
+// let streamUpload = (req) => {
+//     return new Promise((resolve, reject) => {
+//         let stream = cloudinary.v2.uploader.upload_stream((error, result) => {
+//             if (result) {
+//                 console.log(result);
+//                 resolve(result);
+//             } else {
+//                 reject(error);
+//             }
+//         });
+
+//         streamifier.createReadStream(req.file).pipe(stream);
+//     });
+// };
 
 // get a specific user
 usersRouter.get('/:id', getUser, (_req: Request, res: Response) => {
