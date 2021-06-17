@@ -120,6 +120,8 @@ export class AddPostComponent implements OnInit, OnDestroy {
 
     createLink(): void {
         if (this.addPostForm.controls.importance.value) {
+            const savedSource = this.source[0];
+            const savedTarget = this.target[0];
             this.links = [
                 ...this.links,
                 {
@@ -131,6 +133,8 @@ export class AddPostComponent implements OnInit, OnDestroy {
             this.source = [];
             this.target = [];
             this.addPostForm.controls.importance.reset();
+
+            this.postTopics = [...this.postTopics, savedSource, savedTarget];
 
             this.links$.next(this.links);
         } else {

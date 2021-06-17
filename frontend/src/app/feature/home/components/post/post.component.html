@@ -126,7 +126,7 @@
                                             {{ comment?.content }}
                                         </p>
                                     </div>
-                                    <div class="col-2">
+                                    <div class="col-2 mb-3">
                                         <p>
                                             <mdb-icon class="orange-text mx-1" size="2x" fas icon="crown"></mdb-icon>
                                             <span>Score:</span>
@@ -152,7 +152,6 @@
             <!--Leave a reply form-->
             <div class="reply-form">
                 <h3 class="h3 pt-3">Leave a reply</h3>
-                <p class="text-center">(Logged In User)</p>
 
                 <!--Third row-->
                 <form (ngSubmit)="onSubmit()" #commentForm="ngForm">

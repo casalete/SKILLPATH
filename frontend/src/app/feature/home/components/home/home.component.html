@@ -28,14 +28,14 @@
 <div class="row">
     <div class="col-lg-4 col-md-6 my-3" *ngFor="let topic of topics; let i = index">
         <mdb-card cascade="true" wider="true">
-            <div class="view view-cascade gradient-card-header peach-gradient p-1">
+            <div class="view view-cascade gradient-card-header p-1 primary-color">
                 <h2 class="card-header-title mb-0">{{ topic.name }}</h2>
             </div>
             <mdb-card-body cascade="true" class="text-center">
                 <div class="row d-flex justify-content-center">
                     <div class="col-md-6 text-center">
                         <h4 class="h1 font-weight-normal mb-3">
-                            <mdb-icon fas icon="road" class="indigo-text mr-1"></mdb-icon>
+                            <mdb-icon fas icon="road" class="purple-text mr-1"></mdb-icon>
                             <span class="d-inline-block count-up">{{ topic.postsCount ? topic.postsCount : 0 }}</span>
                         </h4>
                         <p class="font-weight-normal text-muted">Posts</p>

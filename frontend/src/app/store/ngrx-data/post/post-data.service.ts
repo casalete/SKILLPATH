@@ -32,7 +32,7 @@ export class PostDataService extends DefaultDataService<Post> {
     //     return this.http.get<Post[]>(`${this.apiUrl}/post`, httpOptions);
     // }
 
-    getWithQuery(topicName: any): Observable<Post[]> {
+    getWithQuery(topicName: string | any): Observable<Post[]> {
         return this.http.get<Post[]>(`${this.apiUrl}/posts/getPostsByTopic`, { params: topicName });
     }
 }
