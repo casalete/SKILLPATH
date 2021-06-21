@@ -61,6 +61,9 @@ export class TopicComponent implements OnInit, OnDestroy {
             )
             .subscribe((ps: Post[]) => {
                 this.posts = ps;
+                this.elements = this.posts;
+                this.mdbTable.setDataSource(this.elements);
+                this.previous = this.mdbTable.getDataSource();
             });
 
         this.subs.sink = this.topicEntityService.loading$
@@ -89,7 +92,7 @@ export class TopicComponent implements OnInit, OnDestroy {
             this.elements = this.mdbTable.getDataSource();
         }
         if (this.searchText) {
-            this.elements = this.mdbTable.searchLocalDataBy(this.searchText);
+            this.elements = this.mdbTable.searchLocalDataByMultipleFields(this.searchText, ['name', 'description', 'content', 'authorDisplayName']);
             this.mdbTable.setDataSource(prev);
         }
     }

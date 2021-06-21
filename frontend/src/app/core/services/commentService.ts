@@ -4,7 +4,6 @@ import { ToastService } from 'ng-uikit-pro-standard';
 import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-import { ProfileData } from '../Models/ProfileData';
 
 @Injectable({
     providedIn: 'root',
@@ -32,7 +31,8 @@ export class CommentService {
             )
             .pipe(
                 catchError((err) => {
-                    this.toast.error('Could not update Comment');
+                    console.log(err);
+                    this.toast.error(err.error.message);
                     return [];
                 }),
             );

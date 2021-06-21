@@ -151,7 +151,7 @@ usersRouter.post('/follow', getUserByEmail, async (req: any, res: Response) => {
         const user = req.user;
         const userToFollow = req.foundUser;
         const followedUsers = req.user.followedUsers;
-        const newFollowedUsers = [...followedUsers, userToFollow];
+        const newFollowedUsers = [...followedUsers, userToFollow.email];
         user.followedUsers = newFollowedUsers;
 
         userToFollow.followers = userToFollow.followers + 1;

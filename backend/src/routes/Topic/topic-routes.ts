@@ -1,5 +1,6 @@
 import elastic from '@elastic/elasticsearch';
 import express, { NextFunction, Request, Response } from 'express';
+import { PostModel } from '../../models/post';
 import { TopicModel } from '../../models/topic';
 import { UserModel } from '../../models/user';
 import { NotFound } from '../../utils/errors';
@@ -32,6 +33,36 @@ topicsRouter.get('/', async (_req: Request, res: Response) => {
     try {
         const topics = await TopicModel.find();
         res.json(topics);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+});
+
+topicsRouter.get('/search', async (req: any, res: any, next: any) => {
+    let topicResults, postResults;
+    try {
+        [topicResults, postResults] = await Promise.all([
+            TopicModel.find(),
+            PostModel.find(),
+            // elasticClient.search({
+            //     index: 'comments',
+            //     body: {
+            //         query: {
+            //             bool: {
+            //                 must: [
+            //                     {
+            //                         match: {
+            //                             postId: `${req.params.id}`,
+            //                         },
+            //                     },
+            //                 ],
+            //             },
+            //         },
+            //     },
+            // }),
+        ]);
+        res.json({ results: [...topicResults.map((t) => ({ ...t._doc, type: 'TOPIC' })), ...postResults.map((p) => ({ ...p._doc, type: 'POST' }))] });
+        // res.json({ topics: topicResults, posts: postResults });
     } catch (err) {
         res.status(500).json({ message: err.message });
     }

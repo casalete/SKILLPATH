@@ -5,9 +5,11 @@ import { VoteType } from './voteType';
 interface Comment {
     author: String;
     authorDisplayName: String;
+    authorImage: String;
     postId: String;
     content: String;
     topicName: String;
+    voteType?: VoteType;
     upVotes: Number;
     downVotes: Number;
     lastUpdated: Date;
@@ -30,6 +32,12 @@ const commentSchema = new mongoose.Schema({
     authorDisplayName: {
         type: String,
         required: true,
+    },
+    authorImage: {
+        type: String,
+    },
+    voteType: {
+        type: String,
     },
     postId: {
         type: String,

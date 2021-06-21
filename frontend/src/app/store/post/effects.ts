@@ -1,13 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { ToastService } from 'ng-uikit-pro-standard';
-import { catchError, delay, map, switchMap, tap } from 'rxjs/operators';
+import { catchError, map, switchMap, tap } from 'rxjs/operators';
 import * as PostActions from './actions';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { CommentService } from '../../core/services/commentService';
 import { PostEntityService } from '../ngrx-data/post/post-entity.service';
-import { TopicEntityService } from '../ngrx-data/topic/topic-entity.service';
 import { PostService } from 'src/app/core/services/postService';
 
 @Injectable()
@@ -17,10 +15,8 @@ export class PostEffects {
     constructor(
         private actions$: Actions,
         private toast: ToastService,
-        private http: HttpClient,
         private commentService: CommentService,
         private postEntityService: PostEntityService,
-        private topicEntityService: TopicEntityService,
         private postService: PostService,
     ) {}
 
@@ -39,6 +35,7 @@ export class PostEffects {
     voteCommentSuccess$ = this.actions$.pipe(
         ofType(PostActions.voteCommentSuccess),
         switchMap((action) => {
+            this.toast.success('Comment voted successfully');
             this.postEntityService.clearCache();
             return this.postEntityService.getByKey(action.postId).pipe(
                 map((res) => {
@@ -66,7 +63,7 @@ export class PostEffects {
     votePostSuccess$ = this.actions$.pipe(
         ofType(PostActions.votePostSuccess),
         tap((action) => {
-            this.toast.success('Post Upvoted Successfully!');
+            this.toast.success('Post voted Successfully!');
             this.postEntityService.clearCache();
             if (action.queryParams) {
                 this.postEntityService.getWithQuery(action.queryParams).pipe(

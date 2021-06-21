@@ -24,6 +24,7 @@ export class PostComponent implements OnInit {
     comment: string;
     subs = new SubSink();
     profileData$: Observable<ProfileData>;
+    radioModel: string;
 
     links: { source: String; target: String; importance: Number }[];
     constructor(private store: Store, private postEntityService: PostEntityService) {}
@@ -52,11 +53,9 @@ export class PostComponent implements OnInit {
                 map((entities) => entities.filter((entity) => entity._id === this.postId)),
             )
             .subscribe((ps: any) => {
-                console.log('pe loading de postEntity');
                 this.post = ps[0];
                 this.links = this.post?.links.map((link) => [link.source, link.target, link.importance]);
             });
-        // setTimeout(this.swapData, 5000);
     }
 
     truncated(index: number) {
@@ -84,31 +83,24 @@ export class PostComponent implements OnInit {
     }
 
     onSubmit(): void {
-        console.log(this.comment);
-        this.postEntityService
-            .addComment({ postId: this.postId, content: this.comment })
-            .pipe(take(1))
-            .subscribe(() => {
-                setTimeout(() => {
-                    this.postEntityService.getByKey(this.postId);
-                    console.log('subscribe la onsubmit');
-                }, 1000);
-            });
-    }
-
-    swapData(): void {
-        // this.data$.next([
-        //     ['Mathematics', 'ML', 2],
-        //     ['Algorithms', 'ML', 1],
-        //     ['Statistics', 'ML', 2],
-        //     ['Probabilities', 'ML', 1],
-        //     ['Probabilities', 'Statistics', 2],
-        //     ['Mathematics', 'Probabilities', 2],
-        //     ['Mathematics', 'Optics', 2],
-        //     ['Optics', 'CV', 1],
-        //     ['Algorithms', 'CV', 1],
-        //     ['ML', 'CV', 3],
-        // ]);
-        // this.data = 'test';
+        if (this.radioModel !== undefined) {
+            this.postEntityService
+                .addComment({ postId: this.postId, content: this.comment, voteType: this.radioModel })
+                .pipe(take(1))
+                .subscribe(() => {
+                    setTimeout(() => {
+                        this.postEntityService.getByKey(this.postId);
+                    }, 300);
+                });
+        } else {
+            this.postEntityService
+                .addComment({ postId: this.postId, content: this.comment })
+                .pipe(take(1))
+                .subscribe(() => {
+                    setTimeout(() => {
+                        this.postEntityService.getByKey(this.postId);
+                    }, 300);
+                });
+        }
     }
 }

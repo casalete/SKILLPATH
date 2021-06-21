@@ -8,7 +8,7 @@ import { UserCredentials } from '../Models/UserCredentials';
 @Injectable({
     providedIn: 'root',
 })
-export class AuthService {
+export class SearchService {
     constructor(private http: HttpClient, private router: Router) {}
 
     apiUrl = `${environment.apiUrl}`;
@@ -22,17 +22,12 @@ export class AuthService {
         return this.http.post(`${this.apiUrl}/auth/login`, userCredentials, httpOptions);
     }
 
-    logout(): void {
-        localStorage.removeItem('id_token');
-        this.router.navigate(['/auth/login']);
-    }
-
-    register(userCredentials: UserCredentials): Observable<any> {
+    searchTopicsAndPosts(): Observable<any> {
         const httpOptions = {
             headers: new HttpHeaders({
                 'Content-Type': 'application/json',
             }),
         };
-        return this.http.post(`${this.apiUrl}/auth/register`, userCredentials, httpOptions);
+        return this.http.get<any>(`${this.apiUrl}/topics/search`, httpOptions);
     }
 }

@@ -101,11 +101,11 @@
                 </div>
                 <!--First row-->
                 <div class="comment-card" *ngFor="let comment of post?.comments">
-                    <mdb-card class="my-4">
+                    <mdb-card class="my-4" [ngClass]="{ upVote: comment.voteType === 'upVote', downVote: comment.voteType === 'downVote' }">
                         <div class="row align-items-center pl-3">
                             <!--Image column-->
                             <div class="col-sm-1">
-                                <img src="https://mdbootstrap.com/img/Photos/Avatars/img (32).jpg" class="avatar rounded-circle img-fluid z-depth-2" />
+                                <img src="{{ comment.authorImage }}" class="avatar rounded-circle img-fluid z-depth-2" />
                             </div>
                             <!--/.Image column-->
 
@@ -176,6 +176,34 @@
                                 ></textarea>
                                 <label for="commentInput">Your message</label>
                             </div>
+                        </div>
+                        <div class="col-12 text-center">
+                            <label
+                                [hidden]="!commentForm.form.valid"
+                                mdbBtn
+                                size="sm"
+                                class="btn-secondary"
+                                rounded="true"
+                                [(ngModel)]="radioModel"
+                                mdbRadio="upVote"
+                                mdbWavesEffect
+                                name="reactiveRadio"
+                            >
+                                UpVote
+                            </label>
+                            <label
+                                [hidden]="!commentForm.form.valid"
+                                mdbBtn
+                                size="sm"
+                                class="btn-default"
+                                rounded="true"
+                                [(ngModel)]="radioModel"
+                                mdbRadio="downVote"
+                                mdbWavesEffect
+                                name="reactiveRadio"
+                            >
+                                DownVote
+                            </label>
                         </div>
                         <div class="col-md-12 text-center">
                             <button type="submit" [disabled]="!commentForm.form.valid" mdbBtn rounded="true" class="waves-effect waves-light btn-primary">

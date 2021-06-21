@@ -1,7 +1,7 @@
 import elastic from '@elastic/elasticsearch';
 import express, { NextFunction, Request, Response } from 'express';
 import { CommentModel } from '../../models/comment';
-import { NotFound } from '../../utils/errors';
+import { BadRequest, NotFound } from '../../utils/errors';
 
 const elasticClient = new elastic.Client({
     node: 'http://localhost:9200',
@@ -70,8 +70,10 @@ commentsRouter.post('/', async (req: any, res: any) => {
     const comment = new CommentModel({
         author: req.user.email,
         authorDisplayName: req.user.displayName,
+        authorImage: req.user.imagePath,
         postId: req.body.postId,
         content: req.body.content,
+        voteType: req.body.voteType ? req.body.voteType : undefined,
     });
     try {
         const newComment = await comment.save(function (err) {
@@ -89,36 +91,44 @@ commentsRouter.post('/', async (req: any, res: any) => {
 });
 
 commentsRouter.patch('/vote', getComment, async (req: any, res: any) => {
-    if (req.body.voteType != null) {
-        (<any>res).comment.votersList.push({ email: req.user.email, voteType: req.body.voteType });
-        if (req.body.voteType === 'UP') {
-            if ((<any>res).comment.upVotes) {
-                (<any>res).comment.upVotes = (<any>res).comment.upVotes + 1;
-            } else {
-                (<any>res).comment.upVotes = 1;
-            }
-            if ((<any>res).comment.score) {
-                (<any>res).comment.score = (<any>res).comment.score + 10;
-            } else {
-                (<any>res).comment.score = 10;
-            }
-        }
-        if (req.body.voteType === 'DOWN') {
-            if ((<any>res).comment.downVotes) {
-                (<any>res).comment.downVotes = (<any>res).comment.downVotes + 1;
-            } else {
-                (<any>res).comment.downVotes = 1;
-            }
-            if ((<any>res).comment.score) {
-                (<any>res).comment.score = (<any>res).comment.score - 5;
-            } else {
-                (<any>res).comment.score = -5;
-            }
-        }
-    }
     try {
-        const updatedComment = await (<any>res).comment.save();
-        res.json(updatedComment);
+        if (req.body.voteType != null) {
+            if ((<any>res).comment.votersList.find((voter) => voter.email === req.user.email)) {
+                // res.status(400).json({ message: 'comment already voted!' });
+                throw new BadRequest('Comment already voted!');
+            }
+            (<any>res).comment.votersList.push({ email: req.user.email, voteType: req.body.voteType });
+            if (req.body.voteType === 'UP') {
+                if ((<any>res).comment.upVotes) {
+                    (<any>res).comment.upVotes = (<any>res).comment.upVotes + 1;
+                } else {
+                    (<any>res).comment.upVotes = 1;
+                }
+                if ((<any>res).comment.score) {
+                    (<any>res).comment.score = (<any>res).comment.score + 10;
+                } else {
+                    (<any>res).comment.score = 10;
+                }
+            }
+            if (req.body.voteType === 'DOWN') {
+                if ((<any>res).comment.downVotes) {
+                    (<any>res).comment.downVotes = (<any>res).comment.downVotes + 1;
+                } else {
+                    (<any>res).comment.downVotes = 1;
+                }
+                if ((<any>res).comment.score) {
+                    (<any>res).comment.score = (<any>res).comment.score - 5;
+                } else {
+                    (<any>res).comment.score = -5;
+                }
+            }
+        }
+        try {
+            const updatedComment = await (<any>res).comment.save();
+            res.json(updatedComment);
+        } catch (err) {
+            res.status(400).json({ message: err.message });
+        }
     } catch (err) {
         res.status(400).json({ message: err.message });
     }

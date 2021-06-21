@@ -61,6 +61,7 @@ export class ProfileEffects {
         switchMap((action) =>
             this.profileService.followUser(action.user).pipe(
                 switchMap((profileData) => {
+                    this.toast.success('Post Author successfully added to your following list');
                     return [ProfileActions.followUserSuccess({ profileData })];
                 }),
                 catchError((err) => {

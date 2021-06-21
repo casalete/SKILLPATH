@@ -3,9 +3,11 @@ import { MdbTableDirective } from 'ng-uikit-pro-standard';
 import { SubSink } from 'subsink';
 import { TopicEntityService } from '../../../../store/ngrx-data/topic/topic-entity.service';
 import { Topic } from 'src/app/core/Models/Topic';
-import { Observable } from 'rxjs';
-import { skipWhile, switchMap } from 'rxjs/operators';
+import { Observable, Subject } from 'rxjs';
+import { map, skipWhile, startWith, switchMap, filter, take } from 'rxjs/operators';
 import { Router } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
+import { SearchService } from 'src/app/core/services/searchService';
 
 @Component({
     selector: 'app-home',
@@ -13,32 +15,22 @@ import { Router } from '@angular/router';
     styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit, OnDestroy {
-    constructor(private topicEntityService: TopicEntityService, private router: Router) {}
+    constructor(private topicEntityService: TopicEntityService, private router: Router, private httpClient: HttpClient, private searchService: SearchService) {}
     subs = new SubSink();
     topics$: Observable<Topic[]>;
     topics: Topic[] = [];
 
-    @ViewChild(MdbTableDirective, { static: true }) mdbTable: MdbTableDirective;
-    elements: any = [];
-    // headElements = ['Topic', 'Post Count', 'Last', 'Handle'];
-    headElements = ['Topic', 'Post Count'];
-    searchText: string = '';
-    previous: string;
+    searchText = new Subject();
 
-    @HostListener('input') oninput() {
-        this.searchItems();
-    }
+    results: Observable<any>;
+    data: any = [];
+
+    @ViewChild(MdbTableDirective, { static: true }) mdbTable: MdbTableDirective;
+    headElements = ['Topic', 'Post Count'];
+    previous: string;
 
     ngOnInit() {
         this.topicEntityService.getAll();
-        for (let i = 1; i <= 8; i++) {
-            this.elements.push({
-                id: i.toString(),
-                first: 'Wpis ' + i,
-                last: 'Last ' + i,
-                handle: 'Handle ' + i,
-            });
-        }
 
         this.subs.sink = this.topicEntityService.loading$
             .pipe(
@@ -48,22 +40,36 @@ export class HomeComponent implements OnInit, OnDestroy {
             .subscribe((ts: Topic[]) => {
                 this.topics = ts;
             });
+
+        this.searchService.searchTopicsAndPosts().subscribe((data: any) => {
+            this.data = data;
+            this.results = this.searchText.pipe(
+                startWith(''),
+                map((value: string) => this.filter(value)),
+            );
+        });
     }
 
-    // ngAfterViewInit(): void {
-    //     // this.mdbTable.setDataSource(this.topics);
-    //     // this.previous = this.mdbTable.getDataSource();
-    // }
-
-    searchItems() {
-        const prev = this.mdbTable.getDataSource();
-        if (!this.searchText) {
-            this.mdbTable.setDataSource(this.previous);
-            this.elements = this.mdbTable.getDataSource();
+    onItemSelected(event: any) {
+        if (event.element.el.nativeElement.innerText.includes('Path')) {
+            let foundItem;
+            this.results.pipe(take(1)).subscribe((results) => {
+                foundItem = results.filter((res) => res.name === event.text)[0];
+            });
+            const foundItemId = foundItem._id;
+            this.router.navigate([`/post/${foundItemId}`]);
         }
-        if (this.searchText) {
-            this.elements = this.mdbTable.searchLocalDataBy(this.searchText);
-            this.mdbTable.setDataSource(prev);
+        if (event.element.el.nativeElement.innerText.includes('Topic')) {
+            this.router.navigate([`/topic/${event.text}`]);
+        }
+    }
+
+    filter(value: string): string[] | undefined {
+        const filterValue = value.toLowerCase();
+        if (this.data) {
+            return this.data['results'].filter((item: any) => {
+                return item.name.toLowerCase().includes(filterValue);
+            });
         }
     }
 

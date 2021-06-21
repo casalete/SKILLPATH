@@ -157,6 +157,16 @@ postsRouter.post('/', async (req: any, res: any) => {
         authorImage: req.user.imagePath,
         score: 0,
     });
+    const author = req.user;
+    const authorRankList = author.rank;
+    const mainTopicRank = authorRankList.findIndex((rank) => rank.topicName === req.body.mainTopic);
+    if (mainTopicRank !== -1) {
+        authorRankList[mainTopicRank] = { ...authorRankList[mainTopicRank], rank: authorRankList[mainTopicRank].rank + 10 };
+    } else {
+        authorRankList.push({ topicName: req.body.mainTopic, rank: 10 });
+    }
+    author.rank = authorRankList;
+    author.score = author.score + 10;
     try {
         const newPost = await post.save(function (err) {
             if (err) throw err;
@@ -221,56 +231,7 @@ postsRouter.post('/', async (req: any, res: any) => {
                 }
             }
         });
-        // mt.suggestedTopics = newSuggestedTopics;
-
-        // try {
-        //     let topicModelsToAdd;
-        //     let topicsToAdd;
-        //     let newSuggestedTopics;
-
-        //     const mt = await TopicModel.findOne({ name: req.body.mainTopic }, async (err, mainTopic) => {
-        //         if (err) {
-        //             console.log('could not find main topic in post');
-        //         }
-        //         console.log('mainTopic:');
-        //         console.log(mainTopic);
-        //         // const suggestedTopics = mainTopic.get('suggestedTopics', String, { getters: false });
-        //         const suggestedTopics = mainTopic.suggestedTopics();
-        //         topicModelsToAdd = await TopicModel.find().where('name').nin(suggestedTopics);
-        //         newSuggestedTopics = [...topicsToAdd, ...savedTopicModels];
-        //         // newSuggestedTopics.push()
-        //     });
-        //     mt.suggestedTopics = newSuggestedTopics;
-        //     const savedMt = await mt.save();
-        //     // const mainTopicSuggestedTopics = mainTopic.suggestedTopics.map((st) => {
-        //     //     console.log(st.toObject().name);
-        //     //     return st.toObject().name;
-        //     // });
-        //     // topicsToAdd = await TopicModel.find().where('name').nin(mainTopicSuggestedTopics).exec();
-
-        //     // topic.suggestedTopics.forEach(async topicName=>{
-        //     //     try{
-        //     //         const topic = await TopicModel.findOne({ name: topicName });
-        //     //     if (topic == null) {
-        //     //         topicModel.save(function (err) {
-        //     //             if (err) throw err;
-        //     //             /* Document indexation on going */
-        //     //             TopicModel.on('es-indexed', function (err, res) {
-        //     //                 if (err) throw err;
-        //     //                 /* Document is indexed */
-        //     //             });
-        //     //         });
-        //     //     }
-        //     //     }catch(e){
-        //     //         throw e
-        //     //     }
-        //     // }
-
-        //     // )
-        // } catch (err) {
-        //     console.log(err);
-        //     console.log('Unable to update main topic');
-        // }
+        await author.save();
 
         res.status(201).json(post);
     } catch (err) {
@@ -325,3 +286,54 @@ postsRouter.delete('/delete/:id', function (req, res) {
     res.json({ success: id });
     res.redirect('/');
 });
+
+// mt.suggestedTopics = newSuggestedTopics;
+
+// try {
+//     let topicModelsToAdd;
+//     let topicsToAdd;
+//     let newSuggestedTopics;
+
+//     const mt = await TopicModel.findOne({ name: req.body.mainTopic }, async (err, mainTopic) => {
+//         if (err) {
+//             console.log('could not find main topic in post');
+//         }
+//         console.log('mainTopic:');
+//         console.log(mainTopic);
+//         // const suggestedTopics = mainTopic.get('suggestedTopics', String, { getters: false });
+//         const suggestedTopics = mainTopic.suggestedTopics();
+//         topicModelsToAdd = await TopicModel.find().where('name').nin(suggestedTopics);
+//         newSuggestedTopics = [...topicsToAdd, ...savedTopicModels];
+//         // newSuggestedTopics.push()
+//     });
+//     mt.suggestedTopics = newSuggestedTopics;
+//     const savedMt = await mt.save();
+//     // const mainTopicSuggestedTopics = mainTopic.suggestedTopics.map((st) => {
+//     //     console.log(st.toObject().name);
+//     //     return st.toObject().name;
+//     // });
+//     // topicsToAdd = await TopicModel.find().where('name').nin(mainTopicSuggestedTopics).exec();
+
+//     // topic.suggestedTopics.forEach(async topicName=>{
+//     //     try{
+//     //         const topic = await TopicModel.findOne({ name: topicName });
+//     //     if (topic == null) {
+//     //         topicModel.save(function (err) {
+//     //             if (err) throw err;
+//     //             /* Document indexation on going */
+//     //             TopicModel.on('es-indexed', function (err, res) {
+//     //                 if (err) throw err;
+//     //                 /* Document is indexed */
+//     //             });
+//     //         });
+//     //     }
+//     //     }catch(e){
+//     //         throw e
+//     //     }
+//     // }
+
+//     // )
+// } catch (err) {
+//     console.log(err);
+//     console.log('Unable to update main topic');
+// }

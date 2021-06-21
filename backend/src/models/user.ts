@@ -21,6 +21,7 @@ interface User {
     displayName?: String;
     achievements: String[];
     followers?: number;
+    imagePath: String;
 }
 
 interface UserModel extends User, mongoose.Document {}
