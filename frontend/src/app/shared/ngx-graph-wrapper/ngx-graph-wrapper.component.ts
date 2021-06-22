@@ -40,6 +40,6 @@ export class NgxGraphWrapperComponent implements OnInit, OnChanges {
     ngAfterViewInit(): void {
         // this.centerGraph();
         // this.fitGraph();
-        // this.panToNode();
+        this.panToNode();
     }
 }

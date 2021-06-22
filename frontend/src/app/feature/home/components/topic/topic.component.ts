@@ -113,5 +113,6 @@ export class TopicComponent implements OnInit, OnDestroy {
 
     ngOnDestroy(): void {
         this.subs.unsubscribe();
+        this.postEntityService.clearCache();
     }
 }
